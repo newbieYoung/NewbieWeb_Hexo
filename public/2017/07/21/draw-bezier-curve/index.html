@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="generator" content="Hexo 3.9.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    save_scroll: false,
+    copycode: {"enable":false,"show_result":false,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta name="description" content="前段时间用 SVG 实现了一个简单的路径过渡动画，如下：   由于以前很少接触 SVG 导致遇到了一些困难，解决之后得到了一些总结：">
+<meta name="keywords" content="SVG,贝塞尔曲线">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于贝塞尔曲线的一些事">
+<meta property="og:url" content="https://newbieweb.lione.me/2017/07/21/draw-bezier-curve/index.html">
+<meta property="og:site_name" content="NewbieWeb">
+<meta property="og:description" content="前段时间用 SVG 实现了一个简单的路径过渡动画，如下：   由于以前很少接触 SVG 导致遇到了一些困难，解决之后得到了一些总结：">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://newbieyoung.github.io/images/draw-bezier-curve-0.gif">
+<meta property="og:image" content="https://newbieyoung.github.io/images/draw-bezier-curve-1.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/draw-bezier-curve-2.png">
+<meta property="og:image" content="https://newbieyoung.github.io/images/draw-bezier-curve-3.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/draw-bezier-curve-4.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/draw-bezier-curve-5.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/draw-bezier-curve-6.gif">
+<meta property="og:updated_time" content="2019-11-09T05:12:33.391Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于贝塞尔曲线的一些事">
+<meta name="twitter:description" content="前段时间用 SVG 实现了一个简单的路径过渡动画，如下：   由于以前很少接触 SVG 导致遇到了一些困难，解决之后得到了一些总结：">
+<meta name="twitter:image" content="https://newbieyoung.github.io/images/draw-bezier-curve-0.gif">
+  <link rel="canonical" href="https://newbieweb.lione.me/2017/07/21/draw-bezier-curve/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>关于贝塞尔曲线的一些事 | NewbieWeb</title>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-145147663-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-145147663-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  <div class="container sidebar-position-left">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">NewbieWeb</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">Oh,Captain! My Captain! Carpe Diem!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content page-post-detail">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://newbieweb.lione.me/2017/07/21/draw-bezier-curve/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Young">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NewbieWeb">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">关于贝塞尔曲线的一些事
+
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2017-07-21 20:22:00" itemprop="dateCreated datePublished" datetime="2017-07-21T20:22:00+08:00">2017-07-21</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-09 13:12:33" itemprop="dateModified" datetime="2019-11-09T13:12:33+08:00">2019-11-09</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/前端开发/" itemprop="url" rel="index"><span itemprop="name">前端开发</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>前段时间用 SVG 实现了一个简单的路径过渡动画，如下：</p>
+<img src="https://newbieyoung.github.io/images/draw-bezier-curve-0.gif">
+
+<p>由于以前很少接触 SVG 导致遇到了一些困难，解决之后得到了一些总结：</p>
+<a id="more"></a>
+
+<ul>
+<li>1、路径过渡动画只适用于指令类似的路径；</li>
+</ul>
+<img src="https://newbieyoung.github.io/images/draw-bezier-curve-1.jpg">
+
+<p>上述图中分别是动画前路径和动画后路径，由于这两个路径是设计同学分开设计的，两个路径之间指令完全不一样，比如动画前路径中全是贝塞尔曲线，但是动画后路径中却存在直线；因此这两个路径之间是不能在没有任何处理的情况下通过 Animation 实现过渡动画效果的。</p>
+<ul>
+<li>2、Animation 在 IPhone 中存在兼容性问题；</li>
+</ul>
+<p>在 IPhone 中一个路径存在多个 Animation 时多次触发会有 bug，某些 Animation 不能显式的表现出来；</p>
+<p><a href="https://newbieyoung.github.io/SomeBugs/bug-about-svg-animation-in-iphone/demo0.html" target="_blank" rel="noopener">问题例子</a></p>
+<p><a href="https://newbieyoung.github.io/SVG_Learn/path/demo1.html" target="_blank" rel="noopener">解决方案</a></p>
+<p>实现之后喜闻乐见加需求了，产品要求图形张开之后里边的文案是可配置的，也就是说图形张开之后水平区域的宽度是可控制的；面对这种情况我唯一能想到的就只有通过 JS 动态更改路径中的指令参数了，而这就要求我得完全明白路径中指令和参数代表的是什么意思了！</p>
+<h2 id="SVG-缩写"><a href="#SVG-缩写" class="headerlink" title="SVG 缩写"></a>SVG 缩写</h2><p>不幸的是软件导出的 SVG 文件出于文件大小的考虑会采用缩写的形式，导致可读性较差，比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;path d=&quot;M640.5,300.5c-36,0-221.2-0.1-235.5-0.1c-18.5,0-29.6-15.9-29.5-30.7c0-14,12.3-29.9,29.5-29.9c13.9,0,198.2,0,235.4,0L640.5,300.5z&quot;/&gt;</span><br></pre></td></tr></table></figure>
+
+<p>不仅没有空格分隔符，还有很多不明意义的横杠（后来才知道其实就是负号的意思）；</p>
+<p>通过查询资料发现PATH属性存在一些缩写规则，比如：</p>
+<ul>
+<li>字母和数字之间可以省略分隔符；</li>
+<li>负数和数字之间可以省略分隔符；</li>
+<li>数字和字母之间也可以省略分隔符；</li>
+<li>逗号就是普通的分隔符和空格类似，之所以使用逗号代替空格应该是因为空格在不同操作系统或者不同编码格式下会有差异。</li>
+</ul>
+<p>因此上述软件导出的PATH其实和下边格式化之后的PATH表现一致。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;path d=&quot;M640.5, 300.5 c -36, 0 -221.2 -0.1 -235.5 -0.1 c -18.5, 0 -29.6 -15.9 -29.5 -30.7 c 0 -14, 12.3 -29.9, 29.5 -29.9 c 13.9, 0, 198.2, 0, 235.4, 0 L640.5,300.5z&quot;/&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="相对坐标"><a href="#相对坐标" class="headerlink" title="相对坐标"></a>相对坐标</h2><p>格式化之后可读性好了很多，但是还有一个地方比较困惑，SVG 中大写 C 和小写 c 都表示三次贝塞尔曲线，但是大写 C 中的坐标是绝对坐标，小写 c 中的坐标是相对坐标；三次贝塞尔曲线存在一个起始点、一个结束点和两个控制点，那么相对坐标中是都是相对起始点而言还是相对上一个点而言呢？</p>
+<p>稍作验证即可得出相对坐标都是相对起始点而言的，起始点也就是上一个指令的结束点；</p>
+<img src="https://newbieyoung.github.io/images/draw-bezier-curve-2.png">
+
+<img src="https://newbieyoung.github.io/images/draw-bezier-curve-3.jpg">
+
+<p><a href="https://newbieyoung.github.io/SVG_Learn/path/demo0.html" target="_blank" rel="noopener">示例代码</a></p>
+<p>大家可以稍微思考下为什么软件导出的会默认是相对坐标？以及为什么相对坐标都是相对上一个指令的结束点而言？</p>
+<p>猜想：相对坐标会减少文件字符从而减少文件大小，另外相对上一个指令的结束点和相对当前指令的上一个点的区别在于前一种方式一个指令中的数据是不存在联系的，而后一种方式一个指令中的数据是存在的联系的，也许这种联系会带来逻辑上的复杂性（比如会影响绘制效率等）。</p>
+<p>当然上述猜想也可能是我想多了……</p>
+<h2 id="贝塞尔曲线"><a href="#贝塞尔曲线" class="headerlink" title="贝塞尔曲线"></a>贝塞尔曲线</h2><p>贝塞尔曲线的数学基础是早在 1912 年就广为人知的<code>伯恩斯坦多项式</code>。但直到 1959年 ，当时就职于雪铁龙的法国数学家<code>Paul de Casteljau</code>才开始对它进行图形化应用的尝试，并提出了一种数值稳定的<code>de Casteljau</code> 算法。然而贝塞尔曲线的得名，却是由于1962年另一位就职于雷诺的法国工程师<code>Pierre Bézier</code> 的广泛宣传，他使用这种只需要很少的控制点就能够生成复杂平滑曲线的方法，来辅助汽车车体的工业设计。</p>
+<p>正是因为控制简便却具有极强的描述能力，贝塞尔曲线在工业设计领域和计算机图形学领域得到了广泛的应用，贝塞尔曲线根据控制点的多少分为，一次贝塞尔曲线、二次贝塞尔曲线、三次贝塞尔曲线等。</p>
+<h2 id="手绘二次贝塞尔曲线"><a href="#手绘二次贝塞尔曲线" class="headerlink" title="手绘二次贝塞尔曲线"></a>手绘二次贝塞尔曲线</h2><img src="https://newbieyoung.github.io/images/draw-bezier-curve-4.jpg">
+
+<ul>
+<li>在坐标系中选取三个不共线的点，分别是<code>P0</code>、<code>P1</code>、<code>P2</code>；</li>
+<li>在线段<code>P0P1</code>上任选一点<code>Q0</code>，并计算线段<code>P0Q0</code>在<code>P0P1</code>上所占的比例<code>t</code>；</li>
+<li>根据上一步得到的比例，在线段<code>P1P2</code>上找到<code>Q1</code>，使得<code>P1Q1</code>在<code>P1P2</code>上所占的比例等于<code>t</code>；</li>
+<li>连接<code>Q0Q1</code>；</li>
+<li>在新线段上再次找到<code>B</code>，使得<code>Q0B</code>在<code>Q0Q1</code>上所占比例等于<code>t</code>；</li>
+<li>点<code>B</code>即为该二次贝塞尔曲线上的一点；</li>
+<li>以此类推。</li>
+</ul>
+<p>根据上述规律可以对二次贝塞尔曲线公式进行推导；</p>
+<img src="https://newbieyoung.github.io/images/draw-bezier-curve-5.jpg">
+
+<h2 id="完成产品要求"><a href="#完成产品要求" class="headerlink" title="完成产品要求"></a>完成产品要求</h2><p>了解了这么多没什么卵用的东西，是时候解决产品的要求了；</p>
+<p><a href="https://newbieyoung.github.io/SVG_Learn/path/demo2.html" target="_blank" rel="noopener">具体代码</a></p>
+<p>最终结果如图：</p>
+<img src="https://newbieyoung.github.io/images/draw-bezier-curve-6.gif">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+        
+        <div class="post-tags">
+            <a href="/tags/SVG/" rel="tag"># SVG</a>
+          
+            <a href="/tags/贝塞尔曲线/" rel="tag"># 贝塞尔曲线</a>
+          
+        </div>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+              <a href="/2017/02/28/understanding-experience/" rel="next" title="某个程序员眼中的用户体验设计">
+                <i class="fa fa-chevron-left"></i> 某个程序员眼中的用户体验设计
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+              <a href="/2017/07/31/auto-suit-website/" rel="prev" title="移动端网页绝对自适应方案总结">
+                移动端网页绝对自适应方案总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Young</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">51</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/newbieYoung" title="GitHub &rarr; https://github.com/newbieYoung" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://www.zhihu.com/people/NewbieYoung" title="知乎 &rarr; https://www.zhihu.com/people/NewbieYoung" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>知乎</a>
+      </span>
+    
+  </div>
+
+
+
+        </div>
+      </div>
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#SVG-缩写"><span class="nav-number">1.</span> <span class="nav-text">SVG 缩写</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相对坐标"><span class="nav-number">2.</span> <span class="nav-text">相对坐标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#贝塞尔曲线"><span class="nav-number">3.</span> <span class="nav-text">贝塞尔曲线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#手绘二次贝塞尔曲线"><span class="nav-number">4.</span> <span class="nav-text">手绘二次贝塞尔曲线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#完成产品要求"><span class="nav-number">5.</span> <span class="nav-text">完成产品要求</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Young</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.3.0</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+      </div>
+
+    
+
+  </div>
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+<script src="/js/utils.js?v=7.3.0"></script>
+  <script src="/js/motion.js?v=7.3.0"></script>
+
+
+  <script src="/js/affix.js?v=7.3.0"></script>
+  <script src="/js/schemes/pisces.js?v=7.3.0"></script>
+
+
+
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  
+  <script src="/js/scrollspy.js?v=7.3.0"></script>
+<script src="/js/post-details.js?v=7.3.0"></script>
+
+
+</body>
+</html>

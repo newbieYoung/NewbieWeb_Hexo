@@ -1,0 +1,1728 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="generator" content="Hexo 3.9.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    save_scroll: false,
+    copycode: {"enable":false,"show_result":false,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta property="og:type" content="website">
+<meta property="og:title" content="NewbieWeb">
+<meta property="og:url" content="https://newbieweb.lione.me/index.html">
+<meta property="og:site_name" content="NewbieWeb">
+<meta property="og:locale" content="zh-CN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="NewbieWeb">
+  <link rel="canonical" href="https://newbieweb.lione.me/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: true,
+    isPost: false,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>NewbieWeb</title>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-145147663-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-145147663-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  <div class="container sidebar-position-left">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">NewbieWeb</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">Oh,Captain! My Captain! Carpe Diem!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content page-home">
+            
+  <section id="posts" class="posts-expand">
+      
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://newbieweb.lione.me/2020/10/10/simple-screenshot/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Young">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NewbieWeb">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">
+              
+              <a href="/2020/10/10/simple-screenshot/" class="post-title-link" itemprop="url">前后端混合式“截屏”方案</a>
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2020-10-10 20:56:00 / 修改时间：20:58:26" itemprop="dateCreated datePublished" datetime="2020-10-10T20:56:00+08:00">2020-10-10</time>
+            </span>
+          
+            
+
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/工具-组件-工程化/" itemprop="url" rel="index"><span itemprop="name">工具/组件/工程化</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          
+            <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>“截屏”是指把小程序或者 H5 页面转换成图片，从而方便用户转发或者分享。截屏分享相对于普通的结构化分享（链接分享）具有更丰富的视觉表现、更多的信息承载等优势，在很多项目中均有应用，举例来说：</p>
+<p><img src="https://newbieyoung.github.io/images/simple-screenshot-0.gif" alt><img src="https://newbieyoung.github.io/images/simple-screenshot-1.gif" alt></p>
+<h2 id="相关技术"><a href="#相关技术" class="headerlink" title="相关技术"></a>相关技术</h2><p>目前流行的“截屏”实现方案按生成图片的方式可以分为<code>客户端截屏</code>和<code>服务端截屏</code>两种。</p>
+<p><code>服务端截屏</code>一般做法是使用 <a href="https://github.com/puppeteer/puppeteer" target="_blank" rel="noopener">Puppeteer</a> 或者其它 Headless 浏览器渲染页面生成图片，这种方式规避了目前繁多浏览器以及终端导致的前端兼容性问题，但是会消耗大量的服务器资源（启动 Headless 浏览器需要消耗系统资源，页面渲染需要加载外部资源），而且在弱网络环境中性能较低；另外如果采用由前端组织待渲染页面内容然后传输给服务器的方式，还可能存在一定的安全风险。</p>
+<p><img src="https://newbieyoung.github.io/images/simple-screenshot-2.jpg" alt></p>
+<p><code>客户端截屏</code>一般是使用客户端提供的图形 API （Canvas、SVG 等）重新绘制页面生成图片，这种方式不需要依赖服务器，资源消耗较少；但是使用客户端提供的图形 API 重新绘制页面，相当于重新实现客户端的渲染过程，毫无疑问是比较复杂且麻烦的事情；因此当前的客户端截屏组件往往会选择仅支持部分 CSS 属性，从而降低复杂度同时尽可能避免目前繁多的浏览器和终端导致的兼容性问题。</p>
+<h3 id="html2canvas"><a href="#html2canvas" class="headerlink" title="html2canvas"></a>html2canvas</h3><p>以目前最流行的 <a href="https://github.com/niklasvh/html2canvas" target="_blank" rel="noopener">html2canvas</a> 组件为例（截止到 2020 年 9 月 在 Github 上有 21.6k star），<br>其官网 <a href="https://html2canvas.hertzen.com/features" target="_blank" rel="noopener">Features</a> 上声明了目前并不支持的 CSS 属性如下：</p>
+<p><img src="https://newbieyoung.github.io/images/simple-screenshot-3.jpg" alt></p>
+<p>然而当我们使用那些所谓已经支持的 CSS 属性时，html2canvas 的表现依然不容乐观。</p>
+<ul>
+<li>文字渲染存在偏移；</li>
+</ul>
+<p><img src="https://newbieyoung.github.io/images/simple-screenshot-4.jpg" alt></p>
+<p><a href="https://newbieyoung.github.io/Simple-Screenshot/examples/compare/compare1.html" target="_blank" rel="noopener">文字渲染 DEMO</a></p>
+<p>在上图中可以很明显地看到和原页面文字（图中第一个）相比 html2canvas 截屏后的文字（图中第三个红框部分）存在向下偏移。</p>
+<ul>
+<li>不支持文字渐变；</li>
+</ul>
+<p><img src="https://newbieyoung.github.io/images/simple-screenshot-5.jpg" alt></p>
+<p><a href="https://newbieyoung.github.io/Simple-Screenshot/examples/compare/compare5.html" target="_blank" rel="noopener">文字渐变 DEMO</a></p>
+<p>上图中第一个为原页面文字渐变效果，第三个红框部分的为 html2canvas 对页面渐变文字截屏后的效果。</p>
+<ul>
+<li>部分 CSS 属性（transform、opacity、filter等）的继承关系处理并不完善；</li>
+</ul>
+<p><img src="https://newbieyoung.github.io/images/simple-screenshot-6.jpg" alt></p>
+<p><a href="https://newbieyoung.github.io/Simple-Screenshot/examples/compare/compare6.html" target="_blank" rel="noopener">属性继承 DEMO</a></p>
+<p>页面中 p 元素 具有三个父元素，分别设置有 opacity、transform、filter 等属性，在这些父元素属性和 p 元素自身属性的共同作用下，最终渲染到页面效果如图中第一个所示；而 html2canvas 对 p 元素截屏后的效果为图中第三个，其效果仅仅考虑了 p 元素自身 CSS 属性的影响。</p>
+<p>上面仅仅只是简单的举了一些例子，当我们真正去使用 html2canvas 时可能还会遇到更多坑点；这也是 html2canvas 想要完全重新实现浏览器渲染过程这一思路很难避免的问题；甚至随着 CSS 标准的更新而这种思路的组件跟不上进度，问题就会越来越多。</p>
+<p>另外在小程序中有一套和浏览器类似的 Canvas API，但是一些不大的差异导致 html2canvas 并不能在小程序中使用；因此就有了小程序组件 <a href="https://github.com/wechat-miniprogram/wxml-to-canvas" target="_blank" rel="noopener">wxml-to-canvas</a>、<a href="https://github.com/Kujiale-Mobile/Painter" target="_blank" rel="noopener">Painter</a> 等；这些组件其实可以看成是弱化版 html2canvas 在小程序上的实现，支持的 CSS 属性更少，学习使用的成本反而增加了不少。</p>
+<h3 id="dom-to-image"><a href="#dom-to-image" class="headerlink" title="dom-to-image"></a>dom-to-image</h3><p>那么客户端截屏有没有稍微简单一点的思路呢？比如说要是客户端提供 <code>html+css</code> 直接生成图片的能力就好了！</p>
+<p>答案是有的！</p>
+<p>在 SVG 的 <code>foreignObject</code> 元素中可以嵌入使用其它 XML 命名空间的元素，这也就意味着我们只需要指定其内部元素的命名空间为 <code>http://www.w3.org/1999/xhtml</code> 就可以在 SVG 中使用 html+css 了，举个简单例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;svg xmlns=&apos;http://www.w3.org/2000/svg&apos; width=&apos;100&apos; height=&apos;100&apos;&gt;</span><br><span class="line">  &lt;foreignObject width=&apos;100%&apos; height=&apos;100%&apos;&gt;</span><br><span class="line">    &lt;div class=&apos;test&apos; xmlns=&apos;http://www.w3.org/1999/xhtml&apos; style=&apos;width:100px;height:100px;background-color:red;&apos;&gt;1😁1&lt;/div&gt;</span><br><span class="line">  &lt;/foreignObject&gt;</span><br><span class="line">&lt;/svg&gt;</span><br></pre></td></tr></table></figure>
+
+<p>另外在浏览器中创建图片，然后指定其类型为 <code>svg+xml</code> 就可以直接通过 SVG 生成图片：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">let svg = &quot;&quot;;</span><br><span class="line">svg += &quot;&lt;svg xmlns=&apos;http://www.w3.org/2000/svg&apos; width=&apos;1&apos; height=&apos;1&apos;&gt;&quot;;</span><br><span class="line">svg += &quot;&lt;foreignObject width=&apos;100%&apos; height=&apos;100%&apos;&gt;&quot;;</span><br><span class="line">svg += &quot;&lt;div xmlns=&apos;http://www.w3.org/1999/xhtml&apos; style=&apos;width:100%;height:100%;background-color:red;&apos;&gt;&lt;/div&gt;&quot;;</span><br><span class="line">svg += &quot;&lt;/foreignObject&gt;&quot;;</span><br><span class="line">svg += &quot;&lt;/svg&gt;&quot;</span><br><span class="line"></span><br><span class="line">let self = this;</span><br><span class="line">let img = new Image();</span><br><span class="line">img.src = &quot;data:image/svg+xml;charset=utf-8,&quot; + encodeURIComponent(svg);</span><br></pre></td></tr></table></figure>
+
+<p>简单来说就是先把 html+css 转换为 SVG 然后再把 SVG 转换为图片，这样就间接地实现了通过 html+css 生成图片。</p>
+<p>整个方案最大的工作量就在于如何把页面中待截屏元素转换到 SVG 的 foreignObject 元素中去；理论上来说只要是这个转换过程没有问题，然后客户端支持 foreignObject，那么最终的截屏效果肯定和原页面效果一模一样。</p>
+<p>然而现实<del>总是残酷的</del>（有机可乘），就拿目前该方案的代表 <a href="https://github.com/tsayen/dom-to-image" target="_blank" rel="noopener">dom-to-image</a>（截止到 2020 年 9 月 在 Github 上有 6.5k star）组件来说，其转换过程存在很多问题；在上文中关于 html2canvas 问题说明的示例图中，也展示了 dom-to-image 截屏效果（最后一个蓝框部分）；表现出以下问题：</p>
+<ul>
+<li>截屏效果模糊；</li>
+<li>不支持文字渐变；</li>
+<li>部分 CSS 属性的继承关系没有处理好；</li>
+</ul>
+<p>更糟糕的是连 CSS 最基础的盒模型以及布局都有问题：</p>
+<ul>
+<li>盒模型截屏异常；</li>
+</ul>
+<p><img src="https://newbieyoung.github.io/images/simple-screenshot-7.jpg" alt></p>
+<p><a href="https://newbieyoung.github.io/Simple-Screenshot/examples/compare/compare3.html" target="_blank" rel="noopener">盒模型 DEMO</a></p>
+<p>上图中第一个为原页面 margin 盒模型效果，第四个蓝框部分为 dom-to-image 对 margin 盒模型截屏后的效果，可以明显地看到截屏后的效果存在向下偏移。</p>
+<ul>
+<li>布局截屏异常；</li>
+</ul>
+<p><img src="https://newbieyoung.github.io/images/simple-screenshot-8.jpg" alt></p>
+<p><a href="https://newbieyoung.github.io/Simple-Screenshot/examples/compare/compare4.html" target="_blank" rel="noopener">布局 DEMO</a></p>
+<p>上图中第四个为原页面绝对定位布局效果，第三个蓝框部分为 dom-to-image 对绝对定位布局截屏后的效果，可以明显地看到截屏后的效果存在空白异常的情况。</p>
+<p>除了 dom-to-image 本身的实现问题以外，还存在一些方案本身的问题；比如 foreignObject 和 data:image/svg+xml 存在兼容性问题，某些情况下可能客户端并不支持这些特性（小程序以及部分浏览器）。</p>
+<p><img src="https://newbieyoung.github.io/images/simple-screenshot-9.jpg" alt></p>
+<h2 id="混合式截屏方案"><a href="#混合式截屏方案" class="headerlink" title="混合式截屏方案"></a>混合式截屏方案</h2><p>在上文中总结了服务端截屏、客户端截屏等各种方案的优缺点；基于<code>实现简单</code>、<code>使用方便</code>、<code>稳定可靠</code>的原则，不局限于单一技术，把服务端截屏和客户端 SVG 截屏方案结合起来，是可以得到一种<code>更完善</code>的解决方案的。</p>
+<p>具体实现如下：<a href="https://github.com/newbieYoung/Simple-Screenshot" target="_blank" rel="noopener">SimpleScreenshot</a>。</p>
+<p><img src="https://newbieyoung.github.io/images/simple-screenshot-10.jpg" alt></p>
+<p>项目核心代码包括两部分：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">├── build                    // 打包构建代码</span><br><span class="line">├── examples                 // 示例项目</span><br><span class="line">│   ├── web</span><br><span class="line">│   ├── qq-app</span><br><span class="line">│   └── wechat-app</span><br><span class="line">├── server                   // 截屏服务</span><br><span class="line">├── tools                    // 辅助工具</span><br><span class="line">│   └── format_xml.html</span><br><span class="line">├── index-web.js             // Web SimpleScreenshot 代码</span><br><span class="line">├── index-qq.js              // QQ 小程序 SimpleScreenshot 代码</span><br><span class="line">└── index-wechat.js          // 微信小程序 SimpleScreenshot 代码</span><br></pre></td></tr></table></figure>
+
+<p><code>server</code> 目录为截屏服务需要单独部署（支持 Docker 镜像部署），<code>build</code> 目录为打包构建后的客户端代码，在实际项目中使用时需要引入。</p>
+<p><code>SimpleScreenshot 支持全部 CSS 属性，所见即所得，简单方便</code>；开发人员只需要正常编写页面代码，然后进行简单的初始化即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">let screenshot = new SimpleScreenshot(&#123;</span><br><span class="line">  debug: isPub ? false : true, // 调试模式，组件代码中会执行 log 函数</span><br><span class="line">  imgType: imgType, // 图片类型</span><br><span class="line">  puppeteerServer: &quot;https://dom2img.lione.me/simple-screenshot&quot;,// 截屏服务</span><br><span class="line">  puppeteerGlobalFont: &quot;PingFang&quot;, // 截屏服务全局字体</span><br><span class="line">  devicePixelRatio: window.devicePixelRatio, // 设备像素比</span><br><span class="line">  log: function (msg) &#123;</span><br><span class="line">    console.log(msg);</span><br><span class="line">    console.log(msg.svg);</span><br><span class="line">  &#125;,</span><br><span class="line">  error: function (err) &#123;</span><br><span class="line">    console.log(err);</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><a href="https://dom2img.lione.me/simple-screenshot" target="_blank" rel="noopener">https://dom2img.lione.me/simple-screenshot</a> 为部署在云服务器上的示例服务，请不要在生产环境中使用！！！</p>
+</blockquote>
+<p>初始化完成之后，传入待截屏元素选择器执行 SimpleScreenshot 组件的 <code>toIMG</code> 方法即可完成截屏：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">screenshot.toIMG(&quot;.mps-content&quot;, function (img) &#123;</span><br><span class="line">  // img.base64</span><br><span class="line">  // img.canvas</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>在回调函数中即可获得截屏结果（客户端截屏方式可以获得 base64 图片以及 Canvas 画布，但是服务端截屏仅仅能获得 base64 图片）。</p>
+<p><a href="https://demo.lione.me/simple-screenshot/test-1.html?pub" target="_blank" rel="noopener">Web 示例</a></p>
+<p><img src="https://newbieyoung.github.io/images/simple-screenshot-11.png" alt></p>
+<p>另外 <code>SimpleScreenShot 还支持小程序截屏</code>，使用方式和 Web 基本类似，唯一的区别在于编写完小程序页面代码之后还需要把待截屏元素的代码复制到 SimpleScreenshot 提供的<a href="https://newbieyoung.github.io/Simple-Screenshot//tools/format_xml.html" target="_blank" rel="noopener">格式化工具</a>中进行格式化：</p>
+<p><img src="https://newbieyoung.github.io/images/simple-screenshot-12.png" alt></p>
+<p>小程序截屏之所以需要进行上述操作，主要是因为小程序提供的 API 功能有限，通过选择器选取元素节点之后，没有办法获得该元素节点的类型、子节点信息以及部分关键属性（比如 image 元素的 src 属性、内联文本等）；这会导致生成的 SVG 代码缺失关键信息，最终得到的截屏图片异常。</p>
+<p>为了解决上述问题，本技术方案提供了一个格式化工具，使用该工具可以对小程序页面代码进行解析，把生成 SVG 代码所需要的相关信息提前设置到元素的自定义属性中，这样在运行代码时就可以直接获取了。</p>
+<p>其中 <code>data-name</code> 表示元素类型，<code>data-level</code> 表示元素级别（0 表示根节点、0-0 表示根节点的第一个子节点、0-1 表示根节点的第二个子节点以此类推），<code>data-len</code> 表示当前元素的子元素数量（包含内联文本），<code>data-texts</code> 表示当前元素内联文本信息（小程序中并没有内联文本的概念）；另外为了一次性选取全部生成图片的元素节点，还需要对每个元素节点加入特定的 class 类名进行标注。</p>
+<p>最后用格式化之后的代码替换原有代码即可。</p>
+<p><a href="https://github.com/newbieYoung/Simple-Screenshot/tree/master/examples/wechat-app" target="_blank" rel="noopener">微信小程序示例</a></p>
+<p><img src="https://newbieyoung.github.io/images/simple-screenshot-13.jpg" alt></p>
+<blockquote>
+<p>上文中 html2canvas、dom-to-image 问题说明的示例图中也展示了 SimpleScreenshot 的截屏效果（黄框部分）。</p>
+</blockquote>
+<h2 id="总结与展望"><a href="#总结与展望" class="headerlink" title="总结与展望"></a>总结与展望</h2><p>本文提出并实现的前后端混合式截屏方案 SimpleScreenshot <code>采用相对简单的解决方案，在保证稳定可靠的前提下，充分利用了客户端的资源和能力；统一截屏需求在浏览器和小程序的实现方式，尽可能地减少学习和开发成本</code>。</p>
+<p>该方案目前已在少数几个项目中进行了实践，但是应用场景较少，不排除还有其它没有发现的问题；个人精力有限，欢迎大家携手共建。</p>
+
+          
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://newbieweb.lione.me/2019/11/06/nodejs-imagemin/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Young">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NewbieWeb">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">
+              
+              <a href="/2019/11/06/nodejs-imagemin/" class="post-title-link" itemprop="url">NodeJS Imagemin</a>
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-11-06 21:21:00" itemprop="dateCreated datePublished" datetime="2019-11-06T21:21:00+08:00">2019-11-06</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-12-13 17:07:18" itemprop="dateModified" datetime="2019-12-13T17:07:18+08:00">2019-12-13</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/NodeJS/" itemprop="url" rel="index"><span itemprop="name">NodeJS</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><code>imagemin</code> 是目前比较常用的压缩图片的 NodeJS 库，Github 仓库地址为 <a href="https://github.com/imagemin/imagemin" target="_blank" rel="noopener">https://github.com/imagemin/imagemin</a>；它支持很多插件可以用有损压缩或者无损压缩的方式压缩不同类型的图片，比如：</p>
+<img src="https://newbieyoung.github.io/images/nodejs-imagemin-0.jpg">
+
+<p>其用法很简单：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> imagemin = <span class="built_in">require</span>(<span class="string">"imagemin"</span>);</span><br><span class="line"><span class="keyword">const</span> imageminPngquant = <span class="built_in">require</span>(<span class="string">"imagemin-pngquant"</span>);</span><br><span class="line"><span class="keyword">const</span> imageminMozjpeg = <span class="built_in">require</span>(<span class="string">"imagemin-mozjpeg"</span>)(<span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> files = <span class="keyword">await</span> imagemin([<span class="string">"images/*.&#123;jpg,png&#125;"</span>], &#123;</span><br><span class="line">    destination: <span class="string">"build/images"</span>,</span><br><span class="line">    plugins: [</span><br><span class="line">      imageminJpegtran(),</span><br><span class="line">      imageminPngquant(&#123;</span><br><span class="line">        quality: [<span class="number">0.6</span>, <span class="number">0.8</span>]</span><br><span class="line">      &#125;)</span><br><span class="line">    ]</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+
+<p>本应该没啥好记录的才对，但是当你执行 <code>npm install</code> 开始安装的时候麻烦事就来了（以 CentOS6 为例）。</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/11/06/nodejs-imagemin/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://newbieweb.lione.me/2019/09/02/template-match-and-morphology/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Young">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NewbieWeb">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">
+              
+              <a href="/2019/09/02/template-match-and-morphology/" class="post-title-link" itemprop="url">OpenCV 图像模板匹配、形态学变换以及卷积运算</a>
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-09-02 20:59:00" itemprop="dateCreated datePublished" datetime="2019-09-02T20:59:00+08:00">2019-09-02</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-12-09 22:14:40" itemprop="dateModified" datetime="2019-12-09T22:14:40+08:00">2019-12-09</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/数字图像处理/" itemprop="url" rel="index"><span itemprop="name">数字图像处理</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>简单记录下几个知识点：<code>卷积运算</code>、<code>模版匹配</code>、<code>形态学变换</code>。</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/09/02/template-match-and-morphology/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://newbieweb.lione.me/2019/08/02/machinelearningaction-tensorflow-layer-reg/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Young">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NewbieWeb">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">
+              
+              <a href="/2019/08/02/machinelearningaction-tensorflow-layer-reg/" class="post-title-link" itemprop="url">UI工程师的机器学习之旅（五）隐藏层和正则化</a>
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-08-02 15:16:00" itemprop="dateCreated datePublished" datetime="2019-08-02T15:16:00+08:00">2019-08-02</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-09 13:12:33" itemprop="dateModified" datetime="2019-11-09T13:12:33+08:00">2019-11-09</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在<a href="https://newbieweb.lione.me/2019/06/30/machinglearningaction-tensorflow-mnist/">Tensorflow MNIST 数字识别</a>使用<code>单层神经网络</code>的正确率大概在 91% 左右，有很多方法对其进行优化，这次简单聊一聊<code>隐藏层</code>和<code>正则化</code>。</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/08/02/machinelearningaction-tensorflow-layer-reg/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://newbieweb.lione.me/2019/06/30/machinglearningaction-tensorflow-mnist/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Young">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NewbieWeb">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">
+              
+              <a href="/2019/06/30/machinglearningaction-tensorflow-mnist/" class="post-title-link" itemprop="url">UI工程师的机器学习之旅（四）Tensorflow MNIST 数字识别</a>
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-06-30 16:19:00" itemprop="dateCreated datePublished" datetime="2019-06-30T16:19:00+08:00">2019-06-30</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-09 13:12:33" itemprop="dateModified" datetime="2019-11-09T13:12:33+08:00">2019-11-09</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Tensorflow 是谷歌开源的一个计算框架，该计算框架可以很好地实现各种深度学习算法，网络上相关学习资料挺多，就不过多复制粘贴了；</p>
+<p>这里只是记录一下自己的学习小结。</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/06/30/machinglearningaction-tensorflow-mnist/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://newbieweb.lione.me/2019/05/16/simple-crop/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Young">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NewbieWeb">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">
+              
+              <a href="/2019/05/16/simple-crop/" class="post-title-link" itemprop="url">全平台（Vue、React、微信小程序）任意角度旋转 图片裁剪组件</a>
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-05-16 17:14:00" itemprop="dateCreated datePublished" datetime="2019-05-16T17:14:00+08:00">2019-05-16</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-02 21:26:38" itemprop="dateModified" datetime="2020-04-02T21:26:38+08:00">2020-04-02</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/工具-组件-工程化/" itemprop="url" rel="index"><span itemprop="name">工具/组件/工程化</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><code>SimpleCrop</code> 目前是<code>全网唯一</code>支持裁剪图片任意角度旋转、交互体验<code>媲美原生客户端</code>的<code>全平台</code>图片裁剪组件。</p>
+<p>项目地址：<a href="https://github.com/newbieYoung/Simple-Crop" target="_blank" rel="noopener">https://github.com/newbieYoung/Simple-Crop</a>。</p>
+<h2 id="特性及优势"><a href="#特性及优势" class="headerlink" title="特性及优势"></a>特性及优势</h2><p>和目前流行的图片裁剪组件相比，其优势在于以下几点：</p>
+<ul>
+<li>裁剪图片支持任意角度旋转；</li>
+<li>支持 Script 标签、微信小程序、React、Vue 等多种开发模式；</li>
+<li>支持移动和 PC 设备；</li>
+<li>支持边界判断、当裁剪框里出现空白时，图片自动吸附至完全填满裁剪框；</li>
+<li>移动端缩放以双指中心为基准点；</li>
+<li>交互体验媲美原生客户端。</li>
+</ul>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/05/16/simple-crop/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://newbieweb.lione.me/2019/04/29/css-2d-transform-matrix/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Young">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NewbieWeb">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">
+              
+              <a href="/2019/04/29/css-2d-transform-matrix/" class="post-title-link" itemprop="url">CSS3 2D Transform Matrix</a>
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-29 17:17:00" itemprop="dateCreated datePublished" datetime="2019-04-29T17:17:00+08:00">2019-04-29</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-03-03 11:28:24" itemprop="dateModified" datetime="2020-03-03T11:28:24+08:00">2020-03-03</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/前端开发/" itemprop="url" rel="index"><span itemprop="name">前端开发</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>给自己出了一道题如下：</p>
+<p>在某个大矩形中心有一个黄色的矩形，对该黄色矩形进行一系列 transform 变换得到灰色矩形；</p>
+<p>以大矩形中心为<code>坐标原点</code>，屏幕水平向左为<code>X 轴正方向</code>，屏幕垂直向上为<code>Y 轴正方向</code>，黄色矩形初始位置中心在坐标原点，根据其宽高可以得到其初始位置四个顶点的坐标<code>initPoints</code>；</p>
+<p>那么求黄色矩形经过一系列变换后新的顶点坐标。</p>
+<img src="https://newbieyoung.github.io/images/css-2d-transform-matrix-0.jpg">
+
+<p>示例链接如下：<a href="https://newbieyoung.github.io/CSS_learn/transform3.html" target="_blank" rel="noopener">https://newbieyoung.github.io/CSS_learn/transform3.html</a></p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/04/29/css-2d-transform-matrix/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://newbieweb.lione.me/2019/03/26/motion-blur/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Young">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NewbieWeb">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">
+              
+              <a href="/2019/03/26/motion-blur/" class="post-title-link" itemprop="url">运动模糊滤镜</a>
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-26 21:00:00" itemprop="dateCreated datePublished" datetime="2019-03-26T21:00:00+08:00">2019-03-26</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-09 13:12:33" itemprop="dateModified" datetime="2019-11-09T13:12:33+08:00">2019-11-09</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/前端开发/" itemprop="url" rel="index"><span itemprop="name">前端开发</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>运动模糊是指快速运动的物体造成明显的模糊拖动痕迹；</p>
+<p>以简单的直线运动为例，运动模糊应该具有两个参数，分别是半径长度和角度；</p>
+<p>比如在<code>Sketch</code>中如下：</p>
+<img src="https://newbieyoung.github.io/images/motion-blur-0.jpg">
+
+<p>但是 CSS、Canvas、SVG 的滤镜均不支持运动模糊。</p>
+<p>那是不是意味着如果设计师只是对一个很简单的图形使用了<code>Sketch</code>中的运动模糊滤镜，我们在重构时就必须使用图片来实现呢？</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/03/26/motion-blur/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://newbieweb.lione.me/2019/03/05/threejs-antialiasing/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Young">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NewbieWeb">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">
+              
+              <a href="/2019/03/05/threejs-antialiasing/" class="post-title-link" itemprop="url">聊一聊 ThreeJS 反锯齿</a>
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-05 17:20:00" itemprop="dateCreated datePublished" datetime="2019-03-05T17:20:00+08:00">2019-03-05</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-09 13:12:33" itemprop="dateModified" datetime="2019-11-09T13:12:33+08:00">2019-11-09</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3D技术/" itemprop="url" rel="index"><span itemprop="name">3D技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>之所以会折腾这个问题主要是因为自己的魔方微信小游戏在<code>Android</code>机型中存在莫名其妙的<code>锯齿</code>问题；</p>
+<img src="https://newbieyoung.github.io/images/threejs-antialiasing-0.jpg">
+
+<p>那怕是已经在创建<code>WebGLRenderer</code>渲染器时设置了反锯齿参数。</p>
+<img src="https://newbieyoung.github.io/images/threejs-antialiasing-1.jpg">
+
+<p>曾经有人问我遇到锯齿问题怎么办？</p>
+<p>其实除了设置反锯齿参数之外，我也不知道该怎么办…</p>
+<p>因此就趁着这个机会稍微了解了一下。</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/03/05/threejs-antialiasing/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://newbieweb.lione.me/2019/02/23/chrome-network-http2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Young">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NewbieWeb">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">
+              
+              <a href="/2019/02/23/chrome-network-http2/" class="post-title-link" itemprop="url">Chrome Network 和 Puppeteer 禁止 HTTP2</a>
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-02-23 15:47:00" itemprop="dateCreated datePublished" datetime="2019-02-23T15:47:00+08:00">2019-02-23</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-09 13:12:33" itemprop="dateModified" datetime="2019-11-09T13:12:33+08:00">2019-11-09</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/网络协议/" itemprop="url" rel="index"><span itemprop="name">网络协议</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>以前做过一个 <a href="https://newbieweb.lione.me/2018/12/13/lottie-web-sprite/">精灵图在 Lottie Web 动画中的应用</a>的方案；因为要写PPT，所以需要举证这种方案的优点；</p>
+<p>但是当我在 Chrome 浏览器的 Network 中查看优化前的 waterfall 的时候震惊了；</p>
+<img src="https://newbieyoung.github.io/images/chrome-network-http2-0.jpg">
+
+<p>不是说好并发请求数有限制的吗？怎么会有一百个请求同时发送？</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/02/23/chrome-network-http2/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+  </section>
+
+  
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+  </nav>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Young</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">51</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/newbieYoung" title="GitHub &rarr; https://github.com/newbieYoung" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://www.zhihu.com/people/NewbieYoung" title="知乎 &rarr; https://www.zhihu.com/people/NewbieYoung" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>知乎</a>
+      </span>
+    
+  </div>
+
+
+
+        </div>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Young</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.3.0</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+      </div>
+
+    
+
+  </div>
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+<script src="/js/utils.js?v=7.3.0"></script>
+  <script src="/js/motion.js?v=7.3.0"></script>
+
+
+  <script src="/js/affix.js?v=7.3.0"></script>
+  <script src="/js/schemes/pisces.js?v=7.3.0"></script>
+
+
+
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  
+</body>
+</html>

@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="generator" content="Hexo 3.9.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    save_scroll: false,
+    copycode: {"enable":false,"show_result":false,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta name="description" content="之所以会折腾这个问题主要是因为自己的魔方微信小游戏在Android机型中存在莫名其妙的锯齿问题；   那怕是已经在创建WebGLRenderer渲染器时设置了反锯齿参数。   曾经有人问我遇到锯齿问题怎么办？ 其实除了设置反锯齿参数之外，我也不知道该怎么办… 因此就趁着这个机会稍微了解了一下。">
+<meta name="keywords" content="ThreeJS,WebGL,抗锯齿">
+<meta property="og:type" content="article">
+<meta property="og:title" content="聊一聊 ThreeJS 反锯齿">
+<meta property="og:url" content="https://newbieweb.lione.me/2019/03/05/threejs-antialiasing/index.html">
+<meta property="og:site_name" content="NewbieWeb">
+<meta property="og:description" content="之所以会折腾这个问题主要是因为自己的魔方微信小游戏在Android机型中存在莫名其妙的锯齿问题；   那怕是已经在创建WebGLRenderer渲染器时设置了反锯齿参数。   曾经有人问我遇到锯齿问题怎么办？ 其实除了设置反锯齿参数之外，我也不知道该怎么办… 因此就趁着这个机会稍微了解了一下。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-antialiasing-0.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-antialiasing-1.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-antialiasing-2.png">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-antialiasing-3.png">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-antialiasing-4.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-antialiasing-5.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-antialiasing-6.png">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-antialiasing-7.png">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-antialiasing-8.png">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-antialiasing-9.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-antialiasing-10.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-antialiasing-11.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-antialiasing-12.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-antialiasing-13.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-antialiasing-14.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-antialiasing-15.jpg">
+<meta property="og:updated_time" content="2019-11-09T05:12:33.400Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="聊一聊 ThreeJS 反锯齿">
+<meta name="twitter:description" content="之所以会折腾这个问题主要是因为自己的魔方微信小游戏在Android机型中存在莫名其妙的锯齿问题；   那怕是已经在创建WebGLRenderer渲染器时设置了反锯齿参数。   曾经有人问我遇到锯齿问题怎么办？ 其实除了设置反锯齿参数之外，我也不知道该怎么办… 因此就趁着这个机会稍微了解了一下。">
+<meta name="twitter:image" content="https://newbieyoung.github.io/images/threejs-antialiasing-0.jpg">
+  <link rel="canonical" href="https://newbieweb.lione.me/2019/03/05/threejs-antialiasing/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>聊一聊 ThreeJS 反锯齿 | NewbieWeb</title>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-145147663-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-145147663-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  <div class="container sidebar-position-left">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">NewbieWeb</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">Oh,Captain! My Captain! Carpe Diem!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content page-post-detail">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://newbieweb.lione.me/2019/03/05/threejs-antialiasing/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Young">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NewbieWeb">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">聊一聊 ThreeJS 反锯齿
+
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-05 17:20:00" itemprop="dateCreated datePublished" datetime="2019-03-05T17:20:00+08:00">2019-03-05</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-09 13:12:33" itemprop="dateModified" datetime="2019-11-09T13:12:33+08:00">2019-11-09</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3D技术/" itemprop="url" rel="index"><span itemprop="name">3D技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>之所以会折腾这个问题主要是因为自己的魔方微信小游戏在<code>Android</code>机型中存在莫名其妙的<code>锯齿</code>问题；</p>
+<img src="https://newbieyoung.github.io/images/threejs-antialiasing-0.jpg">
+
+<p>那怕是已经在创建<code>WebGLRenderer</code>渲染器时设置了反锯齿参数。</p>
+<img src="https://newbieyoung.github.io/images/threejs-antialiasing-1.jpg">
+
+<p>曾经有人问我遇到锯齿问题怎么办？</p>
+<p>其实除了设置反锯齿参数之外，我也不知道该怎么办…</p>
+<p>因此就趁着这个机会稍微了解了一下。</p>
+<a id="more"></a>
+
+<h2 id="为什么会有锯齿？"><a href="#为什么会有锯齿？" class="headerlink" title="为什么会有锯齿？"></a>为什么会有锯齿？</h2><p>锯齿的出现和<code>光栅器</code>的工作方式有关，顶点坐标理论上可以取任意值，但是<code>片元</code>不行，因为它们受限于显示器的分辨率，所以光栅器必须以某种方式来决定每个片元最终的屏幕坐标；</p>
+<img src="https://newbieyoung.github.io/images/threejs-antialiasing-2.png">
+
+<p>在上图中每个像素中心包含一个采样点，它会被用来决定这个三角形是否覆盖了某个像素点，图中红色的采样点被三角形所覆盖，在每个被覆盖的像素处都会生成一个片元；虽然三角形边缘的一些部分也遮住了某些屏幕像素，但是这些像素的采样点并没有被三角形内部所覆盖，所以它们不会被片元着色器影响，最终渲染出来的效果如下：</p>
+<img src="https://newbieyoung.github.io/images/threejs-antialiasing-3.png">
+
+<p>由于显示器的分辨率限制，有些边缘的像素能被渲染出来，有些则不会，造成的结果就是渲染的图像具有不平滑的边缘，这也就是锯齿出现的原因了。</p>
+<h2 id="超采样抗锯齿（SSAA）"><a href="#超采样抗锯齿（SSAA）" class="headerlink" title="超采样抗锯齿（SSAA）"></a>超采样抗锯齿（SSAA）</h2><p>最开始大家使用一种叫<code>超采样抗锯齿（Super Sample Anti-aliasing）</code>的技术来解决这个问题，它会使用比正常分辨率更高的分辨率来渲染场景，当图像输出在帧缓冲中更新时，分辨率会被下采样（Downsample）至正常的分辨率，这些额外的分辨率会被用来防止锯齿的产生，但是因为要绘制更多的片元，因此会带来很大的性能开销。</p>
+<p>在 ThreeJS 框架中有对应的例子实现<a href="https://threejs.org/examples/?q=ssaa#webgl_postprocessing_ssaa" target="_blank" rel="noopener">webgl_postprocessing_ssaa</a>。</p>
+<img src="https://newbieyoung.github.io/images/threejs-antialiasing-4.jpg">
+
+<img src="https://newbieyoung.github.io/images/threejs-antialiasing-5.jpg">
+
+<p>不过这个例子中并不是采用的使用更高分辨率的方式来实现的，而是通过多次渲染场景，每次渲染时对摄像机进行轻微的抖动偏移，从而得到额外的颜色信息，最终会根据这些额外的颜色信息来进行防锯齿处理。</p>
+<h2 id="多重采样抗锯齿（MSAA）"><a href="#多重采样抗锯齿（MSAA）" class="headerlink" title="多重采样抗锯齿（MSAA）"></a>多重采样抗锯齿（MSAA）</h2><p>在超采样抗锯齿技术基础上诞生了更为现代的技术，即<code>多重采样抗锯齿（Multisample Anti-aliasing）</code>。</p>
+<img src="https://newbieyoung.github.io/images/threejs-antialiasing-6.png">
+
+<p>如图所示多重采样所做的正是将单一的采样点变为多个采样点，我们不再使用像素中心的单一采样点，取而代之的是以特定图案排列的4个采样点，我们将用这些子采样点来决定像素的覆盖度；当然这也意味着颜色缓存区的大小会随着子采样点的增加而增加；</p>
+<p>采样点的数量并不是固定的，更多的采样点能带来更精确的覆盖率，而最终的像素颜色将由片元本身的颜色和覆盖率共同决定。</p>
+<img src="https://newbieyoung.github.io/images/threejs-antialiasing-7.png">
+
+<p>多重采样需要硬件的支持而且多采样点也会带来一定的性能问题，另外还不能和<code>延迟渲染</code>很好的配合。</p>
+<h2 id="后处理抗锯齿（PPAA）"><a href="#后处理抗锯齿（PPAA）" class="headerlink" title="后处理抗锯齿（PPAA）"></a>后处理抗锯齿（PPAA）</h2><p>鉴于多重采样的不足，各种后处理抗锯齿技术（Post Process Antialiasing）发展了起来，比如<code>FXAA</code>和<code>SMAA</code>。</p>
+<p><code>快速近似抗锯齿（FXAA）</code>是基于边缘检测的抗锯齿算法，依赖于像素信息的变化，可以参考 <a href="https://github.com/mattdesl/glsl-fxaa" target="_blank" rel="noopener">mattdesl/glsl-fxaa</a> 的实现：</p>
+<ul>
+<li>先是根据片元位置获取其周围片元的位置；</li>
+</ul>
+<img src="https://newbieyoung.github.io/images/threejs-antialiasing-8.png">
+
+<p>示意图如下：</p>
+<img src="https://newbieyoung.github.io/images/threejs-antialiasing-9.jpg">
+
+<ul>
+<li>然后根据位置获取颜色值；</li>
+</ul>
+<img src="https://newbieyoung.github.io/images/threejs-antialiasing-10.jpg">
+
+<ul>
+<li>然后根据颜色值计算亮度；</li>
+</ul>
+<img src="https://newbieyoung.github.io/images/threejs-antialiasing-11.jpg">
+
+<p>同时计算最大亮度和最小亮度，边缘变化越明显则局部差异越大（<code>luma</code>是标准灰度向量，亮度通过颜色向量和标准灰度向量的点乘计算得到）。</p>
+<ul>
+<li>最后就是很玄学的抗锯齿处理的颜色计算了。</li>
+</ul>
+<img src="https://newbieyoung.github.io/images/threejs-antialiasing-12.jpg">
+
+<p>作者提供了 <a href="http://mattdesl.github.io/glsl-fxaa/demo/" target="_blank" rel="noopener">在线DEMO</a> 对比优化前后的效果。</p>
+<p>在 ThreeJS 框架中对于<code>FXAA</code>和<code>SMAA</code>都是对应的例子实现：</p>
+<ul>
+<li><a href="https://threejs.org/examples/?q=fxaa#webgl_postprocessing_fxaa" target="_blank" rel="noopener">webgl_postprocessing_fxaa</a>；</li>
+</ul>
+<img src="https://newbieyoung.github.io/images/threejs-antialiasing-13.jpg">
+
+<ul>
+<li><a href="https://threejs.org/examples/?q=fxaa#webgl_postprocessing_fxaa" target="_blank" rel="noopener">webgl_postprocessing_smaa</a>；</li>
+</ul>
+<img src="https://newbieyoung.github.io/images/threejs-antialiasing-14.jpg">
+
+<p>但是当我依葫芦画瓢在微信小游戏中使用<code>FXAA</code>和<code>SMAA</code>时却出现了很尴尬的情况：</p>
+<img src="https://newbieyoung.github.io/images/threejs-antialiasing-15.jpg">
+
+<p>虽然解决了魔方外部边缘的细小锯齿，但是却给魔方内部边缘带来了更严重的锯齿。</p>
+<p>这里我只能甩锅给微信小游戏的渲染引擎了！</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://learnopengl-cn.github.io/04%20Advanced%20OpenGL/11%20Anti%20Aliasing/" target="_blank" rel="noopener">LearnOpenGL CN 抗锯齿</a></li>
+<li><a href="http://www.selfgleam.com/fxaa.html" target="_blank" rel="noopener">抗锯齿技术之FXAA</a></li>
+<li><a href="https://www.qiujiawei.com/antialiasing/" target="_blank" rel="noopener">现代抗锯齿技术——PPAA中的新星SMAA</a></li>
+<li><a href="https://www.geeks3d.com/20110405/fxaa-fast-approximate-anti-aliasing-demo-glsl-opengl-test-radeon-geforce/" target="_blank" rel="noopener">Fast Approximate Anti-Aliasing</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+        
+        <div class="post-tags">
+            <a href="/tags/ThreeJS/" rel="tag"># ThreeJS</a>
+          
+            <a href="/tags/WebGL/" rel="tag"># WebGL</a>
+          
+            <a href="/tags/抗锯齿/" rel="tag"># 抗锯齿</a>
+          
+        </div>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+              <a href="/2019/02/23/chrome-network-http2/" rel="next" title="Chrome Network 和 Puppeteer 禁止 HTTP2">
+                <i class="fa fa-chevron-left"></i> Chrome Network 和 Puppeteer 禁止 HTTP2
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+              <a href="/2019/03/26/motion-blur/" rel="prev" title="运动模糊滤镜">
+                运动模糊滤镜 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Young</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">51</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/newbieYoung" title="GitHub &rarr; https://github.com/newbieYoung" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://www.zhihu.com/people/NewbieYoung" title="知乎 &rarr; https://www.zhihu.com/people/NewbieYoung" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>知乎</a>
+      </span>
+    
+  </div>
+
+
+
+        </div>
+      </div>
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么会有锯齿？"><span class="nav-number">1.</span> <span class="nav-text">为什么会有锯齿？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#超采样抗锯齿（SSAA）"><span class="nav-number">2.</span> <span class="nav-text">超采样抗锯齿（SSAA）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多重采样抗锯齿（MSAA）"><span class="nav-number">3.</span> <span class="nav-text">多重采样抗锯齿（MSAA）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#后处理抗锯齿（PPAA）"><span class="nav-number">4.</span> <span class="nav-text">后处理抗锯齿（PPAA）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">5.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Young</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.3.0</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+      </div>
+
+    
+
+  </div>
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+<script src="/js/utils.js?v=7.3.0"></script>
+  <script src="/js/motion.js?v=7.3.0"></script>
+
+
+  <script src="/js/affix.js?v=7.3.0"></script>
+  <script src="/js/schemes/pisces.js?v=7.3.0"></script>
+
+
+
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  
+  <script src="/js/scrollspy.js?v=7.3.0"></script>
+<script src="/js/post-details.js?v=7.3.0"></script>
+
+
+</body>
+</html>

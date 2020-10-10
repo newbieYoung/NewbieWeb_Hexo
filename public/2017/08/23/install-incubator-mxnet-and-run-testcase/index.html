@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="generator" content="Hexo 3.9.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    save_scroll: false,
+    copycode: {"enable":false,"show_result":false,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta name="description" content="前些天偶然间看到大家在讨论某些活动页面风格不一致的情况，然后想到了很久以前看过的一篇文章关于深度学习框架 Mxnet 的文章； 文章中有一个例子能把任意图片转换成梵高的绘画风格，结合上述大家讨论的情况，开了个脑洞： 能不能通过这个例子做一个判断页面风格是否一致的工具呢？">
+<meta name="keywords" content="Mxnet">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在 MAC 操作系统中安装 Mxnet 并运行其中的梵高绘画风格模拟例子">
+<meta property="og:url" content="https://newbieweb.lione.me/2017/08/23/install-incubator-mxnet-and-run-testcase/index.html">
+<meta property="og:site_name" content="NewbieWeb">
+<meta property="og:description" content="前些天偶然间看到大家在讨论某些活动页面风格不一致的情况，然后想到了很久以前看过的一篇文章关于深度学习框架 Mxnet 的文章； 文章中有一个例子能把任意图片转换成梵高的绘画风格，结合上述大家讨论的情况，开了个脑洞： 能不能通过这个例子做一个判断页面风格是否一致的工具呢？">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://newbieyoung.github.io/images/incubator-mxnet-0.jpg">
+<meta property="og:updated_time" content="2019-11-09T05:12:33.391Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="在 MAC 操作系统中安装 Mxnet 并运行其中的梵高绘画风格模拟例子">
+<meta name="twitter:description" content="前些天偶然间看到大家在讨论某些活动页面风格不一致的情况，然后想到了很久以前看过的一篇文章关于深度学习框架 Mxnet 的文章； 文章中有一个例子能把任意图片转换成梵高的绘画风格，结合上述大家讨论的情况，开了个脑洞： 能不能通过这个例子做一个判断页面风格是否一致的工具呢？">
+<meta name="twitter:image" content="https://newbieyoung.github.io/images/incubator-mxnet-0.jpg">
+  <link rel="canonical" href="https://newbieweb.lione.me/2017/08/23/install-incubator-mxnet-and-run-testcase/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>在 MAC 操作系统中安装 Mxnet 并运行其中的梵高绘画风格模拟例子 | NewbieWeb</title>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-145147663-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-145147663-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  <div class="container sidebar-position-left">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">NewbieWeb</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">Oh,Captain! My Captain! Carpe Diem!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content page-post-detail">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://newbieweb.lione.me/2017/08/23/install-incubator-mxnet-and-run-testcase/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Young">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NewbieWeb">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">在 MAC 操作系统中安装 Mxnet 并运行其中的梵高绘画风格模拟例子
+
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2017-08-23 17:41:00" itemprop="dateCreated datePublished" datetime="2017-08-23T17:41:00+08:00">2017-08-23</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-09 13:12:33" itemprop="dateModified" datetime="2019-11-09T13:12:33+08:00">2019-11-09</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>前些天偶然间看到大家在讨论某些活动页面风格不一致的情况，然后想到了很久以前看过的一篇文章关于深度学习框架 Mxnet 的文章；</p>
+<p>文章中有一个例子能把任意图片转换成梵高的绘画风格，结合上述大家讨论的情况，开了个脑洞：</p>
+<p>能不能通过这个例子做一个判断页面风格是否一致的工具呢？</p>
+<a id="more"></a>
+
+<p>比如：</p>
+<ul>
+<li>首先确定某个页面为标准风格；</li>
+<li>然后使用 Mxnet 框架中的例子把活动页面转换为标准风格；</li>
+<li>然后比较该活动页面标准风格和原始风格的相似程度来判断该活动页面的原始风格是否符合既定的标准风格。</li>
+</ul>
+<p>折腾了一下午证实了这个脑洞是个失败的脑洞，主要原因是 Mxnet 框架里边的这个例子中的算法不具备通用性，只能把任意图片转换成“特征“很明显的图片风格。</p>
+<p>而不同网页的风格相比不同的绘画风格，其实是差异很小的。</p>
+<p>虽然脑洞失败了，但是毕竟折腾了一下午，在安装 Mxnet 以及运行例子程序时遇到了很多问题，鉴于网上的教程大多不靠谱，还是记录一下，万一后边对深度学习之类有兴趣了呢！</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>其实安装流程参照<a href="http://mxnet.io/get_started/install.html" target="_blank" rel="noopener">官网流程</a>即可，比网上的教程靠谱很多，一般不会出现啥问题。</p>
+<h2 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h2><p>Github 上有很多信息，包括梵高绘画风格模拟例子的怎么运行的<a href="https://github.com/apache/incubator-mxnet/tree/master/example/neural-style" target="_blank" rel="noopener">指引</a>。</p>
+<p>但是在执行<code>python nstyle.py</code>时却报错<code>ImportError: No module named skimage</code>；</p>
+<p>根据错误信息可知，Python中某个叫<code>skimage</code>的模块导入失败，有可能是该模块不存在或者版本不对，此时需要安装或者更新该模块；</p>
+<p>执行<code>sudo pip install scikit-image --upgrade</code>；</p>
+<p>此时还是有问题：</p>
+<p><code>Found existing installation: six 1.4.1
+    DEPRECATION: Uninstalling a distutils installed project (six) has been deprecated and will be removed in a future version...</code></p>
+<p>大致原因是因为安装skimage时本地已经安装的six库版本过低需要更新，结果更新时没有权限就报错了；</p>
+<p>因此需要忽略six安装skimage；</p>
+<p><code>sudo pip install scikit-image --upgrade --ignore-installed six</code>；</p>
+<p>结果还是报错：</p>
+<p><code>OSError:[Errno 1] Operation not permitted: &#39;/System/*/Python.framework/Version/2.7/share&#39;</code></p>
+<p>新版的MAC操作系统有一个叫SIP的机制禁止任何用户直接修改System目录的文件，解决办法是取消这种机制，具体做法是：</p>
+<ul>
+<li><p>重启电脑，按住Command+R（直到出现苹果标志）进入恢复模式；</p>
+</li>
+<li><p>左上角菜单中打开终端；</p>
+</li>
+<li><p>执行<code>csrutil disable</code>；</p>
+</li>
+<li><p>重启电脑即可；</p>
+</li>
+</ul>
+<p>如果想要启用 SIP 机制，按上述流程，执行<code>csrutil enable</code>即可。</p>
+<p>到此应该不存在其它环境问题了，但是运行例子程序时还是报错：</p>
+<p><code>Operator _zeros is not implemented for GPU.</code></p>
+<p>原因在于该例子程序默认是在GPU上执行的，但是我们安装的时候是安装的CPU版本，因此需要在运行指定在CPU上执行；</p>
+<p><code>python nstyle.py --gpu -1</code>。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>虽说脑洞失败，但这个例子其实还是有那么一点意思的，比如生成一张梵高绘画风格的图片……</p>
+<img src="https://newbieyoung.github.io/images/incubator-mxnet-0.jpg">
+
+
+
+
+
+
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+        
+        <div class="post-tags">
+            <a href="/tags/Mxnet/" rel="tag"># Mxnet</a>
+          
+        </div>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+              <a href="/2017/08/22/normal-filter-intro/" rel="next" title="常用滤镜算法以及WebGL实现">
+                <i class="fa fa-chevron-left"></i> 常用滤镜算法以及WebGL实现
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+              <a href="/2017/10/12/sphere-to-cube-panorama/" rel="prev" title="聊一聊全景图">
+                聊一聊全景图 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Young</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">51</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/newbieYoung" title="GitHub &rarr; https://github.com/newbieYoung" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://www.zhihu.com/people/NewbieYoung" title="知乎 &rarr; https://www.zhihu.com/people/NewbieYoung" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>知乎</a>
+      </span>
+    
+  </div>
+
+
+
+        </div>
+      </div>
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装"><span class="nav-number">1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运行"><span class="nav-number">2.</span> <span class="nav-text">运行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结语"><span class="nav-number">3.</span> <span class="nav-text">结语</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Young</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.3.0</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+      </div>
+
+    
+
+  </div>
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+<script src="/js/utils.js?v=7.3.0"></script>
+  <script src="/js/motion.js?v=7.3.0"></script>
+
+
+  <script src="/js/affix.js?v=7.3.0"></script>
+  <script src="/js/schemes/pisces.js?v=7.3.0"></script>
+
+
+
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  
+  <script src="/js/scrollspy.js?v=7.3.0"></script>
+<script src="/js/post-details.js?v=7.3.0"></script>
+
+
+</body>
+</html>

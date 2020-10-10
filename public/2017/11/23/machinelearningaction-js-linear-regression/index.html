@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="generator" content="Hexo 3.9.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    save_scroll: false,
+    copycode: {"enable":false,"show_result":false,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta name="description" content="不知道从什么时候开始人工智能突然就火了起来，某天机缘巧合被Mxnet框架里边的一个把任意一副图片转换成梵高绘画风格的例子给震惊了，感觉非常神奇，竟然还有这种操作，然后就开始坎坷的学习机器学习的旅程。">
+<meta name="keywords" content="机器学习,线性回归,梯度下降">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UI工程师的机器学习之旅（一）线性回归和梯度下降">
+<meta property="og:url" content="https://newbieweb.lione.me/2017/11/23/machinelearningaction-js-linear-regression/index.html">
+<meta property="og:site_name" content="NewbieWeb">
+<meta property="og:description" content="不知道从什么时候开始人工智能突然就火了起来，某天机缘巧合被Mxnet框架里边的一个把任意一副图片转换成梵高绘画风格的例子给震惊了，感觉非常神奇，竟然还有这种操作，然后就开始坎坷的学习机器学习的旅程。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-0.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-1.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-11.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-2.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-3.gif">
+<meta property="og:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-4.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-5.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-6.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-10.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-9.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-8.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-7.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-12.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-13.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-14.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-15.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-16.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-17.jpg">
+<meta property="og:updated_time" content="2019-11-09T05:12:33.392Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="UI工程师的机器学习之旅（一）线性回归和梯度下降">
+<meta name="twitter:description" content="不知道从什么时候开始人工智能突然就火了起来，某天机缘巧合被Mxnet框架里边的一个把任意一副图片转换成梵高绘画风格的例子给震惊了，感觉非常神奇，竟然还有这种操作，然后就开始坎坷的学习机器学习的旅程。">
+<meta name="twitter:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-0.jpg">
+  <link rel="canonical" href="https://newbieweb.lione.me/2017/11/23/machinelearningaction-js-linear-regression/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>UI工程师的机器学习之旅（一）线性回归和梯度下降 | NewbieWeb</title>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-145147663-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-145147663-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  <div class="container sidebar-position-left">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">NewbieWeb</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">Oh,Captain! My Captain! Carpe Diem!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content page-post-detail">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://newbieweb.lione.me/2017/11/23/machinelearningaction-js-linear-regression/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Young">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NewbieWeb">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">UI工程师的机器学习之旅（一）线性回归和梯度下降
+
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2017-11-23 17:00:00" itemprop="dateCreated datePublished" datetime="2017-11-23T17:00:00+08:00">2017-11-23</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-09 13:12:33" itemprop="dateModified" datetime="2019-11-09T13:12:33+08:00">2019-11-09</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>不知道从什么时候开始人工智能突然就火了起来，某天机缘巧合被<code>Mxnet</code>框架里边的一个把任意一副图片转换成梵高绘画风格的例子给震惊了，感觉非常神奇，竟然还有这种操作，然后就开始坎坷的学习机器学习的旅程。</p>
+<a id="more"></a>
+
+<p>开始学习是在网易云课堂上的<a href="https://study.163.com/my#/smarts" target="_blank" rel="noopener">深度学习工程师微专业</a>；</p>
+<p>要想大概了解一些背景知识或者行业现状可以看看第一周的课程和里边的人工智能行业大师访谈；</p>
+<img src="https://newbieyoung.github.io/images/machinelearningaction-js-0.jpg">
+
+<img src="https://newbieyoung.github.io/images/machinelearningaction-js-1.jpg">
+
+<p>后续课程直接是从<code>logistic回归</code>开始；</p>
+<img src="https://newbieyoung.github.io/images/machinelearningaction-js-11.jpg">
+
+<p>初一接触感觉理解有点困难，在网上查找资料的时候发现<code>线性回归</code>相对来说更好理解一点，就干脆先把<code>logistic回归</code>放一放转而去学习<code>线性回归</code>，并在网易公开课上找到了另外一门课程<a href="http://open.163.com/special/opencourse/machinelearning.html" target="_blank" rel="noopener">斯坦福大学公开课 ：机器学习课程</a>。</p>
+<img src="https://newbieyoung.github.io/images/machinelearningaction-js-2.jpg">
+
+<p>第一集主要是一些概览型的知识，第二集和第三集主要讲解的是<code>线性回归</code>和<code>梯度下降</code>，第四集开始讲解<code>logistic回归</code>。</p>
+<p>说了这么一堆流水账主要是想说<code>下文中所有关于理论的知识都是来源上述两个课程，本人初学阐述起来可能会解释不清或者甚至可能存在错误，因此建议还是看看权威资料为妙！</code>。</p>
+<p>在觉得自己大概了解<code>线性回归</code>和<code>梯度下降</code>相关知识后，想着大概需要实践一下加深理解了，但是实际却发现首先是缺乏数据，就算是写爬虫去爬也一时间不知道爬啥，另外也不能确定爬取的数据符合线性模型；</p>
+<p>因此又去网上找了一本书<a href="https://book.douban.com/subject/24703171/" target="_blank" rel="noopener">《机器学习实战》</a>，书中有一些自带数据且说明模型的的算法实践例子，所有代码都在<a href="https://github.com/pbharrin/machinelearninginaction" target="_blank" rel="noopener">machinelearninginaction</a>这个项目里边。</p>
+<p>由于本人对 Python 不熟再加上书中 Python 代码注释较少，看起来略吃力，后来一想如果只是学习练习的话，使用什么语言应该是小事才对，所以就有了这个项目<a href="https://github.com/newbieYoung/machinelearninginaction-js" target="_blank" rel="noopener">machinelearninginaction-js</a>，准备用自己熟悉的 JS 实现一些机器学习算法，顺便还能做些可视化的东西。</p>
+<p>比如下边这个<a href="https://newbieyoung.github.io/machinelearninginaction-js/Ch08/ex0.html" target="_blank" rel="noopener">基于线性回归演示各种梯度下降过程</a>的例子。</p>
+<img src="https://newbieyoung.github.io/images/machinelearningaction-js-3.gif">
+
+<h2 id="线性回归"><a href="#线性回归" class="headerlink" title="线性回归"></a>线性回归</h2><p>在统计学中，线性回归是利用称为线性回归方程的最小二乘函数对一个或多个自变量和因变量之间关系进行建模的一种回归分析。</p>
+<p>简单来说如果有一堆如下数据，可以近似看成线性模型，并拟合出那条黑色的回归线，且能根据回归线做出符合预期的预测，这整个过程就叫线性回归吧……</p>
+<img src="https://newbieyoung.github.io/images/machinelearningaction-js-4.jpg">
+
+<p>上边的模型中只有一个因变量因此可以叫做<code>一元线性回归</code>，回归线一般可以写成如下形式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">y = p0+p1*x</span><br></pre></td></tr></table></figure>
+
+<p>如果存在多个自变量时，回归模型表示为以下形式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">y = p0+p1*x1+p2*x2+...+pn*xn;</span><br></pre></td></tr></table></figure>
+
+<h2 id="梯度下降"><a href="#梯度下降" class="headerlink" title="梯度下降"></a>梯度下降</h2><p>以一元线性模型为例，我们要求得线性回归线就必须找到在一条拟合模型中所有数据的误差最小的线。</p>
+<p>在机器学习中优化算法，除了梯度下降以外，还有最小二乘法、牛顿法以及拟牛顿法等多种方法，最小二乘法适合样本数据量较小的情况，可以直接求解；牛顿法和拟牛顿法是用二阶的海森矩阵的逆矩阵或伪逆矩阵求解，收敛更快，但是每次迭代时间比梯度下降长。</p>
+<p>误差我们取实际值和预测值距离的平方和，如图：</p>
+<img src="https://newbieyoung.github.io/images/machinelearningaction-js-5.jpg">
+
+<p>对于<code>L</code>来说其误差为<code>l1*l1+l2*l2+l3*l3+l4*l4+l5*l5</code>；</p>
+<p>假设某一元线性模型样本数据数量为<code>m</code>，分别为<code>(x1,y1)</code>、<code>(x2,y2)</code>……<code>(xm,ym)</code>；回归线为<code>H(x) = p0+p1*x</code>；那么其误差如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">J(p0,p1) = (H(x1)-y1)+(H(x2)-y2)+......+(H(xm)-ym)</span><br></pre></td></tr></table></figure>
+
+<p>可以简单写为如下形式：</p>
+<img src="https://newbieyoung.github.io/images/machinelearningaction-js-6.jpg">
+
+<p>关于为什么误差是实际值和推测值差的平方的和，课程里边其实也没做过多解释，可以先简单的理解为误差是实际值和推测值差的平方的和时误差符合正态分布；实际推导我准备放到<code>logistic回归</code>里边再聊，因为需要用到<code>极大似然估计</code>；</p>
+<p>另外为什么我们假定误差符合正态分布？这个问题我很难解释清楚，可以去了解了解高斯的一些事以及极限中心定理，正态分布在误差分析中的地位应该是高斯奠定的，而且极限中心定理指出，如果一个随机变量是若干独立随机变量的总和，当被加的个数趋于无穷大时，它的概率密度函数近似高斯密度…BA…LA…BA…LA…</p>
+<p>最后取二分之一则是为了计算方便，后边需要求偏导数。</p>
+<p>上述误差函数同样适用于多元线性回归模型，假设某多元线性回归模型样本数量还是<code>m</code>，分别为<code>(x11,x12,x13...,x1n,y11)</code>、<code>(x21,x22,x23...,x2n,y21)</code>……<code>(xm1,xm2,xm3...,xmn,ym1)</code>，回归线为<code>H(x) = p0+p1*x1+p2*x2+...+pn*xn</code>；那么其误差函数可以表示为<code>J(p0,p1...pn)</code>；</p>
+<img src="https://newbieyoung.github.io/images/machinelearningaction-js-10.jpg">
+
+<p>现在我们知道了误差函数，接下来按照梯度下降的方法来求误差函数的最小值，在开始之前我们得明确以下几点：</p>
+<ul>
+<li>得确保误差函数存在最小值（如果不存在可以对整体结果取负）并且可微（也就是在定义域内所有点都存在导数）；</li>
+<li>其二把某次样本数据代入到误差函数中后，函数中的自变量实际为参数<code>p1、p2......pn</code>；</li>
+</ul>
+<p>还是以简单的一元线性模型误差函数举例，其函数图如下：</p>
+<img src="https://newbieyoung.github.io/images/machinelearningaction-js-9.jpg">
+
+<p><code>Z</code>轴表示误差、<code>X</code>轴是参数<code>p0</code>、<code>Y</code>轴是参数<code>p1</code>；因此显示出来有点类似三维地形图；当然你可能把偏导数都给忘记了，觉得还是有点复杂，没关系我们可以用更简单的例子来说明，如下：</p>
+<img src="https://newbieyoung.github.io/images/machinelearningaction-js-8.jpg">
+
+<p>按照梯度下降方法来，首先我们假定初始化位置在点<code>A</code>，然后把点<code>A</code>的自变量<code>x</code>减去<code>A</code>点导数的<code>alpha</code>倍，得到点<code>B</code>；依此类推，因为越靠近最小值导数越接近0，因此从<code>A</code>点按照这种规律迭代只会发生一种情况就是不断的向最低点靠近，就算某次变化到了最低点的左侧也会因为导数变为负数从而向右侧运动。</p>
+<p>但是我们需要注意两个地方：</p>
+<ul>
+<li>学习速度<code>alpha</code>取值，如果取太大容易导致始终在点<code>A</code>和点<code>C</code>间循环迭代甚至越迭代越远离最低点，如果取太小会导致迭代速度很慢，因此学习速度的选取需要多次运行后才能得到一个较为优的值；</li>
+<li>如果初始化位置在点<code>E</code>那么使用梯度下降取得得最小值可能会是局部最小值，因此梯度下降有局部最优解的风险，还是需要多次运行，选取不同的初始值才能在存在多个局部最优解时相对靠近真正最优解的值。</li>
+</ul>
+<p>综上所述使用梯度下降法可得<code>P</code>的更新过程：</p>
+<img src="https://newbieyoung.github.io/images/machinelearningaction-js-7.jpg">
+
+<p>关于什么是<code>偏导数</code>、什么是<code>梯度</code>？我们以三维空间中的曲面为例，在曲面的每一点都有无穷多条切线，<code>偏导数</code>就是选取其中一条切线，一般取垂直于<code>Y</code>轴以及垂直于<code>X</code>轴的切线；而这两个偏导数组成一个向量就是这个曲线在该点的<code>梯度向量</code>，从几何意义上来说<code>梯度向量</code>的方向就是曲面函数在该点增加最快的方向，沿着梯度方向更容易找到函数的最大值，反过来说，沿着梯度方向的反方向也就更容易找到函数的最小值了。</p>
+<p>最终求出的更新过程方程式如下：</p>
+<img src="https://newbieyoung.github.io/images/machinelearningaction-js-12.jpg">
+
+<h2 id="算法实现"><a href="#算法实现" class="headerlink" title="算法实现"></a>算法实现</h2><p>首先定义线性模型；</p>
+<img src="https://newbieyoung.github.io/images/machinelearningaction-js-13.jpg">
+
+<p>然后实现梯度更新过程方程式；</p>
+<img src="https://newbieyoung.github.io/images/machinelearningaction-js-14.jpg">
+
+<p>最后进行梯度下降迭代；</p>
+<img src="https://newbieyoung.github.io/images/machinelearningaction-js-15.jpg">
+
+<p>为了观察到整个过程我们还可以把每次迭代的值保存下来，然后进行可视化显示（散点图和直线图都是使用<code>HighCharts</code>绘制）；</p>
+<img src="https://newbieyoung.github.io/images/machinelearningaction-js-16.jpg">
+
+<h2 id="算法扩展"><a href="#算法扩展" class="headerlink" title="算法扩展"></a>算法扩展</h2><p>上边实现的梯度下降算法是<code>批量梯度下降</code>，每次更新我们都需要在整个数据集上求出所有的偏导数，计算量较大，在数据集很大的情况下会消耗大量内存而且每次迭代的速度也会很慢，很难使用；因此诞生了另外两种方法，分别是<code>随机梯度下降</code>和<code>小批量梯度下降</code>；相比于<code>批量梯度下降</code>而言<code>随机梯度下降</code>的每次更新是对数据集中的随机一个样本进行计算，因此它的运行速度被大大加快，但是因为使用的数据太少会导致另外一个问题，即迭代时会产生剧烈波动的情况，导致迭代次数较多；<code>小批量梯度下降</code>结合了上述两种方法的优势，每次更新时会随机取一部分数据进行计算，这种方式既加速了运算速度又使得收敛过程较为稳定。</p>
+<p>对上述两种方法简单实现如下：</p>
+<img src="https://newbieyoung.github.io/images/machinelearningaction-js-17.jpg">
+
+<p>聊到这实在按耐不住内心的惶恐，忍不住补充一句，上边只是<code>简单</code>的实践和阐述了一些学习收获，实际情况比这些复杂的多哈……</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>东西太多，为了防止文章过长就暂时到此为止了，如果你仔细思考就会发现，几乎任意一数据集都可以使用上述方法来建立模型，但是我们怎么判断这些模型的好坏呢？上述例子数据量小而且自变量只有一个，可以很简单的被可视化出来，我们可以肉眼观察，但是那些数据量很大，变量因素很多的怎么办？</p>
+<p>另外我们可以看到虽然上述例子可以近似看成一条直线，但是每隔一段距离存在一段有规律的曲线，但是我们回归出来的直线很明显没办法表现这种规律，针对这种情况我们又应该怎么处理？</p>
+<p>后续有机会再聊<code>相关系数</code>和<code>局部加权线性回归</code>等。</p>
+<p>对了，有兴趣的同学一起来玩哈！<a href="https://github.com/newbieYoung/machinelearninginaction-js" target="_blank" rel="noopener">machinelearninginaction-js</a>。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+        
+        <div class="post-tags">
+            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
+          
+            <a href="/tags/线性回归/" rel="tag"># 线性回归</a>
+          
+            <a href="/tags/梯度下降/" rel="tag"># 梯度下降</a>
+          
+        </div>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+              <a href="/2017/10/12/sphere-to-cube-panorama/" rel="next" title="聊一聊全景图">
+                <i class="fa fa-chevron-left"></i> 聊一聊全景图
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+              <a href="/2017/12/21/maintenance-jotting/" rel="prev" title="运维相关杂记">
+                运维相关杂记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Young</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">51</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/newbieYoung" title="GitHub &rarr; https://github.com/newbieYoung" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://www.zhihu.com/people/NewbieYoung" title="知乎 &rarr; https://www.zhihu.com/people/NewbieYoung" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>知乎</a>
+      </span>
+    
+  </div>
+
+
+
+        </div>
+      </div>
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#线性回归"><span class="nav-number">1.</span> <span class="nav-text">线性回归</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#梯度下降"><span class="nav-number">2.</span> <span class="nav-text">梯度下降</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#算法实现"><span class="nav-number">3.</span> <span class="nav-text">算法实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#算法扩展"><span class="nav-number">4.</span> <span class="nav-text">算法扩展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结语"><span class="nav-number">5.</span> <span class="nav-text">结语</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Young</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.3.0</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+      </div>
+
+    
+
+  </div>
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+<script src="/js/utils.js?v=7.3.0"></script>
+  <script src="/js/motion.js?v=7.3.0"></script>
+
+
+  <script src="/js/affix.js?v=7.3.0"></script>
+  <script src="/js/schemes/pisces.js?v=7.3.0"></script>
+
+
+
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  
+  <script src="/js/scrollspy.js?v=7.3.0"></script>
+<script src="/js/post-details.js?v=7.3.0"></script>
+
+
+</body>
+</html>

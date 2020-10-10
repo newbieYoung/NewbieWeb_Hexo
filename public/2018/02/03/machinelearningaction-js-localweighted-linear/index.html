@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="generator" content="Hexo 3.9.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    save_scroll: false,
+    copycode: {"enable":false,"show_result":false,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta name="description" content="在UI工程师的机器学习之旅（一）线性回归和梯度下降中简单的用JavaScript实践了线性回归，同时留下了两个问题：  怎么判断根据数据拟合出的方程模型的好坏？ 拟合出的直线确实符合数据的整体趋势，但是要想更精确的拟合怎么办？">
+<meta name="keywords" content="机器学习,决定系数,局部加权线性回归">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UI工程师的机器学习之旅（二）决定系数与局部加权线性回归">
+<meta property="og:url" content="https://newbieweb.lione.me/2018/02/03/machinelearningaction-js-localweighted-linear/index.html">
+<meta property="og:site_name" content="NewbieWeb">
+<meta property="og:description" content="在UI工程师的机器学习之旅（一）线性回归和梯度下降中简单的用JavaScript实践了线性回归，同时留下了两个问题：  怎么判断根据数据拟合出的方程模型的好坏？ 拟合出的直线确实符合数据的整体趋势，但是要想更精确的拟合怎么办？">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-localweighted-linear-0.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-localweighted-linear-1.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-localweighted-linear-2.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-localweighted-linear-3.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-4.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-localweighted-linear-4.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-localweighted-linear-5.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-localweighted-linear-6.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-localweighted-linear-8.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-localweighted-linear-9.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-localweighted-linear-10.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-localweighted-linear-7.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-localweighted-linear-11.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-localweighted-linear-12.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-localweighted-linear-13.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-localweighted-linear-14.jpg">
+<meta property="og:updated_time" content="2019-11-09T05:12:33.392Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="UI工程师的机器学习之旅（二）决定系数与局部加权线性回归">
+<meta name="twitter:description" content="在UI工程师的机器学习之旅（一）线性回归和梯度下降中简单的用JavaScript实践了线性回归，同时留下了两个问题：  怎么判断根据数据拟合出的方程模型的好坏？ 拟合出的直线确实符合数据的整体趋势，但是要想更精确的拟合怎么办？">
+<meta name="twitter:image" content="https://newbieyoung.github.io/images/machinelearningaction-js-localweighted-linear-0.jpg">
+  <link rel="canonical" href="https://newbieweb.lione.me/2018/02/03/machinelearningaction-js-localweighted-linear/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>UI工程师的机器学习之旅（二）决定系数与局部加权线性回归 | NewbieWeb</title>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-145147663-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-145147663-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  <div class="container sidebar-position-left">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">NewbieWeb</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">Oh,Captain! My Captain! Carpe Diem!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content page-post-detail">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://newbieweb.lione.me/2018/02/03/machinelearningaction-js-localweighted-linear/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Young">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NewbieWeb">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">UI工程师的机器学习之旅（二）决定系数与局部加权线性回归
+
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2018-02-03 18:30:00" itemprop="dateCreated datePublished" datetime="2018-02-03T18:30:00+08:00">2018-02-03</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-09 13:12:33" itemprop="dateModified" datetime="2019-11-09T13:12:33+08:00">2019-11-09</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在<a href="https://newbieweb.lione.me/2017/11/23/machinelearningaction-js-linear-regression/">UI工程师的机器学习之旅（一）线性回归和梯度下降</a>中简单的用<code>JavaScript</code>实践了线性回归，同时留下了两个问题：</p>
+<ul>
+<li>怎么判断根据数据拟合出的方程模型的好坏？</li>
+<li>拟合出的直线确实符合数据的整体趋势，但是要想更精确的拟合怎么办？</li>
+</ul>
+<a id="more"></a>
+
+<h2 id="问题一：怎么判断根据数据拟合出的方程模型的好坏？"><a href="#问题一：怎么判断根据数据拟合出的方程模型的好坏？" class="headerlink" title="问题一：怎么判断根据数据拟合出的方程模型的好坏？"></a>问题一：怎么判断根据数据拟合出的方程模型的好坏？</h2><p>其实在统计学中<code>决定系数</code>这个概念就是用来解决这个问题的，<code>决定系数</code>也被称为<code>判定系数</code>或者<code>拟合优度</code>。</p>
+<p>如果看过上篇文章的童鞋应该还记得，上篇文章在结尾明明提起的是<code>相关系数</code>，怎么到这里变成了<code>决定系数</code>？</p>
+<p>主要是因为<code>相关系数</code>的平方即为<code>决定系数</code>，因此<code>相关系数</code>用大写字母<code>R</code>表示而<code>决定系数</code>则用<code>R2</code>表示；</p>
+<p>由于R2小于R，可以防止R对模型做出一些夸张的解释，因此这里采用<code>决定系数</code>来判断。</p>
+<p>其实抛开这些概念也可以这么来理解；</p>
+<p>判断模型的好坏关键在于模型是否能更好的反应因变量随自变量变化的波动，也就是说模型能表达的波动占总体波动的比例越高，模型越好；比例越低，模型越差。</p>
+<p>总波动就是各个因变量值和其平均数的差的平方和。</p>
+<img src="https://newbieyoung.github.io/images/machinelearningaction-js-localweighted-linear-0.jpg">
+
+<p>而模型能表达的波动等于总波动减去模型未能表达的波动，未能表达的波动其实就是线性回归的误差；因此计算R2的方法如下：</p>
+<img src="https://newbieyoung.github.io/images/machinelearningaction-js-localweighted-linear-1.jpg">
+
+<p>在<a href="https://newbieyoung.github.io/machinelearninginaction-js/Ch08/ex0.html" target="_blank" rel="noopener">简单线性回归梯度下降</a>示例中打开调试面板可以看到拟合的线性方程的<code>决定系数</code>。</p>
+<img src="https://newbieyoung.github.io/images/machinelearningaction-js-localweighted-linear-2.jpg">
+
+<p>另外<code>决定系数</code>达到多少为宜，其实并没有统一的明确界限，实际还和数据类型有关系，不过可以简单的认为0.8以上为优，0.4以下为差。</p>
+<p>以上统计学相关知识来源于<a href="http://open.163.com/special/Khan/khstatistics.html" target="_blank" rel="noopener">可汗学院公开课：统计学</a>。</p>
+<img src="https://newbieyoung.github.io/images/machinelearningaction-js-localweighted-linear-3.jpg">
+
+<p>其中<code>第68集</code>到<code>第70集</code>为<code>决定系数R2</code>相关内容。</p>
+<h2 id="问题二：拟合出的直线确实符合数据的整体趋势，但是要想更精确的拟合怎么办？"><a href="#问题二：拟合出的直线确实符合数据的整体趋势，但是要想更精确的拟合怎么办？" class="headerlink" title="问题二：拟合出的直线确实符合数据的整体趋势，但是要想更精确的拟合怎么办？"></a>问题二：拟合出的直线确实符合数据的整体趋势，但是要想更精确的拟合怎么办？</h2><p>上篇文章拟合的整体效果如图：</p>
+<img src="https://newbieyoung.github.io/images/machinelearningaction-js-4.jpg">
+
+<p>虽然<code>决定系数R2</code>等于0.97，已经是一个相当高的数值了，但是你还是不太满意，因为数据中有很明显的特征并没有被体现出来，比如每隔一段就有一个类似三角函数的波段；因此你可能觉得纯线性函数并不可取，实际模型因该是线性函数加上三角函数，比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">y = a*x+c*sin(x)+b;</span><br></pre></td></tr></table></figure>
+
+<p>在不断的改变模型和特征（多元线性回归中存在多个自变量，你可以加入新的自变量或者去掉已有的自变量）然后拟合的过程中得到你满意的结果，但是其实还有另外一种相对简单的算法来解决这个问题，这个算法被称为<code>局部加权线性回归</code>。</p>
+<p><code>局部加权线性回归</code>关键在于预测一个点的值时，选择与这个点相近的点而不是所有的点做线性回归；在这个算法中，离预测值越近，权重越大，对回归系数的贡献就越多，如下：</p>
+<img src="https://newbieyoung.github.io/images/machinelearningaction-js-localweighted-linear-4.jpg">
+
+<p>其中对于一元线性回归权重是自变量<code>X</code>的距离的平方，在多元线性回归中则是自变量组成的向量差的模的平方。</p>
+<p>对于权重方程可能看起来有点眼熟，有点类似正态分布函数；</p>
+<img src="https://newbieyoung.github.io/images/machinelearningaction-js-localweighted-linear-5.jpg">
+<img src="https://newbieyoung.github.io/images/machinelearningaction-js-localweighted-linear-6.jpg">
+
+<p>当然这里并没有任何正态分布的意义，在这个算法之所以使用这个权重函数，仅仅只是因为这个函数恰好满足，距离无穷远时权重为0，距离不断靠近时，权重不断靠近1。</p>
+<p>因为预测某个值需要计算所有训练数据相对当前预测值的权重，有点类似于批量线性回归，因此代码可以基于批量线性回归算法修改；不过需要注意以下几个地方：</p>
+<p>首先新增了权重计算函数；</p>
+<img src="https://newbieyoung.github.io/images/machinelearningaction-js-localweighted-linear-8.jpg">
+
+<p>批量梯度下降时考虑权重的影响；</p>
+<img src="https://newbieyoung.github.io/images/machinelearningaction-js-localweighted-linear-9.jpg">
+
+<p>在局部加权线性回归中并没有固定的线性回归方程，而是每次预测都需要重新根据所有数据进行计算得到最适合当前预测值的线性回归方程；</p>
+<img src="https://newbieyoung.github.io/images/machinelearningaction-js-localweighted-linear-10.jpg">
+
+<p>根据该算法可以得到预测数据然后把预测数据和训练数据一起绘制出来就可以可视化该算法的实际的效果了，如下：</p>
+<p><a href="https://newbieyoung.github.io/machinelearninginaction-js/Ch08/ex1.html" target="_blank" rel="noopener">局部加权线性回归</a></p>
+<img src="https://newbieyoung.github.io/images/machinelearningaction-js-localweighted-linear-7.jpg">
+
+<p>另外还需要注意一个地方，关于权重函数中波长参数的取值；</p>
+<ul>
+<li><code>k=1</code></li>
+</ul>
+<img src="https://newbieyoung.github.io/images/machinelearningaction-js-localweighted-linear-11.jpg">
+
+<ul>
+<li><code>k=0.1</code></li>
+</ul>
+<img src="https://newbieyoung.github.io/images/machinelearningaction-js-localweighted-linear-12.jpg">
+
+<ul>
+<li><code>k=0.01</code></li>
+</ul>
+<img src="https://newbieyoung.github.io/images/machinelearningaction-js-localweighted-linear-13.jpg">
+
+<ul>
+<li><code>k=0.001</code></li>
+</ul>
+<img src="https://newbieyoung.github.io/images/machinelearningaction-js-localweighted-linear-14.jpg">
+
+<p>可以看到随着波长不断变小，预测数据分布慢慢从普通的线性回归方程变成和训练数据接近完全重合；对于<code>k=1</code>和<code>k=0.1</code>这两种情况我们可以称之为<code>欠拟合</code>；而对于<code>k=0.001</code>这种情况我们称之为<code>过拟合</code>。</p>
+<p>基本上到这里文章内容已经结束，但还有两个问题并没有阐述清楚，比如：波长参数应该取多少才能既避免欠拟合情况又能避免过拟合情况？局部线性回归算法每次预测都需要计算全部训练数据，如果训练数据很庞大时性能显然很低，这时又应该怎么办？</p>
+<p>后续有机会再聊<code>树回归</code>和<code>权衡方差和偏差</code>等。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+        
+        <div class="post-tags">
+            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
+          
+            <a href="/tags/决定系数/" rel="tag"># 决定系数</a>
+          
+            <a href="/tags/局部加权线性回归/" rel="tag"># 局部加权线性回归</a>
+          
+        </div>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+              <a href="/2017/12/21/maintenance-jotting/" rel="next" title="运维相关杂记">
+                <i class="fa fa-chevron-left"></i> 运维相关杂记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+              <a href="/2018/04/29/threejs-rubik-auto-reset-v1/" rel="prev" title="ThreeJS简易魔方自动还原实现（一）层先法">
+                ThreeJS简易魔方自动还原实现（一）层先法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Young</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">51</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/newbieYoung" title="GitHub &rarr; https://github.com/newbieYoung" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://www.zhihu.com/people/NewbieYoung" title="知乎 &rarr; https://www.zhihu.com/people/NewbieYoung" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>知乎</a>
+      </span>
+    
+  </div>
+
+
+
+        </div>
+      </div>
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题一：怎么判断根据数据拟合出的方程模型的好坏？"><span class="nav-number">1.</span> <span class="nav-text">问题一：怎么判断根据数据拟合出的方程模型的好坏？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题二：拟合出的直线确实符合数据的整体趋势，但是要想更精确的拟合怎么办？"><span class="nav-number">2.</span> <span class="nav-text">问题二：拟合出的直线确实符合数据的整体趋势，但是要想更精确的拟合怎么办？</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Young</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.3.0</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+      </div>
+
+    
+
+  </div>
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+<script src="/js/utils.js?v=7.3.0"></script>
+  <script src="/js/motion.js?v=7.3.0"></script>
+
+
+  <script src="/js/affix.js?v=7.3.0"></script>
+  <script src="/js/schemes/pisces.js?v=7.3.0"></script>
+
+
+
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  
+  <script src="/js/scrollspy.js?v=7.3.0"></script>
+<script src="/js/post-details.js?v=7.3.0"></script>
+
+
+</body>
+</html>

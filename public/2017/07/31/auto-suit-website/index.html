@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="generator" content="Hexo 3.9.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    save_scroll: false,
+    copycode: {"enable":false,"show_result":false,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta name="description" content="网页自适应是个涵盖很广的话题，这里我只简单总结下移动端网页绝对自适应，简单来说如果设计师提供给你的设计稿是750px宽，此时里边有一张图片宽高均为375px；那么在IPhone6 Plus手机里边屏幕宽为414px时该图片的渲染宽度应该为207px，这种保证元素尺寸、字体大小在屏幕中所占比例大小始终不变的方式我称之为移动端网页绝对自适应。 目前来说我总结了大概有如下五种方式来实现移动端网页绝对自适">
+<meta name="keywords" content="网页自适应">
+<meta property="og:type" content="article">
+<meta property="og:title" content="移动端网页绝对自适应方案总结">
+<meta property="og:url" content="https://newbieweb.lione.me/2017/07/31/auto-suit-website/index.html">
+<meta property="og:site_name" content="NewbieWeb">
+<meta property="og:description" content="网页自适应是个涵盖很广的话题，这里我只简单总结下移动端网页绝对自适应，简单来说如果设计师提供给你的设计稿是750px宽，此时里边有一张图片宽高均为375px；那么在IPhone6 Plus手机里边屏幕宽为414px时该图片的渲染宽度应该为207px，这种保证元素尺寸、字体大小在屏幕中所占比例大小始终不变的方式我称之为移动端网页绝对自适应。 目前来说我总结了大概有如下五种方式来实现移动端网页绝对自适">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://newbieyoung.github.io/images/auto-suit-website-0.png">
+<meta property="og:updated_time" content="2019-11-09T05:12:33.390Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="移动端网页绝对自适应方案总结">
+<meta name="twitter:description" content="网页自适应是个涵盖很广的话题，这里我只简单总结下移动端网页绝对自适应，简单来说如果设计师提供给你的设计稿是750px宽，此时里边有一张图片宽高均为375px；那么在IPhone6 Plus手机里边屏幕宽为414px时该图片的渲染宽度应该为207px，这种保证元素尺寸、字体大小在屏幕中所占比例大小始终不变的方式我称之为移动端网页绝对自适应。 目前来说我总结了大概有如下五种方式来实现移动端网页绝对自适">
+<meta name="twitter:image" content="https://newbieyoung.github.io/images/auto-suit-website-0.png">
+  <link rel="canonical" href="https://newbieweb.lione.me/2017/07/31/auto-suit-website/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>移动端网页绝对自适应方案总结 | NewbieWeb</title>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-145147663-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-145147663-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  <div class="container sidebar-position-left">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">NewbieWeb</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">Oh,Captain! My Captain! Carpe Diem!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content page-post-detail">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://newbieweb.lione.me/2017/07/31/auto-suit-website/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Young">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NewbieWeb">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">移动端网页绝对自适应方案总结
+
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2017-07-31 20:53:00" itemprop="dateCreated datePublished" datetime="2017-07-31T20:53:00+08:00">2017-07-31</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-09 13:12:33" itemprop="dateModified" datetime="2019-11-09T13:12:33+08:00">2019-11-09</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/前端开发/" itemprop="url" rel="index"><span itemprop="name">前端开发</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>网页自适应是个涵盖很广的话题，这里我只简单总结下<code>移动端网页绝对自适应</code>，简单来说如果设计师提供给你的设计稿是750px宽，此时里边有一张图片宽高均为375px；那么在IPhone6 Plus手机里边屏幕宽为414px时该图片的渲染宽度应该为207px，这种<code>保证元素尺寸、字体大小在屏幕中所占比例大小始终不变</code>的方式我称之为<code>移动端网页绝对自适应</code>。</p>
+<p>目前来说我总结了大概有如下五种方式来实现<code>移动端网页绝对自适应</code>。</p>
+<a id="more"></a>
+
+<h2 id="一、百分比"><a href="#一、百分比" class="headerlink" title="一、百分比"></a>一、百分比</h2><p>在CSS中很多属性都可以使用百分比值，正确使用百分比有两个关键点：</p>
+<h4 id="1、找到当前元素的参照元素；"><a href="#1、找到当前元素的参照元素；" class="headerlink" title="1、找到当前元素的参照元素；"></a>1、找到当前元素的参照元素；</h4><p>某个元素的参照元素不能简单的理解成父元素，还和其定位有关系，比如：</p>
+<ul>
+<li><code>静态定位元素</code>、<code>相对定位元素</code>的参照元素一般是其父元素；</li>
+<li><code>绝对定位元素</code>参照元素一般是<code>离它最近</code>的绝对定位、相对定位或者固定定位的父元素，如果不存在则为视口；</li>
+<li><code>固定定位元素</code>的参照元素一般是视口。</li>
+</ul>
+<h4 id="2、找到当前属性的参照属性；"><a href="#2、找到当前属性的参照属性；" class="headerlink" title="2、找到当前属性的参照属性；"></a>2、找到当前属性的参照属性；</h4><p>在CSS中很多属性都可以被设置为百分比数值，但是其意义确会有很多不同；总结如下：</p>
+<ul>
+<li><code>padding</code>百分比是相对于<code>参照元素的宽度</code>而言；</li>
+<li><code>margin</code>百分比是相对于<code>参照元素的宽度</code>而言；</li>
+<li><code>width</code>百分比是相对于<code>参照元素的宽度</code>而言；</li>
+<li><code>left</code>、<code>right</code>百分比是相对于<code>参照元素的宽度</code>而言；</li>
+<li><code>height</code>百分比是相对于<code>参照元素的高度</code>而言；</li>
+<li><code>top</code>、<code>bottom</code>百分比是相对于<code>参照元素的高度</code>而言；</li>
+<li><code>line-height</code>百分比是相当于<code>元素自身文字大小</code>而言；</li>
+<li><code>background-size</code>百分比是相当于<code>元素自身的宽高</code>而言；</li>
+<li><code>border-radius</code>百分比是相当于<code>元素自身的宽高</code>而言；</li>
+<li><code>transform</code>百分比是相当于<code>元素自身的宽高</code>而言；</li>
+<li><code>background-position</code>百分比和其它的百分比单位表现都不一样，具体可以用以下公式计算：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">positionX = (容器的宽度-图片的宽度) * percentX;</span><br><span class="line">positionY = (容器的高度-图片的高度) * percentY;</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://newbieyoung.github.io/CSS_learn/percent.html" target="_blank" rel="noopener">示例</a></p>
+<p>以上只总结了较为常见的属性，实际还存在很多其它属性可以被设置为百分比，并可能存在你意想不到的意义。</p>
+<p>vw和vh应该就是百分比的一种变种，只不过所有元素的参照元素都是视口，参照属性都是视口的宽高而已；</p>
+<p>另外还要注意在一些Android设备中软键盘弹出会影响视口的尺寸（具体是高度变小），因此会对以百分比或者vw、vh为单位的属性造成影响；而且并不能通过强制设置视口尺寸来解决这个问题，因为在一些Android设备中会对脚本代码设置的视口尺寸再进行一次校验来保证视口尺寸比例不发生变化，具体情况请查看<a href="https://newbieyoung.github.io/SomeBugs/bug-about-vh-vw-in-android/demo0.html" target="_blank" rel="noopener">示例</a>。</p>
+<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><p>百分比方式在处理文字大小的自适应上会比较麻烦，另外在处理图片的自适应也有问题，只能使用img标签的方式来实现，这样就会导致不能把图片合成精灵图（就目前来说把小图片合成精灵图还是有必要的）；</p>
+<p>另外设计稿一般都是固定数值的，所以重构页面时你得自己计算出百分比数值，虽然计算量不大，其实也是有那么一点点麻烦的。</p>
+<h3 id="二、媒体查询"><a href="#二、媒体查询" class="headerlink" title="二、媒体查询"></a>二、媒体查询</h3><p>媒体查询方式的问题在于只能处理特定状态，而“绝对自适应”其实可以理解成有无限多的状态。</p>
+<h3 id="三、REM"><a href="#三、REM" class="headerlink" title="三、REM"></a>三、REM</h3><p>REM方式我一般会在页面里边加入如下脚本；</p>
+<pre><code>(function (doc, win) {
+    var $body = document.querySelector(&apos;body&apos;);
+    var docEl = doc.documentElement,
+            resizeEvt = &apos;orientationchange&apos; in window ? &apos;orientationchange&apos; : &apos;resize&apos;,
+            recalc = function () {
+                var clientWidth = docEl.clientWidth;
+                if (!clientWidth) return;
+                clientWidth = clientWidth&gt;750?750:clientWidth;//防止被放大保证宽屏效果
+                //以宽750px为例子，并扩大100倍，尽可能的保证精度
+                docEl.style.fontSize = 100 * (clientWidth / 750) + &apos;px&apos;;
+                //缩放之后再显示页面，防止缩放过程被观察到，影响体验
+                $body.style.visibility = &apos;visible&apos;;
+            };
+    if (!doc.addEventListener) return;
+    win.addEventListener(resizeEvt, recalc, false);
+    doc.addEventListener(&apos;DOMContentLoaded&apos;, recalc, false);
+})(document, window);</code></pre><p>需要注意的是脚本中<code>750</code>表示的是设计稿的宽度，后述脚本中的<code>640</code>等也是相同的意义。</p>
+<p>其中关于扩大<code>100</code>倍的主要原因是如果这里没有扩大<code>100</code>倍，那么假设屏幕宽度是<code>400px</code>，那么html标签的font-size是<code>0.5333...px</code>，在某些浏览器只保留两位小数，此时实际有效值就变成了<code>0.53px</code>，如果CSS样式里边的值为<code>46rem</code>，最终结果就是<code>0.53*46=24.38px</code>；</p>
+<p>但是如果扩大<code>100</code>倍，屏幕宽度还是<code>400px</code>，那么html标签的font-size是<code>53.33...px</code>，还是在这个保留两位小数的浏览器里边，此时为了保证整体大小不变，CSS样式里边的值缩小<code>100</code>倍为<code>0.46rem</code>，此时最终结果就是<code>53.33*0.46=24.53px</code>；</p>
+<p>显然<code>24.53px</code>会比<code>24.38px</code>更精确一些。</p>
+<p>REM方式理论上来说已经能解决问题了，但是实际上还是会有一些问题，最核心的问题在于数值的精度问题（不同浏览器处理浮点数时所保留的精度不一样），比如：</p>
+<ul>
+<li>1、较小数值可能会因为精度问题导致实际渲染大小为0，比如边框等；</li>
+<li>2、在Android系统里边有可能出现即使设置了height=line-height时文字依然不能完全垂直居中的情况，如果使用REM，font-size、height、line-height均是小数，精度问题会导致问题更明显。</li>
+</ul>
+<h3 id="四、meta-inital-scale"><a href="#四、meta-inital-scale" class="headerlink" title="四、meta inital-scale"></a>四、meta inital-scale</h3><p>上述方式归根到底都属于一种间接缩放的方法，需要注意的WebView早就提供一个直接缩放整个页面的方法，那就是meta标签中inital-scale属性，也就说可以控制这个属性来缩放页面，来达到绝对自适应；</p>
+<p>控制脚本和REM控制脚本类似：</p>
+<pre><code>(function (doc, win) {
+    var docEl = doc.documentElement,
+            resizeEvt = &apos;orientationchange&apos; in window ? &apos;orientationchange&apos; : &apos;resize&apos;,
+            recalc = function () {
+                var clientWidth = docEl.clientWidth;
+                if (!clientWidth) return;
+                clientWidth = clientWidth&gt;750?750:clientWidth;//防止被放大保证宽屏效果
+                document.querySelector(&apos;meta[name=viewport]&apos;).setAttribute(&apos;content&apos;,&apos;width=750, initial-scale=&apos;+clientWidth/750+&apos;, maximum-scale=1.0, user-scalable=0&apos;);
+                document.querySelector(&apos;body&apos;).setAttribute(&apos;style&apos;,&apos;visibility:visible;&apos;);
+            };
+    if (!doc.addEventListener) return;
+    doc.addEventListener(&apos;DOMContentLoaded&apos;, recalc, false);
+})(document, window);</code></pre><p>这种方式异常的简单方便（谁用谁知道），如果REM方式是<code>无脑自适应</code>的话，那么这种方式可以被称为<code>脑残自适应</code>；这种方式基本不存在REM的精度问题，移动端细边框等问题完全不需要考虑；唯一需要你做的就是认认真真的把设计稿里边的值复制到页面中，然后再加上上述脚本；</p>
+<p>起初我以为找到了完美的解决方案，但是后来实践的时候发现这个方式的缺点也很明显；</p>
+<ul>
+<li>1、存在极少数的设备不支持meta标签的initial-scale属性（少到可以忽略不计的那种）；</li>
+<li>2、脚本中所涉及meta标签中的那些属性不能再被其它脚本所处理（貌似普通网页也不会随便操作mata标签）；</li>
+<li>3、由于这个方式是缩放整个页面的方式来实现自适应，那么页面里边所有的样式都得遵循这种方式（就实际情况来看局限性很大），另外渲染性能也偏低（如果页面存在大量动画，不建议采用这种方式）。</li>
+</ul>
+<h3 id="五、transform-scale"><a href="#五、transform-scale" class="headerlink" title="五、transform scale"></a>五、transform scale</h3><p>受上一种方式启发，缩放除了meta标签的initial-scale方式，CSS3的tranform也可以做到，而且meta标签的initial-scale是缩放整个页面，导致会和其它样式冲突，那可不可以专门定义一块区域缩放，其它区域不缩放呢？</p>
+<pre><code>(function (doc, win) {
+    var docEl = doc.documentElement,
+            resizeEvt = &apos;orientationchange&apos; in window ? &apos;orientationchange&apos; : &apos;resize&apos;,
+            recalc = function () {
+                var clientWidth = docEl.clientWidth;
+                if (!clientWidth) return;
+                var $bodyContent = document.querySelector(&apos;.body-content&apos;);
+                var $body = document.querySelector(&apos;body&apos;);
+                var percent = clientWidth/750;
+                percent = percent&gt;1?1:percent;//防止被放大保证宽屏效果
+                var othersHeight = $body.clientHeight-$bodyContent.clientHeight;//计算其它元素的高度
+                $bodyContent.setAttribute(&apos;style&apos;,&apos;width:750px;transform:scale(&apos;+percent+&apos;);transform-origin:0 0;-webkit-transform:scale(&apos;+percent+&apos;);-webkit-transform-origin:0 0;margin:auto;&apos;);
+                var lastStyle = $bodyContent.getAttribute(&apos;style&apos;);
+                var articleHeight = $bodyContent.clientHeight*percent;
+                $body.setAttribute(&apos;style&apos;,&apos;visibility:visible;height:&apos;+(articleHeight+othersHeight)+&apos;px;&apos;);
+            };
+    if (!doc.addEventListener) return;
+    doc.addEventListener(&apos;DOMContentLoaded&apos;, recalc, false);
+})(document, window);</code></pre><p>上述脚本就实现了上述的设想，解决了meta标签的initial-scale方式的第一个和第二个缺陷；</p>
+<p>需要注意的是脚本中还额外处理了页面的高度，因为CSS3的tranform方式只影响了元素视觉效果，不会影响元素的占位尺寸，比如如果元素本身<code>1000px</code>高，缩放一半后看起来只有<code>500px</code>高，但是高度占位还是<code>1000px</code>，导致如果页面出现滚动条，缩放之后滚动高度还是不变，此时需要设置页面高度为缩放之后的高度。</p>
+<p>除了高度问题，这种方式还需要注意一些问题：</p>
+<ul>
+<li>1、tansform会导致其内部元素的fixed定位失效，<del>变为absolute定位</del>；</li>
+</ul>
+<p><a href="https://newbieyoung.github.io/SomeBugs/bug-about-transform-fixed/demo0.html" target="_blank" rel="noopener">示例</a>；</p>
+<p>fixed定位失效的真正原因在于transform影响了fixed定位元素的堆叠上下文，简单来说fixed定位的元素，如果其祖先元素存在非none的transform值，那么该元素将相对于设定了transform的祖先元素定位，而不是原本相对于视口。</p>
+<p>所谓堆叠上下文这个概念可以看看这篇文章<a href="http://www.cnblogs.com/coco1s/p/5899089.html" target="_blank" rel="noopener">层叠顺序（stacking level）与堆叠上下文（stacking context）知多少？</a>。</p>
+<p>fixed定位失效的问题可以通过把元素单独抽离出来并在外部多添加一层，外部容器层使用fixed定位，内部元素使用absolute定位来解决。</p>
+<ul>
+<li><p>2、缩放区域得清除浮动，否则会导致高度计算异常；</p>
+</li>
+<li><p>3、全屏布局不适用这种方法，具体原因如下：</p>
+</li>
+</ul>
+<p><code>全屏布局</code>是指页面刚好在一个屏幕的范围内，这种布局需要既需要自适应宽度的变化，还需要自适应高度的变化，一般方法为让页面主内容区域在屏幕中居中，内容元素自适应宽度，元素之间的间隙自适应高度；<br>某些时候甚至需要使用<code>media query</code>针对不同的情况设置不同的值。</p>
+<ul>
+<li>4、嵌入iframe时，需要在父页面中设置缩放比；</li>
+</ul>
+<p>因为IOS中嵌入在iframe中的页面的clientWidth是由页面本身的内容宽度决定的和父页面的iframe的宽度没有关系，IOS的这种机制会导致缩放比计算异常。</p>
+<p><a href="https://newbieyoung.github.io/SomeBugs/bug-about-iframe-clientwidth-in-ios/container.html" target="_blank" rel="noopener">示例</a>；</p>
+<img src="https://newbieyoung.github.io/images/auto-suit-website-0.png">
+
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>上述这些方式仅仅我在坚持开发所谓的<code>绝对自适应</code>网页过程中慢慢得到的一些经验总结，就目前看来没有一种十全十美的方式，具体情况具体分析咯，毕竟方法是死的，人是活的。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+        
+        <div class="post-tags">
+            <a href="/tags/网页自适应/" rel="tag"># 网页自适应</a>
+          
+        </div>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+              <a href="/2017/07/21/draw-bezier-curve/" rel="next" title="关于贝塞尔曲线的一些事">
+                <i class="fa fa-chevron-left"></i> 关于贝塞尔曲线的一些事
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+              <a href="/2017/08/22/normal-filter-intro/" rel="prev" title="常用滤镜算法以及WebGL实现">
+                常用滤镜算法以及WebGL实现 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Young</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">51</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/newbieYoung" title="GitHub &rarr; https://github.com/newbieYoung" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://www.zhihu.com/people/NewbieYoung" title="知乎 &rarr; https://www.zhihu.com/people/NewbieYoung" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>知乎</a>
+      </span>
+    
+  </div>
+
+
+
+        </div>
+      </div>
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、百分比"><span class="nav-number">1.</span> <span class="nav-text">一、百分比</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、找到当前元素的参照元素；"><span class="nav-number">1.0.1.</span> <span class="nav-text">1、找到当前元素的参照元素；</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、找到当前属性的参照属性；"><span class="nav-number">1.0.2.</span> <span class="nav-text">2、找到当前属性的参照属性；</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#小结"><span class="nav-number">1.0.3.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、媒体查询"><span class="nav-number">1.1.</span> <span class="nav-text">二、媒体查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、REM"><span class="nav-number">1.2.</span> <span class="nav-text">三、REM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、meta-inital-scale"><span class="nav-number">1.3.</span> <span class="nav-text">四、meta inital-scale</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#五、transform-scale"><span class="nav-number">1.4.</span> <span class="nav-text">五、transform scale</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">1.5.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Young</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.3.0</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+      </div>
+
+    
+
+  </div>
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+<script src="/js/utils.js?v=7.3.0"></script>
+  <script src="/js/motion.js?v=7.3.0"></script>
+
+
+  <script src="/js/affix.js?v=7.3.0"></script>
+  <script src="/js/schemes/pisces.js?v=7.3.0"></script>
+
+
+
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  
+  <script src="/js/scrollspy.js?v=7.3.0"></script>
+<script src="/js/post-details.js?v=7.3.0"></script>
+
+
+</body>
+</html>

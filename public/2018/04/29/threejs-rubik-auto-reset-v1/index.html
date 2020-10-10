@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="generator" content="Hexo 3.9.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    save_scroll: false,
+    copycode: {"enable":false,"show_result":false,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta name="description" content="在ThreeJS四步制作一个简易魔方中介绍了怎么实现一个可以转动的简易魔方，接来下准备介绍下怎么让这个简易魔方具备自动还原的功能。 例子如下：  可以扫描以下二维码体验：   或者访问链接https://newbieyoung.github.io/Threejs_rubik/step5.html；">
+<meta name="keywords" content="ThreeJS,魔方">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ThreeJS简易魔方自动还原实现（一）层先法">
+<meta property="og:url" content="https://newbieweb.lione.me/2018/04/29/threejs-rubik-auto-reset-v1/index.html">
+<meta property="og:site_name" content="NewbieWeb">
+<meta property="og:description" content="在ThreeJS四步制作一个简易魔方中介绍了怎么实现一个可以转动的简易魔方，接来下准备介绍下怎么让这个简易魔方具备自动还原的功能。 例子如下：  可以扫描以下二维码体验：   或者访问链接https://newbieyoung.github.io/Threejs_rubik/step5.html；">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-0.png">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-1.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-2.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-3.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-4.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-5.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-6.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-webgl-cube-19.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-7.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-8.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-9.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-10.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-11.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-12.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-13.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-14.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-15.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-16.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-17.jpg">
+<meta property="og:updated_time" content="2019-11-09T05:12:33.400Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ThreeJS简易魔方自动还原实现（一）层先法">
+<meta name="twitter:description" content="在ThreeJS四步制作一个简易魔方中介绍了怎么实现一个可以转动的简易魔方，接来下准备介绍下怎么让这个简易魔方具备自动还原的功能。 例子如下：  可以扫描以下二维码体验：   或者访问链接https://newbieyoung.github.io/Threejs_rubik/step5.html；">
+<meta name="twitter:image" content="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-0.png">
+  <link rel="canonical" href="https://newbieweb.lione.me/2018/04/29/threejs-rubik-auto-reset-v1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>ThreeJS简易魔方自动还原实现（一）层先法 | NewbieWeb</title>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-145147663-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-145147663-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  <div class="container sidebar-position-left">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">NewbieWeb</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">Oh,Captain! My Captain! Carpe Diem!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content page-post-detail">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://newbieweb.lione.me/2018/04/29/threejs-rubik-auto-reset-v1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Young">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NewbieWeb">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">ThreeJS简易魔方自动还原实现（一）层先法
+
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2018-04-29 21:08:00" itemprop="dateCreated datePublished" datetime="2018-04-29T21:08:00+08:00">2018-04-29</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-09 13:12:33" itemprop="dateModified" datetime="2019-11-09T13:12:33+08:00">2019-11-09</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/其它/" itemprop="url" rel="index"><span itemprop="name">其它</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在<a href="https://newbieweb.lione.me/2017/02/28/threejs-webgl-cube/">ThreeJS四步制作一个简易魔方</a>中介绍了怎么实现一个可以转动的简易魔方，接来下准备介绍下怎么让这个简易魔方具备自动还原的功能。</p>
+<p>例子如下：</p>
+<p><video style="height:500px;" controls="controls" preload="auto" webkit-playsinline="true" playsinline="true" src="https://newbieyoung.github.io/Threejs_rubik/auto-reset-v1.mp4"></video></p>
+<p>可以扫描以下二维码体验：</p>
+<img src="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-0.png">
+
+<p>或者访问链接<a href="https://newbieyoung.github.io/Threejs_rubik/step5.html" target="_blank" rel="noopener">https://newbieyoung.github.io/Threejs_rubik/step5.html</a>；</p>
+<a id="more"></a>
+
+<p>代码在<a href="https://github.com/newbieYoung/Threejs_rubik" target="_blank" rel="noopener">https://github.com/newbieYoung/Threejs_rubik</a>项目中：</p>
+<img src="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-1.jpg">
+
+<ul>
+<li>step1.html、step2.html、step3.html、step4.html为<code>ThreeJS四步制作一个简易魔方</code>的相关代码；</li>
+<li>wegame文件夹为简易魔方的<code>小游戏</code>代码，目前只包含前四步功能；</li>
+<li><code>step5.html</code>为简易魔方层先法自动还原的代码，也就是上述例子的代码，后续会进行简单说明；</li>
+<li><code>auto-reset-v1-test.js</code>为上述例子的<code>测试用例</code>代码，在测试用例中会把相关日志信息（比如还原所需步数以及时长）输出到<code>auto-reset-v1-log.txt</code>文件中，方便后续分析；</li>
+<li><code>analyze.js</code>为上述例子的日志分析代码，会计算所有样本数据的平均时长和平均步数并把结果输出到<code>auto-reset-v1-analyze.txt</code>文件中。</li>
+</ul>
+<img src="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-2.jpg">
+
+<p>在<code>210</code>次自动测试中，平均步数为<code>197</code>步，平均时长为<code>44</code>秒，和代码中设定的<code>0.2</code>秒一步基本吻合，从自动测试数据来看，目前的实现还没有达到该算法的最优，估计可以优化到<code>平均步数150</code>的样子（旋转90度即算一步）。</p>
+<p>需要注意的是三阶魔方有<code>8!×3^7×12!×2^11/2 = 43252003274489856000</code>种情形，因此虽然我对例子代码进行了上千测试，但是依然不能百分百保证实现的还原算法可以处理所有情况，因此希望大家在体验的过程中如果遇到的异常情况能反馈给我（<code>最好是六个面都截图</code>）。</p>
+<p><code>层先法</code>是指将魔方分为三层：底层、中层、顶层，分层复原；仔细留意上述例子就可以发现复原过程是从底层开始慢慢到顶层的，如图：</p>
+<img src="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-3.jpg">
+
+<p>层先法只需要记忆几个简单的公式就可以完成，因此适合魔方初学者使用，但是效率较差。</p>
+<p>该怎么实现呢？以第一步小白花来说：</p>
+<h3 id="首先得确定当前模型中上表面中心颜色的对应颜色；"><a href="#首先得确定当前模型中上表面中心颜色的对应颜色；" class="headerlink" title="首先得确定当前模型中上表面中心颜色的对应颜色；"></a>首先得确定当前模型中上表面中心颜色的对应颜色；</h3><p>小白花要求上表面中心颜色四周为其对应颜色；</p>
+<p>所幸我们在ThreeJS中根据颜色数组构建正方体时其规律就已经确定了；</p>
+<img src="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-4.jpg">
+<img src="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-5.jpg">
+
+<p>当我们依次给六个面赋值时，其固定顺序为<code>右、左、上、下、前、后</code>，也就意味着<code>根据颜色序号获取初始化时其对面颜色序号</code>的方法如下：</p>
+<img src="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-6.jpg">
+
+<p>因为魔方转动时使用的是ThreeJS提供<code>轨道控制器OrbitControls</code>，视角变动的原因在于摄像机位置的变化，魔方本身并没有转动；再加上转动某一层之后会更新小方块序号，使其永远保持初始序号不变；</p>
+<img src="https://newbieyoung.github.io/images/threejs-webgl-cube-19.jpg">
+
+<p>那么<code>上表面中心小方块序号则为10</code>，与此同时我们需要一个方法来<code>根据序号选取小方块</code>：</p>
+<img src="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-7.jpg">
+
+<p><code>rotateNum</code>表示小方块绕世界坐标系的Y轴旋转逆时针旋转90度的次数，比如<code>getCubeByIndex(2,1)</code>实际获取的小方块序号为<code>20</code>；</p>
+<p>之所以会这样是因为层先法中每一种情况实际还有三个等效的情形，因为魔方的上下关系确定后就固定了，但是左右前后却是可以变化的；</p>
+<p>选取到具体小方块之后我们还需要获得小方块中法向量和世界坐标系Y轴平行的平面的序号然后根据该平面的序号获取对应颜色，因此我们还需要一个方法来<code>获取某个小方块中法向量和已知向量方向相同的面的颜色序号</code>：</p>
+<img src="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-8.jpg">
+
+<p>这个方法里边需要注意两点：</p>
+<p><code>其一</code>：判断两个向量平行时不能判断其夹角是否等于0，因为浮点数运算存在误差，实际情况可能是其夹角是个很小很小的数但是就是不等于0，得改成判断最小值的方法；</p>
+<p><code>其二</code>：<code>cube.faces[i].normal</code>获取的法向量是在小方块自身坐标系中的，所幸ThreeJS需要进行光线相关的运算，因此小方块对象中存储了法向量矩阵<code>cube.normalMatrix</code>，自身坐标系的法向量乘以法向量矩阵即可得到视图坐标系中的法向量；但是因为我们传入这个方法的坐标轴向量在世界坐标系中，因此不能拿来直接计算，需要转换到视图坐标系中去，转换方法就是乘以<code>视图矩阵的逆反矩阵</code>；</p>
+<p>因为使用的是<code>透视投影相机 THREE.PerspectiveCamera</code>因此视图矩阵可以这么求：</p>
+<img src="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-9.jpg">
+
+<p>直接调用<code>THREE.Matrix4</code>的静态方法<code>getInverse</code>即可求得某个矩阵的逆反矩阵；</p>
+<p>到此我们就可以实现<code>首先得确定当前模型中上表面中心颜色的对应颜色</code>这一步骤了：</p>
+<img src="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-10.jpg">
+
+<h3 id="然后判断小白花是否完成，如果完成则进入第二步；"><a href="#然后判断小白花是否完成，如果完成则进入第二步；" class="headerlink" title="然后判断小白花是否完成，如果完成则进入第二步；"></a>然后判断小白花是否完成，如果完成则进入第二步；</h3><p>小白花的判断很简单，只需要判断序号为<code>1、9、11、19</code>的小方块的上表面颜色是否为中心小方块上表面颜色的对应色即可：</p>
+<img src="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-11.jpg">
+<img src="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-12.jpg">
+
+<h3 id="然后得处理小白花的各种情况；"><a href="#然后得处理小白花的各种情况；" class="headerlink" title="然后得处理小白花的各种情况；"></a>然后得处理小白花的各种情况；</h3><p>以第一种举例来说：</p>
+<img src="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-13.jpg">
+
+<p>如图<code>3</code>号小方块<code>Z</code>轴表面为<code>底色</code>时，如果<code>9</code>号小方块<code>Y</code>轴表面也为<code>底色</code>，则需要<code>逆时针转动顶层</code>；反之则需要<code>逆时针转动左侧</code>：</p>
+<img src="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-14.jpg">
+
+<p>上述代码有两个需要注意的地方：</p>
+<p><code>其一</code>：<code>rotateAxisByYLine</code>方法是用于处理各种等效情况中各坐标轴的变化情况的，比如<code>Z轴在逆时针绕Y轴旋转90度之后就变成了X轴</code>；</p>
+<p><code>其二</code>：<code>逆时针转动顶层</code>的逻辑被<code>u</code>方法所封装；<code>逆时针转动左侧</code>的逻辑被<code>l</code>方法所封装；原因在于<code>层先法</code>还原魔方的各种转动最终都可以被封装为<code>12</code>基本转动，如下：</p>
+<img src="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-15.jpg">
+<img src="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-16.jpg">
+
+<p>在代码中分别封装如下：</p>
+<img src="https://newbieyoung.github.io/images/threejs-rubik-auto-reset-v1-17.jpg">
+
+<p>后续按照教程一步步实现即可，基本都是上述基本方法的应用了。</p>
+<p><code>层先法</code>虽然理解起来简单，但是因为步骤较多，实现起来容易出错，写代码的时候最好仔细点！</p>
+<p>另外想做一个基于微信小游戏的魔方，前期主要想复刻好魔方体验并结合一些方便的小功能比如标记某一状态，后续操作有问题立刻回归标记状态，以及操作历史，信息统计等；欢迎有兴趣的同学一起来玩（在我博客留言留下联系方式即可）。</p>
+<p>最后列一篇有趣的科普文章<a href="http://www.changhai.org/articles/science/mathematics/rubikcube.php" target="_blank" rel="noopener">魔方与 “上帝之数”</a>感受魔方的魅力。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+        
+        <div class="post-tags">
+            <a href="/tags/ThreeJS/" rel="tag"># ThreeJS</a>
+          
+            <a href="/tags/魔方/" rel="tag"># 魔方</a>
+          
+        </div>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+              <a href="/2018/02/03/machinelearningaction-js-localweighted-linear/" rel="next" title="UI工程师的机器学习之旅（二）决定系数与局部加权线性回归">
+                <i class="fa fa-chevron-left"></i> UI工程师的机器学习之旅（二）决定系数与局部加权线性回归
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+              <a href="/2018/07/05/ios-pits/" rel="prev" title="你可能不需要知道的 IOS 的一些坑">
+                你可能不需要知道的 IOS 的一些坑 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Young</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">51</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/newbieYoung" title="GitHub &rarr; https://github.com/newbieYoung" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://www.zhihu.com/people/NewbieYoung" title="知乎 &rarr; https://www.zhihu.com/people/NewbieYoung" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>知乎</a>
+      </span>
+    
+  </div>
+
+
+
+        </div>
+      </div>
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#首先得确定当前模型中上表面中心颜色的对应颜色；"><span class="nav-number">1.</span> <span class="nav-text">首先得确定当前模型中上表面中心颜色的对应颜色；</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#然后判断小白花是否完成，如果完成则进入第二步；"><span class="nav-number">2.</span> <span class="nav-text">然后判断小白花是否完成，如果完成则进入第二步；</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#然后得处理小白花的各种情况；"><span class="nav-number">3.</span> <span class="nav-text">然后得处理小白花的各种情况；</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Young</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.3.0</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+      </div>
+
+    
+
+  </div>
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+<script src="/js/utils.js?v=7.3.0"></script>
+  <script src="/js/motion.js?v=7.3.0"></script>
+
+
+  <script src="/js/affix.js?v=7.3.0"></script>
+  <script src="/js/schemes/pisces.js?v=7.3.0"></script>
+
+
+
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  
+  <script src="/js/scrollspy.js?v=7.3.0"></script>
+<script src="/js/post-details.js?v=7.3.0"></script>
+
+
+</body>
+</html>

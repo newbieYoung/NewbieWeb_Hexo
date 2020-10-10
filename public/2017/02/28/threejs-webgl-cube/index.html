@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="generator" content="Hexo 3.9.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    save_scroll: false,
+    copycode: {"enable":false,"show_result":false,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta name="description" content="去年之所以再次兴起了学习 WebGL 的念头，主要是有两个原因：  其一是想制作一个魔方玩； 其二是想用 Web 技术还原一些经典电影的镜头，比如《Cast Away》又译《荒岛余生》中电影快结束时主人公站在十字路口的场景。    现在看来我想第一个目的已经达成了，有点可惜的是在此之前已经有很多人做过同样的事了，比如：  https://github.com/miniwangdali/Simple">
+<meta name="keywords" content="ThreeJS,WebGL,魔方">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ThreeJS四步制作一个简易魔方">
+<meta property="og:url" content="https://newbieweb.lione.me/2017/02/28/threejs-webgl-cube/index.html">
+<meta property="og:site_name" content="NewbieWeb">
+<meta property="og:description" content="去年之所以再次兴起了学习 WebGL 的念头，主要是有两个原因：  其一是想制作一个魔方玩； 其二是想用 Web 技术还原一些经典电影的镜头，比如《Cast Away》又译《荒岛余生》中电影快结束时主人公站在十字路口的场景。    现在看来我想第一个目的已经达成了，有点可惜的是在此之前已经有很多人做过同样的事了，比如：  https://github.com/miniwangdali/Simple">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-webgl-cube-0.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-webgl-cube-5.png">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-webgl-cube-4.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-webgl-cube-7.png">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-webgl-cube-25.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-webgl-cube-10.gif">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-webgl-cube-15.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-webgl-cube-17.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-webgl-cube-19.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-webgl-cube-24.gif">
+<meta property="og:image" content="https://newbieyoung.github.io/images/threejs-webgl-cube-26.jpg">
+<meta property="og:updated_time" content="2020-10-10T12:35:30.527Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ThreeJS四步制作一个简易魔方">
+<meta name="twitter:description" content="去年之所以再次兴起了学习 WebGL 的念头，主要是有两个原因：  其一是想制作一个魔方玩； 其二是想用 Web 技术还原一些经典电影的镜头，比如《Cast Away》又译《荒岛余生》中电影快结束时主人公站在十字路口的场景。    现在看来我想第一个目的已经达成了，有点可惜的是在此之前已经有很多人做过同样的事了，比如：  https://github.com/miniwangdali/Simple">
+<meta name="twitter:image" content="https://newbieyoung.github.io/images/threejs-webgl-cube-0.jpg">
+  <link rel="canonical" href="https://newbieweb.lione.me/2017/02/28/threejs-webgl-cube/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>ThreeJS四步制作一个简易魔方 | NewbieWeb</title>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-145147663-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-145147663-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  <div class="container sidebar-position-left">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">NewbieWeb</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">Oh,Captain! My Captain! Carpe Diem!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content page-post-detail">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://newbieweb.lione.me/2017/02/28/threejs-webgl-cube/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Young">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NewbieWeb">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">ThreeJS四步制作一个简易魔方
+
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2017-02-28 14:00:00" itemprop="dateCreated datePublished" datetime="2017-02-28T14:00:00+08:00">2017-02-28</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-10 20:35:30" itemprop="dateModified" datetime="2020-10-10T20:35:30+08:00">2020-10-10</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3D技术/" itemprop="url" rel="index"><span itemprop="name">3D技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>去年之所以再次兴起了学习 WebGL 的念头，主要是有两个原因：</p>
+<ul>
+<li>其一是想制作一个魔方玩；</li>
+<li>其二是想用 Web 技术还原一些经典电影的镜头，比如《Cast Away》又译《荒岛余生》中电影快结束时主人公站在十字路口的场景。</li>
+</ul>
+<img src="https://newbieyoung.github.io/images/threejs-webgl-cube-0.jpg">
+
+<p>现在看来我想第一个目的已经达成了，有点可惜的是在此之前已经有很多人做过同样的事了，比如：</p>
+<ul>
+<li><a href="https://github.com/miniwangdali/SimpleRubiksCube" target="_blank" rel="noopener">https://github.com/miniwangdali/SimpleRubiksCube</a></li>
+<li><a href="https://www.google.com/logos/2014/rubiks/iframe/index.html" target="_blank" rel="noopener">https://www.google.com/logos/2014/rubiks/iframe/index.html</a></li>
+</ul>
+<p>站在前人的肩膀上整个事情简单了很多，但是解决问题所带来的成就感也相对减少了很多，这也是没有办法的事情了。</p>
+<a id="more"></a>
+
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>首先我假设你是一名前端工程师而且已经初步了解 WebGL 和 ThreeJS 的基础知识，比如坐标系、相机、光线、矩阵、弧度等；</p>
+<h2 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h2><h3 id="第一步：搭架子"><a href="#第一步：搭架子" class="headerlink" title="第一步：搭架子"></a>第一步：搭架子</h3><p>从我短暂的 ThreeJS 编程经验来看，有个通用的的架构能处理大部分情况，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">//开始</span><br><span class="line">function threeStart() &#123;</span><br><span class="line">    initThree();</span><br><span class="line">    initCamera();</span><br><span class="line">    initScene();</span><br><span class="line">    initLight();</span><br><span class="line">    initObject();</span><br><span class="line">    render();</span><br><span class="line">&#125;</span><br><span class="line">function initThree() &#123;</span><br><span class="line">	//...</span><br><span class="line">&#125;</span><br><span class="line">var camera;</span><br><span class="line">function initCamera() &#123;</span><br><span class="line">	//...</span><br><span class="line">&#125;</span><br><span class="line">var scene;</span><br><span class="line">function initScene() &#123;</span><br><span class="line">	//...</span><br><span class="line">&#125;</span><br><span class="line">var light;</span><br><span class="line">function initLight() &#123;</span><br><span class="line">	//...</span><br><span class="line">&#125;</span><br><span class="line">var cubes</span><br><span class="line">function initObject() &#123;</span><br><span class="line">	//...</span><br><span class="line">&#125;</span><br><span class="line">function render()&#123;</span><br><span class="line">	//...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第一步完整代码如下：</p>
+<p><a href="https://newbieyoung.github.io/Threejs_rubik/step1.html" target="_blank" rel="noopener">https://newbieyoung.github.io/Threejs_rubik/step1.html</a></p>
+<h3 id="第二步：画外型"><a href="#第二步：画外型" class="headerlink" title="第二步：画外型"></a>第二步：画外型</h3><p>魔方的外型很简单，就是由一些小正方体组成的一个大正方体而已。</p>
+<p>用一个方法封装起来：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 简易魔方</span><br><span class="line"> * x、y、z 魔方中心点坐标</span><br><span class="line"> * num 魔方阶数</span><br><span class="line"> * len 小方块宽高</span><br><span class="line"> * colors 魔方六面体颜色</span><br><span class="line"> */</span><br><span class="line">function SimpleCube(x, y, z, num, len, colors) &#123;</span><br><span class="line">    //魔方左上角坐标</span><br><span class="line">    var leftUpX = x - num / 2 * len;</span><br><span class="line">    var leftUpY = y + num / 2 * len;</span><br><span class="line">    var leftUpZ = z + num / 2 * len;</span><br><span class="line">    //根据颜色生成材质</span><br><span class="line">    var materialArr = [];</span><br><span class="line">    for (var i = 0; i &lt; colors.length; i++) &#123;</span><br><span class="line">        var texture = new THREE.Texture(faces(colors[i]));</span><br><span class="line">        texture.needsUpdate = true;</span><br><span class="line">        var material = new THREE.MeshLambertMaterial(&#123; map: texture &#125;);</span><br><span class="line">        materialArr.push(material);</span><br><span class="line">    &#125;</span><br><span class="line">    var cubes = [];</span><br><span class="line">    for (var i = 0; i &lt; num; i++) &#123;</span><br><span class="line">        for (var j = 0; j &lt; num * num; j++) &#123;</span><br><span class="line">            var cubegeo = new THREE.BoxGeometry(len, len, len);</span><br><span class="line">            var cube = new THREE.Mesh(cubegeo, materialArr);</span><br><span class="line">            //依次计算各个小方块中心点坐标</span><br><span class="line">            cube.position.x = (leftUpX + len / 2) + (j % num) * len;</span><br><span class="line">            cube.position.y = (leftUpY - len / 2) - parseInt(j / num) * len;</span><br><span class="line">            cube.position.z = (leftUpZ - len / 2) - i * len;</span><br><span class="line">            cubes.push(cube)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return cubes;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>基本都是些 ThreeJS 对象的简单运用，比如盒子对象<code>BoxGeometry</code>、纹理<code>Texture</code>、材质<code>MeshLambertMaterial</code>等，纹理主要是用来描述物体表面静态属性的对象，材质主要是用来描述物体表面动态属性的对象，比如处理光照等。</p>
+<p>其中<code>faces</code>方法主要是生成一块黑色边框的大正方形其内部是某种颜色填充的圆角小正方形的 Canvas 画布，用来充当纹理渲染魔方中小正方体的某个面。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">//生成canvas素材</span><br><span class="line">function faces(rgbaColor) &#123;</span><br><span class="line">    var canvas = document.createElement(&apos;canvas&apos;);</span><br><span class="line">    canvas.width = 256;</span><br><span class="line">    canvas.height = 256;</span><br><span class="line">    var context = canvas.getContext(&apos;2d&apos;);</span><br><span class="line">    if (context) &#123;</span><br><span class="line">    	//画一个宽高都是256的黑色正方形</span><br><span class="line">        context.fillStyle = &apos;rgba(0,0,0,1)&apos;;</span><br><span class="line">        context.fillRect(0, 0, 256, 256);</span><br><span class="line">        //在内部用某颜色的16px宽的线再画一个宽高为224的圆角正方形并用改颜色填充</span><br><span class="line">        context.rect(16, 16, 224, 224);</span><br><span class="line">        context.lineJoin = &apos;round&apos;;</span><br><span class="line">        context.lineWidth = 16;</span><br><span class="line">        context.fillStyle = rgbaColor;</span><br><span class="line">        context.strokeStyle = rgbaColor;</span><br><span class="line">        context.stroke();</span><br><span class="line">        context.fill();</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        alert(&apos;您的浏览器不支持Canvas无法预览.\n&apos;);</span><br><span class="line">    &#125;</span><br><span class="line">    return canvas;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果把这个 Canvas 画布渲染出来，大致是下边这样的：</p>
+<img src="https://newbieyoung.github.io/images/threejs-webgl-cube-5.png">
+
+<p>另外基于魔方中心在坐标系原点从而推算出所有小正方体中心点坐标可以画图理解如下：</p>
+<img src="https://newbieyoung.github.io/images/threejs-webgl-cube-4.jpg">
+
+<p>最后需要把生成的魔方加入到场景中才会被渲染出来：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//创建展示场景所需的各种元素</span><br><span class="line">var cubes</span><br><span class="line">function initObject() &#123;</span><br><span class="line">	//生成魔方小正方体</span><br><span class="line">	cubes = SimpleCube(cubeParams.x,cubeParams.y,cubeParams.z,cubeParams.num,cubeParams.len,cubeParams.colors);</span><br><span class="line">	for(var i=0;i&lt;cubes.length;i++)&#123;</span><br><span class="line">		var item = cubes[i];</span><br><span class="line">		scene.add(cubes[i]);//并依次加入到场景中</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第二步完整代码如下：</p>
+<p><a href="https://newbieyoung.github.io/Threejs_rubik/step2.html" target="_blank" rel="noopener">https://newbieyoung.github.io/Threejs_rubik/step2.html</a></p>
+<p>此时在浏览器中运行第二步完整代码应该是下边这个样子的：</p>
+<img src="https://newbieyoung.github.io/images/threejs-webgl-cube-7.png">
+
+<p>相比于第一步一片空白的页面而言，页面中多了一个类似九宫格的正方形，有人可能会说大兄弟要画这么个玩意用得着 ThreeJS 吗，DIV + CSS 分分钟搞定……</p>
+<p>其实之所以会这样是因为我们设置的<code>相机</code>的位置是在坐标系的Z轴，魔方的中心在坐标系原点，它们刚好处于同一条直线上，导致显示出来的是魔方的正视图。</p>
+<h3 id="第三步：操控魔方视角"><a href="#第三步：操控魔方视角" class="headerlink" title="第三步：操控魔方视角"></a>第三步：操控魔方视角</h3><p>第二步完成之后有个很严重的问题，我们只能看到魔方的正面，为了解决这个问题我们需要让<code>相机</code>随着鼠标或者触摸点的移动而移动；</p>
+<p>在 ThreeJS 中作者提供了很多种视角控制类库，比如：</p>
+<ul>
+<li><p>轨迹球控件<code>TrackballControls</code>(最常用的控件,用鼠标控制相机移动和转动)；</p>
+</li>
+<li><p>飞行控件<code>FlyControls</code>(飞行模拟器控件,用键盘和鼠标控制相机移动和旋转)；</p>
+</li>
+<li><p>翻滚控件<code>RollControls</code>(翻滚控件是飞行控件的简化版,控制相机绕Z轴旋转)；</p>
+</li>
+<li><p>第一人称控件<code>FirstPersonControls</code>(类似于第一人称视角的相机控件)；</p>
+</li>
+<li><p>轨道空间<code>OrbitControls</code>(类似于轨道中的卫星,控制鼠标和键盘在场景中游走)；</p>
+</li>
+<li><p>路径控件<code>PathControls</code>(控制相机在预定义的轨道上移动和旋转)；</p>
+</li>
+</ul>
+<p>在这里我使用 OrbitControls 控制器，具体用法很简单如下：</p>
+<p>首先下载代码并引入：</p>
+<img src="https://newbieyoung.github.io/images/threejs-webgl-cube-25.jpg">
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script type=&quot;text/javascript&quot; src=&quot;./threejs/controls/OrbitControls.js&quot;&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>然后根据相机以及画布初始化即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">//创建相机，并设置正方向和中心点</span><br><span class="line">var camera;</span><br><span class="line">var controller;//视角控制器</span><br><span class="line">function initCamera() &#123;</span><br><span class="line">    camera = new THREE.PerspectiveCamera(45, width / height, 1, 1000);</span><br><span class="line">    camera.position.set(0, 0, 600);</span><br><span class="line">    camera.up.set(0, 1, 0);//正方向</span><br><span class="line">    camera.lookAt(origPoint);</span><br><span class="line">    //视角控制</span><br><span class="line">    controller = new THREE.OrbitControls(camera, renderer.domElement);</span><br><span class="line">    controller.target = origPoint;//设置控制点</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第三步完整代码如下：</p>
+<p><a href="https://newbieyoung.github.io/Threejs_rubik/step3.html" target="_blank" rel="noopener">https://newbieyoung.github.io/Threejs_rubik/step3.html</a></p>
+<p>此时在浏览器中运行第三步完整代码应该是下边这个样子的：</p>
+<img src="https://newbieyoung.github.io/images/threejs-webgl-cube-10.gif">
+
+<h3 id="第四步：转动魔方"><a href="#第四步：转动魔方" class="headerlink" title="第四步：转动魔方"></a>第四步：转动魔方</h3><p>经过前三步在视觉方面简易魔方已经完成了差不多了，但是依然欠缺很重要的东西，没办法转动连最基本的可玩性都没有；</p>
+<p>要想转动魔方需要解决以下几个问题：</p>
+<h4 id="1、首先得确定触摸点"><a href="#1、首先得确定触摸点" class="headerlink" title="1、首先得确定触摸点"></a>1、首先得确定触摸点</h4><p>也就是说必须得在代码里边判断出魔方的哪个部位被触摸了，Canvas 编程是没办法像 DOM 编程那样有完备的事件机制支持的；所以这个问题需要其它解决办法，比如在 2D Canvas 我们可以根据坐标来判断当前鼠标或者触摸点在哪个元素上，从而假定该元素获得了焦点；但是在 WebGL 中存在一个平面 2D 坐标映射为 3D 坐标的问题，万幸 ThreeJS 也提供了对应的解决方案<code>Raycaster</code>。</p>
+<p>简单来说就是模拟一道光从屏幕点击或者触摸的位置上开始，以相机朝向为方向，然后检测光线与物体的碰撞，可以得知距离、碰撞点以及哪些物体先碰撞哪些物体慢碰撞。</p>
+<p>首先得知道在页面的 2D 坐标，这里可以通过监听鼠标事件或者触摸事件来完成；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//监听鼠标事件</span><br><span class="line">renderer.domElement.addEventListener(&apos;mousedown&apos;, startCube, false);</span><br><span class="line">renderer.domElement.addEventListener(&apos;mousemove&apos;, moveCube, false );</span><br><span class="line">renderer.domElement.addEventListener(&apos;mouseup&apos;, stopCube,false);</span><br><span class="line">//监听触摸事件</span><br><span class="line">renderer.domElement.addEventListener(&apos;touchstart&apos;, startCube, false);</span><br><span class="line">renderer.domElement.addEventListener(&apos;touchmove&apos;, moveCube, false);</span><br><span class="line">renderer.domElement.addEventListener(&apos;touchend&apos;, stopCube, false);</span><br></pre></td></tr></table></figure>
+
+<p><code>Raycaster</code>的调用也很简单，但是需要注意的是当刚开始的接触点在魔方上且魔方没有转动时操作为转动魔方，此时屏蔽控制器转动<br>（控制器的<code>enabled</code>属性设置为 false 即可）；反之操作为控制器转动（控制器的<code>enabled</code>属性设置为 true ）；</p>
+<p>魔方是否正在转动，这里用<code>isRotating</code>变量控制，开始一次转动时设置为 true，转动结束之后才还原为 false；而且一下转动操作必须等当前转动动画结束之后才可以被触发。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">//开始操作魔方</span><br><span class="line">function startCube(event)&#123;</span><br><span class="line">    getIntersects(event);</span><br><span class="line">    //魔方没有处于转动过程中且存在碰撞物体</span><br><span class="line">    if(!isRotating&amp;&amp;intersect)&#123;</span><br><span class="line">        startPoint = intersect.point;//开始转动，设置起始点</span><br><span class="line">        controller.enabled = false;//当刚开始的接触点在魔方上时操作为转动魔方，屏蔽控制器转动</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        controller.enabled = true;//当刚开始的接触点没有在魔方上或者在魔方上但是魔方正在转动时操作转动控制器</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">//获取操作焦点以及该焦点所在平面的法向量</span><br><span class="line">function getIntersects(event)&#123;</span><br><span class="line">	//触摸事件和鼠标事件获得坐标的方式有点区别</span><br><span class="line">    if(event.touches)&#123;</span><br><span class="line">        var touch = event.touches[0];</span><br><span class="line">        mouse.x = (touch.clientX / width)*2 - 1;</span><br><span class="line">        mouse.y = -(touch.clientY / height)*2 + 1;</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        mouse.x = (event.clientX / width)*2 - 1;</span><br><span class="line">        mouse.y = -(event.clientY / height)*2 + 1;</span><br><span class="line">    &#125;</span><br><span class="line">    raycaster.setFromCamera(mouse, camera);</span><br><span class="line">    //Raycaster方式定位选取元素，可能会选取多个，以第一个为准</span><br><span class="line">    var intersects = raycaster.intersectObjects(scene.children);</span><br><span class="line">    if(intersects.length)&#123;</span><br><span class="line">        try&#123;</span><br><span class="line">            if(intersects[0].object.cubeType===&apos;coverCube&apos;)&#123;</span><br><span class="line">                intersect = intersects[1];</span><br><span class="line">                normalize = intersects[0].face.normal;</span><br><span class="line">            &#125;else&#123;</span><br><span class="line">                intersect = intersects[0];</span><br><span class="line">                normalize = intersects[1].face.normal;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;catch(err)&#123;</span><br><span class="line">            //nothing</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2、然后得确定转动方向"><a href="#2、然后得确定转动方向" class="headerlink" title="2、然后得确定转动方向"></a>2、然后得确定转动方向</h4><p>转动魔方时应该是存在有六个方向的，分别是<code>X轴正方向</code>、 <code>X轴负方向</code>、<code>Y轴正方向</code>、<code>Y轴负方向</code>、<code>Z轴正方向</code>、<code>Z轴负方向</code>；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//魔方转动的六个方向</span><br><span class="line">var xLine = new THREE.Vector3( 1, 0, 0 );//X轴正方向</span><br><span class="line">var xLineAd = new THREE.Vector3( -1, 0, 0 );//X轴负方向</span><br><span class="line">var yLine = new THREE.Vector3( 0, 1, 0 );//Y轴正方向</span><br><span class="line">var yLineAd = new THREE.Vector3( 0, -1, 0 );//Y轴负方向</span><br><span class="line">var zLine = new THREE.Vector3( 0, 0, 1 );//Z轴正方向</span><br><span class="line">var zLineAd = new THREE.Vector3( 0, 0, -1 );//Z轴负方向</span><br></pre></td></tr></table></figure>
+
+<p>先根据滑动时的两点确定转动向量，然后判断转动向量和这六个方向向量夹角最小的方向即为转动方向；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">//获得旋转方向</span><br><span class="line">function getDirection(vector3)&#123;</span><br><span class="line">    var direction;</span><br><span class="line">    //判断差向量和x、y、z轴的夹角</span><br><span class="line">    var xAngle = vector3.angleTo(xLine);</span><br><span class="line">    var xAngleAd = vector3.angleTo(xLineAd);</span><br><span class="line">    var yAngle = vector3.angleTo(yLine);</span><br><span class="line">    var yAngleAd = vector3.angleTo(yLineAd);</span><br><span class="line">    var zAngle = vector3.angleTo(zLine);</span><br><span class="line">    var zAngleAd = vector3.angleTo(zLineAd);</span><br><span class="line">    var minAngle = min([xAngle,xAngleAd,yAngle,yAngleAd,zAngle,zAngleAd]);//最小夹角</span><br><span class="line">    switch(minAngle)&#123;</span><br><span class="line">        case xAngle:</span><br><span class="line">            direction = 0;//向x轴正方向旋转90度（还要区分是绕z轴还是绕y轴）</span><br><span class="line">            //...</span><br><span class="line">            break;</span><br><span class="line">        case xAngleAd:</span><br><span class="line">            direction = 1;//向x轴反方向旋转90度</span><br><span class="line">            //...</span><br><span class="line">            break;</span><br><span class="line">        case yAngle:</span><br><span class="line">            direction = 2;//向y轴正方向旋转90度</span><br><span class="line">            //...</span><br><span class="line">            break;</span><br><span class="line">        case yAngleAd:</span><br><span class="line">            direction = 3;//向y轴反方向旋转90度</span><br><span class="line">            //...</span><br><span class="line">            break;</span><br><span class="line">        case zAngle:</span><br><span class="line">            direction = 4;//向z轴正方向旋转90度</span><br><span class="line">            //...</span><br><span class="line">            break;</span><br><span class="line">        case zAngleAd:</span><br><span class="line">            direction = 5;//向z轴反方向旋转90度</span><br><span class="line">            //...</span><br><span class="line">            break;</span><br><span class="line">        default:</span><br><span class="line">            break;</span><br><span class="line">    &#125;</span><br><span class="line">    return direction;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是光知道方向其实还是不能够转动魔方的，比如下图中从点<code>E</code>滑动到点<code>F</code>和从点<code>G</code>滑动到点<code>H</code>，滑动方向都是<code>X轴的正方向</code>，而且还有其它情况滑动方向是<code>X轴正方向</code>的；对魔方来说这完全是两种不同的情形，所以我们还需要知道是在哪个平面滑动的。</p>
+<img src="https://newbieyoung.github.io/images/threejs-webgl-cube-15.jpg">
+
+<p>判断是在哪个平面，我们可以通过该平面的法向量和哪个坐标轴平行来判断，比如如果滑动平面的法向量平行于坐标系的Y轴且等于Y轴正方向的单位向量，那么该滑动平面肯定是魔方的<code>上平面</code>，以此类推；上边那个判断转动方向的方法可以优化为如下这个样子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">//获得旋转方向</span><br><span class="line">function getDirection(vector3)&#123;</span><br><span class="line">    var direction;</span><br><span class="line">    //判断差向量和x、y、z轴的夹角</span><br><span class="line">    var xAngle = vector3.angleTo(xLine);</span><br><span class="line">    var xAngleAd = vector3.angleTo(xLineAd);</span><br><span class="line">    var yAngle = vector3.angleTo(yLine);</span><br><span class="line">    var yAngleAd = vector3.angleTo(yLineAd);</span><br><span class="line">    var zAngle = vector3.angleTo(zLine);</span><br><span class="line">    var zAngleAd = vector3.angleTo(zLineAd);</span><br><span class="line">    var minAngle = min([xAngle,xAngleAd,yAngle,yAngleAd,zAngle,zAngleAd]);//最小夹角</span><br><span class="line">    switch(minAngle)&#123;</span><br><span class="line">        case xAngle:</span><br><span class="line">            direction = 0;//向x轴正方向旋转90度（还要区分是绕z轴还是绕y轴）</span><br><span class="line">            if(normalize.equals(yLine))&#123;</span><br><span class="line">                direction = direction+0.1;//绕z轴顺时针</span><br><span class="line">            &#125;else if(normalize.equals(yLineAd))&#123;</span><br><span class="line">                direction = direction+0.2;//绕z轴逆时针</span><br><span class="line">            &#125;else if(normalize.equals(zLine))&#123;</span><br><span class="line">                direction = direction+0.3;//绕y轴逆时针</span><br><span class="line">            &#125;else&#123;</span><br><span class="line">                direction = direction+0.4;//绕y轴顺时针</span><br><span class="line">            &#125;</span><br><span class="line">            break;</span><br><span class="line">    //...</span><br></pre></td></tr></table></figure>
+
+<p>那么接下来的问题就是怎么获得滑动平面的法向量了，所幸 ThreeJS 的光线碰撞检测机制除了能得到碰撞物体、碰撞点，还能得到碰撞平面；已知平面那么就可以获得平面法向量了。</p>
+<p>但是 ThreeJS 中有个问题需要我们注意，在 ThreeJS 中存在物体自身坐标系和世界坐标系的区分，在初始化时物体的坐标和世界坐标系一致，但是当物体发生变化之后它自身的坐标系也是会发生变化的；比如说刚开始某个物体<code>上平面</code>的法向量就是其自身坐标系Y轴正方向的单位向量，同时也是世界坐标系Y轴正方向的单位向量，如果该物体旋转 90 度之后，其<code>上平面</code>的法向量还是其自身坐标系Y轴正方向的单位向量，但是却是世界坐标系Z轴正方向的单位向量了，如图：</p>
+<img src="https://newbieyoung.github.io/images/threejs-webgl-cube-17.jpg">
+
+<p>所以不能使用魔方中小正方体的碰撞平面，因为小正方体的坐标系是会随着小正方体的变化而变化的，此时需要再加入一个和魔方整体大小一样的透明正方体，然后根据该透明正方体的碰撞平面的法向量来判断。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">var cubes</span><br><span class="line">function initObject() &#123;</span><br><span class="line">	//...</span><br><span class="line">	//透明正方体</span><br><span class="line">    var cubegeo = new THREE.BoxGeometry(150,150,150);</span><br><span class="line">    var hex = 0x000000;</span><br><span class="line">    for ( var i = 0; i &lt; cubegeo.faces.length; i += 2 ) &#123;</span><br><span class="line">        cubegeo.faces[ i ].color.setHex( hex );</span><br><span class="line">        cubegeo.faces[ i + 1 ].color.setHex( hex );</span><br><span class="line">    &#125;</span><br><span class="line">    var cubemat = new THREE.MeshBasicMaterial(&#123;vertexColors: THREE.FaceColors,opacity: 0, transparent: true&#125;);</span><br><span class="line">    var cube = new THREE.Mesh( cubegeo, cubemat );</span><br><span class="line">    cube.cubeType = &apos;coverCube&apos;;</span><br><span class="line">    scene.add( cube );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3、再然后我们得根据转动方向、触发点获取转动物体"><a href="#3、再然后我们得根据转动方向、触发点获取转动物体" class="headerlink" title="3、再然后我们得根据转动方向、触发点获取转动物体"></a>3、再然后我们得根据转动方向、触发点获取转动物体</h4><p>比如上图中从点 G 滑动到点 H，转动物体是魔方<code>上平面</code>的所有小正方体；</p>
+<p>至于怎么判断，有两种方法，第一种可以根据小正方体的中心点来判断，比如如果转动的是魔方<code>上平面</code>的正方体，那么已知触发点所在正方体的中心点，根据其Z轴大小就可以确定其它小正方体了；</p>
+<p>还有一种办法则是根据小正方体初始化时的编号规律来判断，转动之后更新编号，保证其规律不发生变化，后续判断依旧即可，从下边的简图很容易就能看出其编号规律。</p>
+<img src="https://newbieyoung.github.io/images/threejs-webgl-cube-19.jpg">
+
+<p>比如：</p>
+<ul>
+<li><code>A/9==0</code> A 层小方块序号整除 9 都等于 0；</li>
+<li><code>B/9==1</code> B 层小方块序号整除 9 都等于 1；</li>
+<li><code>C/9==2</code> C 层小方块序号整除 9 都等于 2；</li>
+<li><code>D%3==2</code> D 层小方块序号取余 3 都等于 2；</li>
+<li><code>E%3==1</code> E 层小方块序号取余 3 都等于 1；</li>
+<li><code>F%3==0</code> F 层小方块序号取余 3 都等于 0；</li>
+<li><code>H%9/3==0</code> H 层小方块序号取余 9 然后再整除 3 都等于 0；</li>
+<li><code>I%9/3==1</code> I 层小方块序号取余 9 然后再整除 3 都等于 1；</li>
+<li><code>J%9/3==2</code> J 层小方块序号取余 9 然后再整除 3 都等于 2。</li>
+</ul>
+<h4 id="4、最后是制作转动动画"><a href="#4、最后是制作转动动画" class="headerlink" title="4、最后是制作转动动画"></a>4、最后是制作转动动画</h4><p>制作转动动画的过程中使用 RequestAnimationFrame，这没什么要说的；唯一要注意的地方还是关于物体自身坐标系和世界坐标系的问题，举例来说，绕世界坐标系Y轴旋转的方法应该是如下图所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//绕着世界坐标系的某个轴旋转</span><br><span class="line">function rotateAroundWorldY(obj,rad)&#123;</span><br><span class="line">    var x0 = obj.position.x;</span><br><span class="line">    var z0 = obj.position.z;</span><br><span class="line">    var q = new THREE.Quaternion();</span><br><span class="line">    q.setFromAxisAngle( new THREE.Vector3( 0, 1, 0 ), rad );</span><br><span class="line">    obj.quaternion.premultiply( q );</span><br><span class="line">    //obj.rotateY(rad);</span><br><span class="line">    obj.position.x = Math.cos(rad)*x0+Math.sin(rad)*z0;</span><br><span class="line">    obj.position.z = Math.cos(rad)*z0-Math.sin(rad)*x0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="5、另外还要注意的是这里的转动魔方会对转动视角有影响"><a href="#5、另外还要注意的是这里的转动魔方会对转动视角有影响" class="headerlink" title="5、另外还要注意的是这里的转动魔方会对转动视角有影响"></a>5、另外还要注意的是这里的转动魔方会对转动视角有影响</h4><p>这和<code>OrbitControls</code>控制器的实现有关系；虽然该控制器为了兼容移动端和PC端同时支持触摸事件和鼠标事件，但是大体逻辑差不多，我们以移动端的触摸事件为例子来简单说明一下：</p>
+<p>首先这个控制器会记录下刚开始触摸时的位置为触摸起点；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">function onTouchStart( event ) &#123;</span><br><span class="line">	if ( scope.enabled === false ) return;</span><br><span class="line">	event.preventDefault();</span><br><span class="line">	switch ( event.touches.length ) &#123;</span><br><span class="line">		case 1:	// one-fingered touch: rotate</span><br><span class="line">			if ( scope.enableRotate === false ) return;</span><br><span class="line">			handleTouchStartRotate( event );</span><br><span class="line">			state = STATE.TOUCH_ROTATE;</span><br><span class="line">			break;</span><br><span class="line">		//...</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">function handleTouchStartRotate( event ) &#123;</span><br><span class="line">	//console.log( &apos;handleTouchStartRotate&apos; );</span><br><span class="line">	rotateStart.set( event.touches[ 0 ].pageX, event.touches[ 0 ].pageY );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后通过这个触摸起点和后续的触摸点计算位移数据；这逻辑初一看起来很完美，但是该控制器还提供了<code>enabled</code>属性用来对其本身起开关的作用；放到当前例子中来说，转动魔方前控制器为开启状态，我们准备转动魔方时刚一接触屏幕控制器会记录下触摸起点，然后控制器被设置为关闭状态，<code>由于我并没有在完成魔方转动动画后立即恢复控制器为开启状态，而是在下一次触摸开始时重新进行状态判断</code>导致如果重新进行状态判断的逻辑晚于控制器记录触摸起点执行就会出现<code>先转动魔方然后转动视角，视角会突然变化，这是因为控制器记录的触摸起点还为转动魔方时的触摸起点</code>。</p>
+<img src="https://newbieyoung.github.io/images/threejs-webgl-cube-24.gif">
+
+<p>解决办法为<code>让控制器的事件监听晚于魔方的事件监听执行</code>，另外还得注意得让魔方的事件监听挂在画布上，因为控制器的事件监听是挂在画布上的，如果魔方的事件监听挂在全局window对象上，那么就算初始化控制器的代码写在后边，依然会是魔方的事件监听先执行，因为事件监听都被设置为在事件捕获阶段执行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">//开始</span><br><span class="line">function threeStart() &#123;</span><br><span class="line">    initThree();</span><br><span class="line">    initCamera();</span><br><span class="line">    initScene();</span><br><span class="line">    initLight();</span><br><span class="line">    initObject();</span><br><span class="line">    render();</span><br><span class="line">    //监听鼠标事件</span><br><span class="line">    renderer.domElement.addEventListener(&apos;mousedown&apos;, startCube, false);</span><br><span class="line">    renderer.domElement.addEventListener(&apos;mousemove&apos;, moveCube, false );</span><br><span class="line">    renderer.domElement.addEventListener(&apos;mouseup&apos;, stopCube,false);</span><br><span class="line">    //监听触摸事件</span><br><span class="line">    renderer.domElement.addEventListener(&apos;touchstart&apos;, startCube, false);</span><br><span class="line">    renderer.domElement.addEventListener(&apos;touchmove&apos;, moveCube, false);</span><br><span class="line">    renderer.domElement.addEventListener(&apos;touchend&apos;, stopCube, false);</span><br><span class="line">    //视角控制</span><br><span class="line">    controller = new THREE.OrbitControls(camera, renderer.domElement);</span><br><span class="line">    controller.target = new THREE.Vector3(0, 0, 0);//设置控制点</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>还有一种办法是在魔方转动动画完成后立即恢复控制器状态为开启状态。</p>
+</blockquote>
+<p>第四步完整代码如下：</p>
+<p><a href="https://newbieyoung.github.io/Threejs_rubik/step4.html" target="_blank" rel="noopener">https://newbieyoung.github.io/Threejs_rubik/step4.html</a></p>
+<h2 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h2><p>至此一个简易魔方完成了，是时候开下脑洞了；</p>
+<ul>
+<li><p>淘宝上应该只能买到低阶魔方，但是对于这个例子稍加拓展，你甚至可以玩 100 阶魔方；</p>
+</li>
+<li><p>这个例子可以和微信小游戏结合，比如：</p>
+</li>
+</ul>
+<img src="https://newbieyoung.github.io/images/threejs-webgl-cube-26.jpg">
+
+<ul>
+<li>这个例子稍加扩展结合摄像头和自动还原算法，应该是可以做到扫描现实中的魔方，然后根据自动还原算法还原，得到一步步还原魔方的动画演示例子的。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+        
+        <div class="post-tags">
+            <a href="/tags/ThreeJS/" rel="tag"># ThreeJS</a>
+          
+            <a href="/tags/WebGL/" rel="tag"># WebGL</a>
+          
+            <a href="/tags/魔方/" rel="tag"># 魔方</a>
+          
+        </div>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+              <a href="/2017/02/13/px-diff-animation/" rel="next" title="像素差逐帧动画">
+                <i class="fa fa-chevron-left"></i> 像素差逐帧动画
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+              <a href="/2017/02/28/understanding-experience/" rel="prev" title="某个程序员眼中的用户体验设计">
+                某个程序员眼中的用户体验设计 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Young</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">51</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/newbieYoung" title="GitHub &rarr; https://github.com/newbieYoung" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://www.zhihu.com/people/NewbieYoung" title="知乎 &rarr; https://www.zhihu.com/people/NewbieYoung" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>知乎</a>
+      </span>
+    
+  </div>
+
+
+
+        </div>
+      </div>
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编码"><span class="nav-number">2.</span> <span class="nav-text">编码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一步：搭架子"><span class="nav-number">2.1.</span> <span class="nav-text">第一步：搭架子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二步：画外型"><span class="nav-number">2.2.</span> <span class="nav-text">第二步：画外型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三步：操控魔方视角"><span class="nav-number">2.3.</span> <span class="nav-text">第三步：操控魔方视角</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第四步：转动魔方"><span class="nav-number">2.4.</span> <span class="nav-text">第四步：转动魔方</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、首先得确定触摸点"><span class="nav-number">2.4.1.</span> <span class="nav-text">1、首先得确定触摸点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、然后得确定转动方向"><span class="nav-number">2.4.2.</span> <span class="nav-text">2、然后得确定转动方向</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3、再然后我们得根据转动方向、触发点获取转动物体"><span class="nav-number">2.4.3.</span> <span class="nav-text">3、再然后我们得根据转动方向、触发点获取转动物体</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4、最后是制作转动动画"><span class="nav-number">2.4.4.</span> <span class="nav-text">4、最后是制作转动动画</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5、另外还要注意的是这里的转动魔方会对转动视角有影响"><span class="nav-number">2.4.5.</span> <span class="nav-text">5、另外还要注意的是这里的转动魔方会对转动视角有影响</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拓展"><span class="nav-number">3.</span> <span class="nav-text">拓展</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Young</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.3.0</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+      </div>
+
+    
+
+  </div>
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+<script src="/js/utils.js?v=7.3.0"></script>
+  <script src="/js/motion.js?v=7.3.0"></script>
+
+
+  <script src="/js/affix.js?v=7.3.0"></script>
+  <script src="/js/schemes/pisces.js?v=7.3.0"></script>
+
+
+
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  
+  <script src="/js/scrollspy.js?v=7.3.0"></script>
+<script src="/js/post-details.js?v=7.3.0"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="generator" content="Hexo 3.9.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    save_scroll: false,
+    copycode: {"enable":false,"show_result":false,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta name="description" content="imagemin 是目前比较常用的压缩图片的 NodeJS 库，Github 仓库地址为 https://github.com/imagemin/imagemin；它支持很多插件可以用有损压缩或者无损压缩的方式压缩不同类型的图片，比如：   其用法很简单： 12345678910111213const imagemin = require(&quot;imagemin&quot;);const imageminPng">
+<meta name="keywords" content="NodeJS,imagemin,pngquant,mozjpeg">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NodeJS Imagemin">
+<meta property="og:url" content="https://newbieweb.lione.me/2019/11/06/nodejs-imagemin/index.html">
+<meta property="og:site_name" content="NewbieWeb">
+<meta property="og:description" content="imagemin 是目前比较常用的压缩图片的 NodeJS 库，Github 仓库地址为 https://github.com/imagemin/imagemin；它支持很多插件可以用有损压缩或者无损压缩的方式压缩不同类型的图片，比如：   其用法很简单： 12345678910111213const imagemin = require(&quot;imagemin&quot;);const imageminPng">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://newbieyoung.github.io/images/nodejs-imagemin-0.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/nodejs-imagemin-1.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/nodejs-imagemin-2.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/nodejs-imagemin-3.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/nodejs-imagemin-4.jpg">
+<meta property="og:updated_time" content="2019-12-13T09:07:18.058Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="NodeJS Imagemin">
+<meta name="twitter:description" content="imagemin 是目前比较常用的压缩图片的 NodeJS 库，Github 仓库地址为 https://github.com/imagemin/imagemin；它支持很多插件可以用有损压缩或者无损压缩的方式压缩不同类型的图片，比如：   其用法很简单： 12345678910111213const imagemin = require(&quot;imagemin&quot;);const imageminPng">
+<meta name="twitter:image" content="https://newbieyoung.github.io/images/nodejs-imagemin-0.jpg">
+  <link rel="canonical" href="https://newbieweb.lione.me/2019/11/06/nodejs-imagemin/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>NodeJS Imagemin | NewbieWeb</title>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-145147663-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-145147663-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  <div class="container sidebar-position-left">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">NewbieWeb</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">Oh,Captain! My Captain! Carpe Diem!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content page-post-detail">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://newbieweb.lione.me/2019/11/06/nodejs-imagemin/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Young">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NewbieWeb">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">NodeJS Imagemin
+
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-11-06 21:21:00" itemprop="dateCreated datePublished" datetime="2019-11-06T21:21:00+08:00">2019-11-06</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-12-13 17:07:18" itemprop="dateModified" datetime="2019-12-13T17:07:18+08:00">2019-12-13</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/NodeJS/" itemprop="url" rel="index"><span itemprop="name">NodeJS</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><code>imagemin</code> 是目前比较常用的压缩图片的 NodeJS 库，Github 仓库地址为 <a href="https://github.com/imagemin/imagemin" target="_blank" rel="noopener">https://github.com/imagemin/imagemin</a>；它支持很多插件可以用有损压缩或者无损压缩的方式压缩不同类型的图片，比如：</p>
+<img src="https://newbieyoung.github.io/images/nodejs-imagemin-0.jpg">
+
+<p>其用法很简单：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> imagemin = <span class="built_in">require</span>(<span class="string">"imagemin"</span>);</span><br><span class="line"><span class="keyword">const</span> imageminPngquant = <span class="built_in">require</span>(<span class="string">"imagemin-pngquant"</span>);</span><br><span class="line"><span class="keyword">const</span> imageminMozjpeg = <span class="built_in">require</span>(<span class="string">"imagemin-mozjpeg"</span>)(<span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> files = <span class="keyword">await</span> imagemin([<span class="string">"images/*.&#123;jpg,png&#125;"</span>], &#123;</span><br><span class="line">    destination: <span class="string">"build/images"</span>,</span><br><span class="line">    plugins: [</span><br><span class="line">      imageminJpegtran(),</span><br><span class="line">      imageminPngquant(&#123;</span><br><span class="line">        quality: [<span class="number">0.6</span>, <span class="number">0.8</span>]</span><br><span class="line">      &#125;)</span><br><span class="line">    ]</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+
+<p>本应该没啥好记录的才对，但是当你执行 <code>npm install</code> 开始安装的时候麻烦事就来了（以 CentOS6 为例）。</p>
+<a id="more"></a>
+
+<p>首先安装 imagemin 自身，一般不会出啥问题；</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@4d694e7e1fd5 <span class="built_in">test</span>]<span class="comment"># npm install imagemin --save</span></span><br><span class="line">npm notice created a lockfile as package-lock.json. You should commit this file.</span><br><span class="line">npm WARN <span class="built_in">test</span>@1.0.0 No description</span><br><span class="line">npm WARN <span class="built_in">test</span>@1.0.0 No repository field.</span><br><span class="line"></span><br><span class="line">+ imagemin@7.0.0</span><br><span class="line">added 45 packages <span class="keyword">in</span> 6.236s</span><br></pre></td></tr></table></figure>
+
+<p>接着安装压缩 png 图片的插件 <code>imagemin-pngquant</code>；</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@4d694e7e1fd5 <span class="built_in">test</span>]<span class="comment"># npm install imagemin-pngquant --save</span></span><br><span class="line"></span><br><span class="line">&gt; pngquant-bin@5.0.2 postinstall /document/<span class="built_in">test</span>/node_modules/pngquant-bin</span><br><span class="line">&gt; node lib/install.js</span><br><span class="line"></span><br><span class="line">  ⚠ tunneling socket could not be established, cause=write EPROTO 139648169346848:error:140770FC:SSL routines:SSL23_GET_SERVER_HELLO:unknown protocol:../deps/openssl/openssl/ssl/s23_clnt.c:797:</span><br><span class="line"></span><br><span class="line">  ⚠ pngquant pre-build <span class="built_in">test</span> failed</span><br><span class="line">  ℹ compiling from <span class="built_in">source</span></span><br><span class="line">  ✖ Error: pngquant failed to build, make sure that libpng-dev is installed</span><br></pre></td></tr></table></figure>
+
+<p>开始报错了，imagemin-pngquant 依赖底层读写 png 图片的跨平台库 <code>libpng-dev</code>；</p>
+<p>在 CentOS 上可以通过 <code>rpm -qa |grep libpng</code> 命令来检查是否有安装，如果没有则需要执行 <code>yum install libpng-devel</code>；</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@4d694e7e1fd5 <span class="built_in">test</span>]<span class="comment"># rpm -qa |grep libpng</span></span><br><span class="line">libpng-1.2.49-2.el6_7.x86_64</span><br><span class="line">libpng-devel-1.2.49-2.el6_7.x86_64</span><br></pre></td></tr></table></figure>
+
+<p>libpng-dev 安装好了之后重新安装 imagemin-pngquant，结果还是报错 <code>Error: pngquant failed to build, make sure that libpng-dev is installed</code>；折腾了很久之后注意到报错之前的日志输出：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pngquant-bin@5.0.2 postinstall /document/<span class="built_in">test</span>/node_modules/pngquant-bin</span><br><span class="line">node lib/install.js</span><br><span class="line">pngquant pre-build <span class="built_in">test</span> failed</span><br><span class="line">compiling from <span class="built_in">source</span></span><br></pre></td></tr></table></figure>
+
+<p>再结合 <code>pngquant-bin</code> <a href="https://github.com/imagemin/pngquant-bin" target="_blank" rel="noopener">https://github.com/imagemin/pngquant-bin</a> 的源代码：</p>
+<img src="https://newbieyoung.github.io/images/nodejs-imagemin-1.jpg">
+
+<p>可以清楚看到其安装的详细流程，先执行 <code>./vendor/pngquant --version</code> 如果执行失败则说明 pngquant-bin 提供的 pngquant 不能在当前环境中执行，然后就只能从 <code>source</code> 目录中的源码压缩包重新进行编译安装；而编译安装需要操作系统满足很多条件，比如需要有 libpng-devel 等；上面明明已经安装了 libpng-devel 还报错，则有很大可能是通过 yum 安装的版本比较低并不兼容 pngquant-bin 中提供源码的版本。</p>
+<p>这种情况有两种解决办法，第一种是去升级 libpng-devel 的版本；但并不建议这么做，因为有非常大的可能 libpng-devel 的升级依赖操作系统的 GLIBC 版本；而 GLIBC 是 Linux 操作系统中最底层的 API 了，几乎所有运行库都会依赖它，它自身也提供了很多必要功能的实现，以我的经验去升级这种东西绝壁是害人害己的操作。</p>
+<p>第二种办法则是自己手动安装好 <code>pngquant</code>( pngquant 是一个用 C 语言编写的 PNG 压缩开源库 )，在 CentOS 中通过 yum 安装 pngquant 时要先安装 <code>epel-release</code> 如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install epel-release</span><br><span class="line">yum install pngquant</span><br></pre></td></tr></table></figure>
+
+<p>安装完成之后执行 <code>pngquant --version</code> 可以查看其版本：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@4d694e7e1fd5 node_modules]# pngquant --version</span><br><span class="line">2.5.2 (October 2015)</span><br></pre></td></tr></table></figure>
+
+<p>再然后修改 pngquant-bin 的安装代码，去掉编译安装失败终止进程的逻辑，起个新名字 <code>pngquant-bin-no-exit</code> <a href="https://www.npmjs.com/package/pngquant-bin-no-exit" target="_blank" rel="noopener">https://www.npmjs.com/package/pngquant-bin-no-exit</a> 发布到 <code>npm</code>。</p>
+<img src="https://newbieyoung.github.io/images/nodejs-imagemin-2.jpg">
+
+<p>接着修改 imagemin-pngquant 用 pngquant-bin-no-exit 代替 pngquant-bin，同样起个新名字 <code>imagemin-pngquant-no-exit</code> <a href="https://www.npmjs.com/package/imagemin-pngquant-no-exit" target="_blank" rel="noopener">https://www.npmjs.com/package/imagemin-pngquant-no-exit</a> 发布到 <code>npm</code>。</p>
+<img src="https://newbieyoung.github.io/images/nodejs-imagemin-3.jpg">
+<img src="https://newbieyoung.github.io/images/nodejs-imagemin-4.jpg">
+
+<p>最后不用再安装 imagemin-pngquant 了；改为安装 imagemin-pngquant-no-exit 。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@4d694e7e1fd5 test]# npm install imagemin-pngquant-no-exit --save</span><br><span class="line"></span><br><span class="line">&gt; pngquant-bin-no-exit@5.0.3 postinstall /document/test/node_modules/pngquant-bin-no-exit</span><br><span class="line">&gt; node lib/install.js</span><br><span class="line"></span><br><span class="line">  ⚠ tunneling socket could not be established, cause=write EPROTO 140379423373088:error:140770FC:SSL routines:SSL23_GET_SERVER_HELLO:unknown protocol:../deps/openssl/openssl/ssl/s23_clnt.c:797:</span><br><span class="line"></span><br><span class="line">  ⚠ pngquant pre-build test failed</span><br><span class="line">  ℹ compiling from source</span><br><span class="line">  ✖ Error: pngquant failed to build, make sure that libpng-dev is installed</span><br><span class="line">npm WARN test@1.0.0 No description</span><br><span class="line">npm WARN test@1.0.0 No repository field.</span><br><span class="line"></span><br><span class="line">+ imagemin-pngquant-no-exit@8.0.0</span><br><span class="line">added 237 packages in 14.783s</span><br></pre></td></tr></table></figure>
+
+<p>虽然还是报错，但至少进程没有被终止，<code>node_modules</code>里除了 vendor 目录中的 pngquant 可执行二进制文件并不存在之外，其它都已经 OK 了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@4d694e7e1fd5 node_modules]# cd pngquant-bin-no-exit/</span><br><span class="line">[root@4d694e7e1fd5 pngquant-bin-no-exit]# ls</span><br><span class="line">cli.js    lib      node_modules  readme.md</span><br><span class="line">index.js  license  package.json  vendor</span><br><span class="line">[root@4d694e7e1fd5 pngquant-bin-no-exit]# cd vendor/</span><br><span class="line">[root@4d694e7e1fd5 vendor]# ls</span><br><span class="line">source</span><br></pre></td></tr></table></figure>
+
+<p>最后把手动安装在 <code>/usr/bin</code> 目录下的 pngquant 的复制到 <code>node_modules/pngquant-bin-no-exit/vendor</code> 目录下即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@4d694e7e1fd5 node_modules]# cd pngquant-bin-no-exit/</span><br><span class="line">[root@4d694e7e1fd5 pngquant-bin-no-exit]# ls</span><br><span class="line">cli.js    lib      node_modules  readme.md</span><br><span class="line">index.js  license  package.json  vendor</span><br><span class="line">[root@4d694e7e1fd5 pngquant-bin-no-exit]# cd vendor/</span><br><span class="line">[root@4d694e7e1fd5 vendor]# ls</span><br><span class="line">source</span><br><span class="line">[root@4d694e7e1fd5 vendor]# pwd</span><br><span class="line">/document/test/node_modules/pngquant-bin-no-exit/vendor</span><br><span class="line">[root@4d694e7e1fd5 vendor]# cp /usr/bin/pngquant /document/test/node_modules/pngquant-bin-no-exit/vendor</span><br><span class="line">[root@4d694e7e1fd5 vendor]# ls</span><br><span class="line">pngquant  source</span><br></pre></td></tr></table></figure>
+
+<p>至此虽然我们还是没有安装成功，但其实整个程序已经可以正常运行了，只需要在引入稍作改动即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">const imageminPngquant = require(&apos;imagemin-pngquant-no-exit&apos;)</span><br></pre></td></tr></table></figure>
+
+<p>对于 imagemin 的其它插件安装失败时也可以用同样的方法解决，比如压缩 JPG 的 imagemin-mozjpeg 插件；同样是依赖一个 C 语言编写的图片压缩库 <code>mozjpeg</code> <a href="https://github.com/mozilla/mozjpeg" target="_blank" rel="noopener">https://github.com/mozilla/mozjpeg</a>，和 pngquant 的区别在于一个压缩 PNG 图片，一个压缩 JPG 图片；另外 mozjpeg 并不能通过 yum 安装，需要下载源代码进行编译安装。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">yum install autoconf automake libtool nasm make</span><br><span class="line">wget https://github.com/mozilla/mozjpeg/archive/v3.1.tar.gz</span><br><span class="line">tar -xvf v3.1.tar.gz</span><br><span class="line"><span class="built_in">cd</span> mozjpeg-3.1</span><br><span class="line">autoreconf -fiv</span><br><span class="line">mkdir build &amp;&amp; <span class="built_in">cd</span> build</span><br><span class="line">sh ../configure</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
+
+<p>编译完成之后可以在 <code>/opt/mozjpeg/bin</code> 看到对应的二进制可执行文件。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+        
+        <div class="post-tags">
+            <a href="/tags/NodeJS/" rel="tag"># NodeJS</a>
+          
+            <a href="/tags/imagemin/" rel="tag"># imagemin</a>
+          
+            <a href="/tags/pngquant/" rel="tag"># pngquant</a>
+          
+            <a href="/tags/mozjpeg/" rel="tag"># mozjpeg</a>
+          
+        </div>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+              <a href="/2019/09/02/template-match-and-morphology/" rel="next" title="OpenCV 图像模板匹配、形态学变换以及卷积运算">
+                <i class="fa fa-chevron-left"></i> OpenCV 图像模板匹配、形态学变换以及卷积运算
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+              <a href="/2020/10/10/simple-screenshot/" rel="prev" title="前后端混合式“截屏”方案">
+                前后端混合式“截屏”方案 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Young</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">51</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/newbieYoung" title="GitHub &rarr; https://github.com/newbieYoung" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://www.zhihu.com/people/NewbieYoung" title="知乎 &rarr; https://www.zhihu.com/people/NewbieYoung" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>知乎</a>
+      </span>
+    
+  </div>
+
+
+
+        </div>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Young</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.3.0</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+      </div>
+
+    
+
+  </div>
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+<script src="/js/utils.js?v=7.3.0"></script>
+  <script src="/js/motion.js?v=7.3.0"></script>
+
+
+  <script src="/js/affix.js?v=7.3.0"></script>
+  <script src="/js/schemes/pisces.js?v=7.3.0"></script>
+
+
+
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  
+  <script src="/js/scrollspy.js?v=7.3.0"></script>
+<script src="/js/post-details.js?v=7.3.0"></script>
+
+
+</body>
+</html>

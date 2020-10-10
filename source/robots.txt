@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Allow: /archives/
+Allow: /categories/
+Allow: /tags/ 
+
+Sitemap: https://newbieweb.lione.me/sitemap.xml
+Sitemap: https://newbieweb.lione.me/baidusitemap.xml

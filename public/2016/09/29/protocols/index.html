@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="generator" content="Hexo 3.9.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    save_scroll: false,
+    copycode: {"enable":false,"show_result":false,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta name="description" content="目前Web通信使用的是HTTP协议，HTTP协议是基于TCP协议的应用层协议，HTTP协议的工作模式是request/response模式，在一次通信中，必须首先由客户端向服务端发起TCP连接，在TCP连接建立之后，首先由客户端发起HTTP request，然后服务端再发起response。 因此，在这种标准HTTP工作模式的约定下，服务端是不被允许在未收到HTTP request的情况下，发送一">
+<meta name="keywords" content="TCP,WebSocket">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TCP、WebSocket等网络协议简单分析">
+<meta property="og:url" content="https://newbieweb.lione.me/2016/09/29/protocols/index.html">
+<meta property="og:site_name" content="NewbieWeb">
+<meta property="og:description" content="目前Web通信使用的是HTTP协议，HTTP协议是基于TCP协议的应用层协议，HTTP协议的工作模式是request/response模式，在一次通信中，必须首先由客户端向服务端发起TCP连接，在TCP连接建立之后，首先由客户端发起HTTP request，然后服务端再发起response。 因此，在这种标准HTTP工作模式的约定下，服务端是不被允许在未收到HTTP request的情况下，发送一">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_43.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_10.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_30.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_0.png">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_1.png">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_17.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_18.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_19.png">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_11.png">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_13.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_12.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_2.png">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_3.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_20.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_4.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_21.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_6.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_5.png">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_7.png">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_8.png">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_22.png">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_9.png">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_24.png">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_15.png">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_16.png">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_14.png">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_25.png">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_26.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_27.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_28.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_29.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_31.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_32.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_33.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_34.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_35.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_36.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_37.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_38.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_39.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_41.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_40.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/protocol_42.jpg">
+<meta property="og:updated_time" content="2019-11-09T05:12:33.398Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TCP、WebSocket等网络协议简单分析">
+<meta name="twitter:description" content="目前Web通信使用的是HTTP协议，HTTP协议是基于TCP协议的应用层协议，HTTP协议的工作模式是request/response模式，在一次通信中，必须首先由客户端向服务端发起TCP连接，在TCP连接建立之后，首先由客户端发起HTTP request，然后服务端再发起response。 因此，在这种标准HTTP工作模式的约定下，服务端是不被允许在未收到HTTP request的情况下，发送一">
+<meta name="twitter:image" content="https://newbieyoung.github.io/images/protocol_43.jpg">
+  <link rel="canonical" href="https://newbieweb.lione.me/2016/09/29/protocols/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>TCP、WebSocket等网络协议简单分析 | NewbieWeb</title>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-145147663-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-145147663-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  <div class="container sidebar-position-left">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">NewbieWeb</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">Oh,Captain! My Captain! Carpe Diem!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content page-post-detail">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://newbieweb.lione.me/2016/09/29/protocols/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Young">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NewbieWeb">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">TCP、WebSocket等网络协议简单分析
+
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2016-09-29 11:30:00" itemprop="dateCreated datePublished" datetime="2016-09-29T11:30:00+08:00">2016-09-29</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-09 13:12:33" itemprop="dateModified" datetime="2019-11-09T13:12:33+08:00">2019-11-09</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/网络协议/" itemprop="url" rel="index"><span itemprop="name">网络协议</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>目前Web通信使用的是HTTP协议，HTTP协议是基于TCP协议的应用层协议，HTTP协议的工作模式是request/response模式，在一次通信中，必须首先由客户端向服务端发起TCP连接，在TCP连接建立之后，首先由客户端发起HTTP request，然后服务端再发起response。</p>
+<p>因此，在这种标准HTTP工作模式的约定下，服务端是不被允许在未收到HTTP request的情况下，发送一个HTTP response给客户端的，在这种约束下，为了能够不断的随时从服务端发送内容到客户端，就必须保证服务端随时都有一个待响应的request（注意这与persistent connection不是同一个概念，persistent connection是用来复用HTTP之下的TCP连接）。</p>
+<a id="more"></a>
+
+<p>如何在现有的HTTP框架内，来获得这么一个时刻存在于服务端的待响应请求呢？这就是COMET技术，主要有如下几种方式：</p>
+<ul>
+<li>轮询（polling）</li>
+</ul>
+<p>轮询的做法就是让客户端每隔一段时间就自动送一个HTTP请求给服务端，获取最新的数据。</p>
+<ul>
+<li>长轮询（long polling）</li>
+</ul>
+<p>长轮询则是让服务端在接收到客户端送出HTTP请求后，服务端会等待一段时间，若这段时间里面服务端数据有更新，它就会把更新的数据传回给客户端，如果等待时间到了之后也没有更新，则会送一个回应给浏览器，告知客户端资料没有更新。</p>
+<p>长轮询与轮询相比区别在于客户端发起的HTTP请求数量明显变少，服务端逻辑较复杂（订阅器模式推送等）。</p>
+<ul>
+<li>基于Iframe及htmlfile的流（streaming）</li>
+</ul>
+<p>串流是让服务端在接收到客户端所送出HTTP请求后，立即产生一个回应客户端的连线，并且让这个连线持续一段时间不要中断，而服务端在这段时间内如果有数据更新，则可以透过这个连线将更新的数据马上传送给客户端。</p>
+<p>streaming与长轮询相比区别在于不用显式的连续发起HTTP请求了。</p>
+<ul>
+<li>服务端发送事件（Server-Sent Event）</li>
+</ul>
+<p>服务端发送事件（以下简称SSE）是HTML 5规范的一个组成部分，可以实现服务端到客户端的单向数据通信。通过SSE，客户端可以自动获取数据更新，而不用重复发送HTTP请求。一旦连接建立，<code>事件</code>便会自动被推送到客户端。服务端SSE通过<code>事件流(Event Stream)</code>的格式产生并推送事件。事件流对应的MIME类型为<code>text/event-stream</code>，包含四个字段：event、data、id和retry。event表示事件类型，data表示消息内容，id用于设置客户端EventSource对象的<code>last event ID string</code>内部属性，retry指定了重新连接的时间。</p>
+<p>可以简单理解为streaming方式的标准化。</p>
+<ul>
+<li>Flash</li>
+</ul>
+<p>基于Flash，首先就目前来说所有应用程序实现socket通信的一般流程都是调用操作系统的Socket库然后委托操作系统的协议栈来实现的，那么Flash也应该是这样；然后Flash以插件的形式嵌入到浏览器中，再暴露出相应的接口为JavaScript调用，从而达到实时传输的目的。</p>
+<p>由上可知传统Web模式在处理高并发及实时性需求的时候，会遇到难以逾越的瓶颈，我们需要一种高效节能的双向通信机制来保证数据的实时传输，在此背景下基于HTML5规范的、有Web TCP之称的WebSocket应运而生。</p>
+<h2 id="基础知识查漏补缺"><a href="#基础知识查漏补缺" class="headerlink" title="基础知识查漏补缺"></a>基础知识查漏补缺</h2><h3 id="WireShark"><a href="#WireShark" class="headerlink" title="WireShark"></a>WireShark</h3><p>Wireshark是一个免费开源的网络数据包分析软件，能截取网络数据包，并尽可能显示出最为详细的网络数据包数据。</p>
+<p>因为后边的实例分析会频繁的用到这个工具，所以这里简单介绍下；</p>
+<img src="https://newbieyoung.github.io/images/protocol_43.jpg">
+
+<h3 id="TCP-IP四层模型和OSI七层模型"><a href="#TCP-IP四层模型和OSI七层模型" class="headerlink" title="TCP/IP四层模型和OSI七层模型"></a>TCP/IP四层模型和OSI七层模型</h3><img src="https://newbieyoung.github.io/images/protocol_10.jpg">
+
+<p>HTTP协议位于应用层，TCP、UDP协议位于传输层，IP协议位于网络层等；</p>
+<p>IP协议中还包括ICMP和ARP协议，ICMP用于告知网络包传输过程中产生的错误以及各种控制消息，ARP用于根据IP地址查询相应的以太网MAC地址；</p>
+<p>一般来说浏览器、邮件等应用程序收发数据时用TCP，DNS查询等收发较短的控制数据时用UDP。</p>
+<h3 id="IP地址（IPv4）"><a href="#IP地址（IPv4）" class="headerlink" title="IP地址（IPv4）"></a>IP地址（IPv4）</h3><p>实际的IP地址是一串32位比特的数字，按照8比特（一个字节）一组分成4组，分别用十进制表示然后再用圆点隔开。</p>
+<p>在IP地址的规则中网络号和主机号连起来总共32比特，但是这两部分的具体结构是不固定的，所以还需要另外的附加信息来表示IP地址的内部结构，这个附加信息被称为子网掩码，子网掩码为1的部分表示网络号，子网掩码为0的部分表示主机号。</p>
+<img src="https://newbieyoung.github.io/images/protocol_30.jpg">
+
+<h3 id="IP地址域名并用的理由"><a href="#IP地址域名并用的理由" class="headerlink" title="IP地址域名并用的理由"></a>IP地址域名并用的理由</h3><p>域名更方便人使用，IP地址更方便机器使用（IP地址定长，只有四个字节，域名最短也要几十个字节而且长度不定，计算机处理起来肯定IP地址效率高），然后通过DNS机制相互转换就能完美兼容人和机器了。</p>
+<h2 id="TCP详解"><a href="#TCP详解" class="headerlink" title="TCP详解"></a>TCP详解</h2><p>传输控制协议，是一种面向连接的、可靠的、基于字节流的运输层通信协议；</p>
+<ul>
+<li>面向连接：通信前要建立连接，通信后要拆除连接；</li>
+<li>可靠：会对报文状态进行跟踪；</li>
+<li>字节流：以字节为最小单位的流服务。</li>
+</ul>
+<h3 id="1-TCP首部数据结构"><a href="#1-TCP首部数据结构" class="headerlink" title="1. TCP首部数据结构"></a>1. TCP首部数据结构</h3><p>在计算机科学领域里边一般来说具有什么样的功能，通常是由其结构决定的（这句话反过来说也是可以的，结构决定功能，或者某种功能的最优实现总有一种最优结构与之对应，总之数据结构很重要哈），所以首先来了解TCP报文的首部数据结构。</p>
+<img src="https://newbieyoung.github.io/images/protocol_0.png">
+
+<img src="https://newbieyoung.github.io/images/protocol_1.png">
+
+<h5 id="发送方端口号"><a href="#发送方端口号" class="headerlink" title="发送方端口号"></a>发送方端口号</h5><h5 id="接收方端口号"><a href="#接收方端口号" class="headerlink" title="接收方端口号"></a>接收方端口号</h5><h5 id="首部长度"><a href="#首部长度" class="headerlink" title="首部长度"></a>首部长度</h5><p>由于TCP首部包含一个长度可变的选项部分，所以需要这么一个值来指定这个TCP报文段到底有多长。</p>
+<h5 id="序列号"><a href="#序列号" class="headerlink" title="序列号"></a>序列号</h5><p>发送方告知接收方当前网络包发送的数据起始于所有发送数据的第几个字节，主要用来解决网络报文乱序的问题；</p>
+<p>客户端发送建立TCP连接报文时，序列号为当前连接的初始序列号（ISN），ISN是不能固定编码的，不然会出问题；</p>
+<p>建立TCP连接时序列号为0，当这个连接超时，再次发起建立连接时序列号还是为0，但是上一个超时的报文返回了，此时会被认为是再次建立连接成功。</p>
+<p>还有一个问题就是如果ISN固定编码，每个新建连接的序列号都从0开始，那么通信过程就会很容易被预测，有人会利用这一点来发送攻击。</p>
+<p>RFC793中说，ISN会和一个假的时钟绑在一起，这个时钟会在每4微秒对ISN做加一操作，直到超过2^32，又从0开始。这样一个ISN的周期大约是4.55个小时，那么只要保证一个TCP报文在网络上的存活时间不超过4.55个小时，就不会出现相同连接ISN也相同的情况。</p>
+<p>有个东东需要稍微提及一下，MSL（Maximum Segment Lifetime）译为报文最大生存时间，只要这个MSL小于4.55个小时就万事大吉了哈，实际也不会设置为这么长，在RFC793中MSL被定义为2分钟，在Linux系统中一般被设置为30s。</p>
+<h5 id="确认序列号"><a href="#确认序列号" class="headerlink" title="确认序列号"></a>确认序列号</h5><p>确认序列号表示发送方所期望收到下一个报文的序列号，因此确认序列号应当是发送方上一次已成功收到的报文的序列号加报文长度再加一，不过只有当标志位ACK为1时确认序号字段才有效，主要用来解决不丢包的问题。</p>
+<h5 id="控制位"><a href="#控制位" class="headerlink" title="控制位"></a>控制位</h5><p>主要用于操作TCP请求的状态机；</p>
+<ul>
+<li>ACK表示数据报文中的确认序列号字段有效，一般用来表示数据已被接收方收到；</li>
+<li>PSH表示push操作，所谓push操作就是指在数据到达接收方之后，立即传送给应用程序，而不是在缓冲区中排队；</li>
+<li>SYN表示同步序号，常用来建立连接；和ACK搭配使用，当建立连接时，SYN＝1，ACK＝0；当建立连接被响应时，SYN＝1，ACK＝1；另外这个标志的报文经常被用来进行端口扫描；</li>
+<li>URG表示紧急指针有效；</li>
+<li>RST在TCP协议中表示复位，用来异常的关闭连接，在TCP的设计中它是不可或缺的。发送方在发送RST包关闭连接时，不必等缓冲区的包都发出去会直接就丢弃缓存区的包。而接收方收到RST包后，也不必发送ACK包来确认；（可以通过伪造RST数据包实现<code>RST攻击</code>）；</li>
+<li>FIN发送端完成发送任务。</li>
+</ul>
+<p>客户端A和服务器B之间建立了TCP连接，此时攻击者C伪造了一个TCP包发给B，使B异常的断开了与A之间的TCP连接，这就是RST攻击，实现这种攻击的关键在于C怎么伪装成A，C需要准确的知道序列号以及源端口号等。</p>
+<h5 id="滑动窗口（Window）"><a href="#滑动窗口（Window）" class="headerlink" title="滑动窗口（Window）"></a>滑动窗口（Window）</h5><p>TCP滑动窗口包括发送窗口和接收窗口，由于TCP协议是全双工协议，会话的双方都可以同时接收、发送数据，所以会话的双方都各自维护一个发送窗口和接收窗口，其中各自接收窗口的大小取决于应用、系统、硬件的限制（TCP传输速率不能大于应用程序的处理速率），各自发送窗口的大小则取决于对端通告的接收窗口大小。</p>
+<p>滑动窗口主要有两个作用，一是提供TCP的可靠性（和序列号一起作用），二是提供TCP的流控特性。</p>
+<img src="https://newbieyoung.github.io/images/protocol_17.jpg">
+
+<p>对于TCP发送方，任何时候在其发送缓存内的数据都可以分为4类，已经发送并收到对端ACK的、已经发送但还未收到对端ACK的、未发送但准备发送的、未发送且未准备发送的。<code>已经发送但还未收到对端ACK的</code>和<code>未发送但准备发送的</code>，这两部分称之为发送窗口。</p>
+<img src="https://newbieyoung.github.io/images/protocol_18.jpg">
+
+<p>对于TCP的接收方，在某一时刻在它的接收缓存内存在3类数据，已接收、未接收准备接收、未接收并未准备接收（由于ACK直接由TCP协议栈回复，默认无应用延迟，不存在已接收未回复ACK的数据）。其中未接收准备接收称之为接收窗口。</p>
+<img src="https://newbieyoung.github.io/images/protocol_19.png">
+
+<p>窗口左边向右边移动称为窗口合拢，这种现象发生在发送窗口发送报文和接收窗口接收报文时；<br>窗口右边向右边移动称为窗口张开，这种现象发生在应用层读取已经确认的报文并释放TCP接收缓存时；<br>窗口右边向左边移动称为窗口收缩，Host Requirements RFC强烈建议不要使用这种方式，但TCP必须能够在某一端产生这种情况时进行处理。</p>
+<p>实例分析，请往下浏览TCP协议数据<code>数据传输</code>。</p>
+<p>在TCP协议中还有个窗口，叫拥塞窗口，可以看作是对发送方发送数据作出的限制，用于拥塞控制；TCP真正的发送窗口大小是由滑动窗口和拥塞窗口的最小值决定的。</p>
+<h5 id="最长报文大小（MSS）"><a href="#最长报文大小（MSS）" class="headerlink" title="最长报文大小（MSS）"></a>最长报文大小（MSS）</h5><p>MSS就是TCP报文每次能够传输的最大报文长度；</p>
+<p>不同类型的网络对数据帧的长度都有一个限制（应该出于响应时间的考虑），这个限制被称为最大传输单元（MTU），IP协议则会根据MTU对数据报进行分片处理（分片操作即可以发生在原始主机上，也可以发生在中间路由器上，已经分片的数据有可能会再次进行分片，分片数据只有到达目的地后才进行重新组装）；</p>
+<p>TCP协议出于最佳传输效能的考虑，在建立连接的时候通常要协商双方的MSS；</p>
+<p>TCP计算MSS的方法是使用网络接口的MTU大小然后减去其它协议头数据大小，例如：MTU为1500的以太网在减去20字节的IPv4头和20字节的TCP头后得到的MSS为1460。</p>
+<p>以下为某次TCP连接建立时协商MSS的例子</p>
+<img src="https://newbieyoung.github.io/images/protocol_11.png">
+<img src="https://newbieyoung.github.io/images/protocol_13.jpg">
+<img src="https://newbieyoung.github.io/images/protocol_12.jpg">
+
+<h3 id="2-建立TCP连接（三次握手）"><a href="#2-建立TCP连接（三次握手）" class="headerlink" title="2. 建立TCP连接（三次握手）"></a>2. 建立TCP连接（三次握手）</h3><img src="https://newbieyoung.github.io/images/protocol_2.png">
+
+<p>由于客户端发起HTTP请求之前需要建立TCP连接，那么我们可以使用Wireshark抓包工具抓取初次访问任意HTTP协议网页时的网络请求详情查看。</p>
+<p>需要注意图中的SYN、ACK、SEQ等缩写单词的意义，SYN表示TCP头部信息中控制位SYN标识为1，但是ACK和SEQ则分别表示的是确认序列号和序列号。</p>
+<img src="https://newbieyoung.github.io/images/protocol_3.jpg">
+
+<p>确认包的ACK ＝ 待确认包的SEQ＋1</p>
+<h5 id="建立TCP连接时服务端和客户端同时打开连接请求"><a href="#建立TCP连接时服务端和客户端同时打开连接请求" class="headerlink" title="建立TCP连接时服务端和客户端同时打开连接请求"></a>建立TCP连接时服务端和客户端同时打开连接请求</h5><p>正常情况下TCP连接的建立是由一方发起建立连接，另一方响应该请求，但是如果出现，通信双方同时请求建立连接时，则连接建立过程并不是三次握手过程，而且这种情况的连接也只有一条，并不会建立两条连接。</p>
+<p>同时打开连接时，两边几乎同时发送 SYN，并进入 SYN_SENT 状态，当每一端收到 SYN 时，状态变为 SYN_RCVD，同时双方都再发 SYN 和 ACK 作为对收到的 SYN 进行确认应答。当双方都收到 SYN 及相应的 ACK 时，状态变为 ESTABLISHED。</p>
+<h5 id="SYN-Flood攻击和TCP连接建立SYN超时"><a href="#SYN-Flood攻击和TCP连接建立SYN超时" class="headerlink" title="SYN Flood攻击和TCP连接建立SYN超时"></a>SYN Flood攻击和TCP连接建立SYN超时</h5><p>如果服务端接到了客户端发的SYN报文后回了SYN-ACK报文后客户端掉线了，服务端没有接收到客户端发送回来的ACK，那么，这个连接处于一个中间状态，即没成功，也没失败。于是，服务端如果在一定时间内没有收到的客户端的确认报文ACK，就会重发SYN-ACK。在Linux下，默认重试次数为5次，重试的间隔时间从1s开始每次都翻倍，5次的重试时间间隔分别为1s， 2s， 4s， 8s， 16s，总共31s，第5次发出后还要等32s都知道第5次也超时了，所以，总共需要 1s + 2s + 4s+ 8s+ 16s + 32s = 2^6 -1 = 63s，TCP才会把断开这个连接。</p>
+<p>一些恶意的人就为此制造了SYN Flood攻击，给服务端发送一个SYN后就断开，于是服务端需要默认等待63秒才会断开连接，这样攻击者就可以把服务端的SYN连接队列耗尽，让正常的连接请求不能处理。</p>
+<p>于是Linux系统中给了一个叫tcp_syncookies的参数来应对这个事，当SYN队列满了之后，TCP会通过源地址端口、目标地址端口和时间戳打造出一个特别的序列号发回去，如果是攻击者则不会有响应（攻击者就是通过主动断开连接来攻击的哈），如果是正常连接，则会把这个序列号发回来，然后服务端就可以通过这个序列号建立连接了（即使你不在SYN队列中）。请注意千万别用tcp_syncookies来处理正常的大负载的连接的情况，因为tcp_syncookies采用的是妥协版的TCP协议，并不严谨。</p>
+<h3 id="3-TCP数据传输"><a href="#3-TCP数据传输" class="headerlink" title="3. TCP数据传输"></a>3. TCP数据传输</h3><img src="https://newbieyoung.github.io/images/protocol_20.jpg">
+
+<p>通过Wireshark抓包来看，除了Window size value字段，还有两个和滑动窗口相关的字段，分别是Calculated window size和Window size scaling factor，之所以是这样，是因为随着带宽越来越大，头部16位的窗口大小已经不够了，为了突破这个限制便有了Window Size Scaling选项（可见要想你设计的东西不断的与时俱进适当的预留项是很重要的哈），另外Wireshark中的Calculated window size只是一个逻辑值，Wireshark帮我们算出来方便我们理解用的。</p>
+<img src="https://newbieyoung.github.io/images/protocol_4.jpg">
+<img src="https://newbieyoung.github.io/images/protocol_21.jpg">
+
+<p>TCP三次握手完成之后，客户端会发起一个HTTP GET请求；</p>
+<p>此时标志位为［PSH、ACK］，目标端口为8080，数据报文长度为439，窗口大小位132384。</p>
+<img src="https://newbieyoung.github.io/images/protocol_6.jpg">
+
+<p>服务端接收到客户端HTTP协议的GET请求后，首先会发送一个确认报文；</p>
+<img src="https://newbieyoung.github.io/images/protocol_5.png">
+
+<p>确认报文的ACK ＝ 待确认报文的SEQ＋待确认报文的长度。</p>
+<p>服务端发送确认报文后会对客户端的HTTP协议的GET请求的资源进行响应，发送一些资源报文给客户端；</p>
+<img src="https://newbieyoung.github.io/images/protocol_7.png">
+
+<p>统一资源会被分隔为MSS整数份以及余下部分，该报文标志为［ACK］序列号为6757，可以理解为发送的数据是从第6757位到8107位（Next sequence number = Sequence number + TCP Segment Len）。</p>
+<p>客户端接收到服务端报文后会对发送确认报文；</p>
+<img src="https://newbieyoung.github.io/images/protocol_8.png">
+
+<p>该确认报文的标志位为［ACK］，序列号为8107等于对应报文的<code>下一序列号</code>，表示第8107位之前的已经接收到了，期望下一次报文是从第8107位开始，从这里也可以看出TCP协议是怎么通过报文处理乱序问题的，另外窗口大小也随着接收数据的不断增多变为了1256641。</p>
+<p>理论上一个处理缓慢的接收方是可以把发送方的滑动窗口降为0的，此时也就是Zero Window情形了，发送方滑动窗口降为0就不会再发送数据，但是如果等一段时间后接收方有缓存区域可以用了呢，该怎么通知发送方呢？为了解决这个问题，TCP使用了Zero Window Probe技术，缩写为ZWP，也就是说，发送方窗口变为0后，会发ZWP报文给接收方，让接收方不断的发ACK报文给发送方来更新其窗口大小，一般会重复三次，每次大约间隔30-60秒（不同的实现可能会不一样），如果三次过后窗口大小还是0，那么一般实现都会在此时断开TCP连接。</p>
+<p>另外需要注意的是基本上任何等待的地方都可能出现DDos攻击，Zero Window也不例外，一些攻击者会在连接建立后，发送GET请求后，就把Window设置为0，然后服务端就只能等待进行ZWP，于是攻击者会并发大量这样的请求，把服务端资源耗尽。</p>
+<p>客户端除了发送确认报文之后，还发送了一个被Wireshark标识为［TCP Window Update］的报文；</p>
+<img src="https://newbieyoung.github.io/images/protocol_22.png">
+
+<p>该报文序列号也为8107；TCP Window Update是TCP通信中的一个状态，它可以发生的原因有很多，但最终可以归结于发送方传输数据的速度比接收方读取数据还快，这使得接收方的缓冲区必须释放一部分空间，所以接收方就给发送方发送该报文，告诉发送方应该以多大的速度发送数据，从而使得数据传输与接收恢复正常。</p>
+<p>所以服务端在接收到TCP Window Update报文，发送的下一个报文长度只有176，而且标志位为［ACK PSH］，至于为啥长度是176，应该处于降低接收方缓存增长过快的压力，然后发送的最小报文吧（HTML文档整除MSS后刚好还剩下176）；</p>
+<img src="https://newbieyoung.github.io/images/protocol_9.png">
+
+<p>服务端资源传输完成之后就会发送HTTP Response请求，至于之后的几次<code>keep alive和RST</code>，就先不展开了（可能涉及保活定时器以及坚持定时器等），因为我本来只想分析下WebSocket是怎么通过HTTP和TCP来进行全双工通信的，结果一周过去了，我还挣扎在TCP协议各种机制中…</p>
+<h5 id="TCP报文发送机制"><a href="#TCP报文发送机制" class="headerlink" title="TCP报文发送机制"></a>TCP报文发送机制</h5><p>应用程序交给协议栈发送的数据长度是由应用程序本身来决定的，不同的应用程序在实现上有所不同，有些应用程序会一次性传递所有数据，有些应用程序会逐字节或者逐行传递数据，协议栈并不能控制这一行为；</p>
+<p>在这种情况下一收到数据就马上发送出去，就有可能会发送大量的小包，导致网络效率下降，因此需要在数据累积到一定量时再发送出去，这个累积量的大小就是上边所说的<code>MSS</code>；</p>
+<p>但是累积量方式也会有一个问题，如果每次都要等到长度累积到MSS时再发送，可能会因为等待时间太长而造成发送延误，这种情况下，即便缓冲区中的数据长度没有达到MSS，也应该果断发送出去，为此协议栈内部有一个定时器，当经过一段时间后，就会把网络包发送出去；</p>
+<p>上述两种方式其实时互相矛盾的，具体的发送策略是由协议栈的开发者综合考虑来决定的，因此不同种类和版本的操作系统在相关操作上是存在差异的；</p>
+<p>另外协议栈也给应用程序保留了控制发送时机的余地，应用程序在传输数据给协议栈时可以指定一些选项，比如控制位PSH标识置为1，那么协议栈就会按照要求直接发送数据。</p>
+<h5 id="TCP报文确认机制"><a href="#TCP报文确认机制" class="headerlink" title="TCP报文确认机制"></a>TCP报文确认机制</h5><p>TCP不对ACK报文进行确认，除非ACK报文长度不为0，因此客户端一般会对服务端发送的ACK数据报文进行确认，但是服务端却没有对客户端发送的TCP Window Update报文进行确认，很明显可以看到TCP Window Update报文长度为0。</p>
+<p>有时候会发现客户端并没有对服务端每一个数据报文都进行了确认，究其原因则是因为TCP的报文确认机制启动的一种延迟确认的机制（Delayed ACK），它的作用就是延迟ACK报文的发送，使得协议栈有机会合并多个ACK，提高网络性能，一般实现的延迟时间为40ms。</p>
+<p>比如说接收方在接收到1报文后准备发送ACK确认报文，该确认报文长度为0，然后40毫秒内又收到了2报文，则还需要对2报文进行确认，那么这种延迟确认机制就会把2报文的ACK报文和1报文的ACK报文合并，而接收方在接收到这个合并的报文就意味着1、2报文都已经被接收了。这样也可以提高系统的效率（这样就能很好的解释为什么有时候客户端并没有对服务端的数据报文一一进行确认回复了）。</p>
+<p>当接收方应用层处理数据很慢时或者当发送方应用进程产生数据很慢时，就会导致大量的短报文充斥网络，效率很低；这种情况又被称为糊涂窗口综合症，解决办法为Nagle算法，也不过多展开了，理由同上。</p>
+<p>延迟ACK能减少带宽浪费，但是在协议性能需要优化时，有丢包的情况下，需要考虑启动快速ACK，因为这样可以及时通知发送方丢包了，避免Zero Window，提升吞吐率。</p>
+<h5 id="选择性重传（Selective-Acknowledgment）"><a href="#选择性重传（Selective-Acknowledgment）" class="headerlink" title="选择性重传（Selective Acknowledgment）"></a>选择性重传（Selective Acknowledgment）</h5><p>以上只描述了TCP协议确认连续报文时的机制，但是由于网络环境很复杂，如果接收方收到的数据报文没有错误，只是未按序号，这种现象如何处理呢？</p>
+<p>TCP协议会保证数据报按序到达应用层，但是并没有规定如何处理自身接收到错序报文的情况，而是由TCP协议的实现者自己去确定，通常有两种方法进行处理：一是对没有按序号到达的报文直接丢弃，二是将未按序号到达的数据包先放于缓冲区内，等待它前面 的序号包到达后，再将它交给应用进程。</p>
+<p>举例来说如果发送方连续发送了7个数据报文段，其序号分别是1，101，201，…，701；假设其它数据报文都收到了，但是201这个数据报文没有收到，那么按第一种方式301-701的数据报文会被丢弃，接收方只会发送确认1-201数据报文的确认报文，发送方超时重发时需要重发301-701的数据报文；按第二种方式301-701的数据报文会被接收方放入缓冲区，而且会发送确认接收到的所有数据报文的确认报文，那么发送方就会根据接收方的确认报文重发接收方未接收到的数据报文（这种机制也被称为选择性重传）。</p>
+<p>序列号和确认序列号并不能解决返回的确认报文明确指明未接收到报文的位置，所以这时候就需要在TCP头部的选项指明；一般SACK信息分两种，一种标识是否支持SACK，是在TCP握手时发送；另一种是具体的SACK信息，这些信息主要是为了告诉发送方，接收方已经接收到并缓存的不连续的报文，通过这些信息发送方就能判断究竟是哪块丢失，从而重发相应的报文。</p>
+<img src="https://newbieyoung.github.io/images/protocol_24.png">
+
+<h5 id="超时重传"><a href="#超时重传" class="headerlink" title="超时重传"></a>超时重传</h5><p>发送端发送一个TCP报文后，会启动一个重传定时器，如果在一定时间内没有收到接收方的确认报文，就会重传；看起来的超时重传机制很简单，但是这里有个问题，怎么确定超时时间（RTO）？首先超时时间固定是肯定会有问题的（考虑最长报文大小、发送端和接收接收方的网络环境），网络环境很复杂，如果超时时间固定，那么时间定长了，判断一次重传需要等待很长时间；如果定短了，在网络环境好的情况下就会大量无意义的重传。一般RTO是经过RTT计算出来的（RTT是发送端发出一个报文到接收到接收方反馈报文的时间），没有仔细了解这个算法（包括经典算法、Karn/Partridge算法、Jacobson/Karels算法等，总之网络环境很复杂……），但可以确定RTO肯定要比RTT大。</p>
+<h5 id="快速重传"><a href="#快速重传" class="headerlink" title="快速重传"></a>快速重传</h5><p>TCP继续发展，RTO算法不断优化，还是觉得超时重传机制效率偏低，然后重传机制得到了进一步加强，出现了快速重传；快速重传机制规定，发生丢包时，在重传定时器被触发之前，当发送方连续收到3个对丢失数据包的重传请求时将引起立即重传。</p>
+<p>例如发送方发送1、2、3、4、5连续数据报文，接收方接收到1后发送确认报文，此后接连接收到3、4、5但是没有接收到2，那么就会发送三次确认2报文未接收的报文，发送方再接收到三次同一报文就可以在超时重传之前确认2数据报文接收方未接收到此时会立即重传2数据报文。</p>
+<h5 id="慢启动"><a href="#慢启动" class="headerlink" title="慢启动"></a>慢启动</h5><p>最初的TCP在连接建立成功后会向网络中发送大量的报文，这样很容易导致网络中路由器缓存空间耗尽，从而发生拥塞，因此新建立的连接不能一开始就大量发送报文，而只能根据网络情况逐步增加每次发送的数据量，以避免上述现象的发生。具体来说，当新建连接时，cwnd初始化为1一个最大报文大小（MSS），发送端开始按照拥塞窗口大小发送数据，每当有一个报文被确认时，cwnd就增加一个MSS大小，这样cwnd的值就随着网络往返时间呈指数级增长，事实上慢启动的速度一点都不慢，只是起点比较低而已。</p>
+<p>知道这两种机制，其实我们在处理一些循环定时逻辑的时候也可以参考哈，比如可以加入反馈、尝试机制等（前端童鞋如果不怕复杂话，其实可以在轮询中加入这些机制，服务器应答很快我们就减少间隔时间，应答很慢就增加间隔时间等，而不像现在统统写死，100个用户访问也是3秒轮询一次，10000个用户访问也是3秒轮询一次之类的）。</p>
+<h5 id="拥塞避免"><a href="#拥塞避免" class="headerlink" title="拥塞避免"></a>拥塞避免</h5><p>从慢启动可以看到，cwnd可以很快的增长上来，从而最大程度利用网络带宽资源，但是cwnd不能一直这样无限增长下去，一定需要某个限制。TCP使用了一个叫慢启动门限(ssthresh)的变量，当cwnd超过该值后，慢启动过程结束，进入拥塞避免阶段。对于大多数TCP实现来说，ssthresh的值是65536(同样以字节计算)。拥塞避免的主要思想是加法增大，也就是cwnd的值不再指数级往上升，开始加法增加。此时当窗口中所有的报文段都被确认时，cwnd的大小加1，cwnd的值就随着RTT开始线性增加，这样就可以避免增长过快导致网络拥塞，慢慢的增加调整到网络的最佳值。</p>
+<h5 id="拥塞发生"><a href="#拥塞发生" class="headerlink" title="拥塞发生"></a>拥塞发生</h5><p>慢启动和拥塞避免都是没有检测到拥塞的情况下的行为，那么当拥塞发生时cwnd又该怎样去调整呢？</p>
+<p>当发生重传时，TCP协议认为出现拥塞的可能性很大，这时ssthresh降低为cwnd值的一半，cwnd重新设置为1，重新进入慢启动过程。</p>
+<h5 id="快速恢复"><a href="#快速恢复" class="headerlink" title="快速恢复"></a>快速恢复</h5><p>当发生快速重传时，ssthresh设置为cwnd的一半，cwnd再设置为ssthresh的值，重新进入拥塞避免阶段。</p>
+<p>上述几个机制或者说是算法是拥塞控制的主要算法，这些算法不是同时诞生的，各自经历了很多时间的发展，到今天都还在优化中，而且我也不知道怎么模拟相关环境去仔细了解其机制，所以就先记下来假装了解一下。</p>
+<h3 id="4-断开TCP连接（四次挥手）"><a href="#4-断开TCP连接（四次挥手）" class="headerlink" title="4.断开TCP连接（四次挥手）"></a>4.断开TCP连接（四次挥手）</h3><img src="https://newbieyoung.github.io/images/protocol_15.png">
+
+<p>我所接触到的所有资料都说断开TCP连接的过程是四次挥手的过程，但是我实际抓包时却发现客户端和服务端在断开TCP连接时只有三次交互（如下图所示），理论上的四次挥手和实际的三次挥手的差别在于，服务端接收到客户端发送的关闭TCP请求后，理论上服务端会发两个确认请求，一次为ACK报文一次为FIN报文，分别表示传输未传输完成数据以及确认关闭，但实际上只有一个请求，而且该请求控制为ACK和FIN；</p>
+<p>应该是当服务端没有任何未传输完成的数据时，会把理论上的两个请求合并为一个请求（根据延迟确认机制）。</p>
+<img src="https://newbieyoung.github.io/images/protocol_16.png">
+
+<h5 id="客户端和服务端同时关闭连接"><a href="#客户端和服务端同时关闭连接" class="headerlink" title="客户端和服务端同时关闭连接"></a>客户端和服务端同时关闭连接</h5><p>正常情况下，通信一方请求连接关闭，另一方响应连接关闭请求，并且被动关闭连接。但是若出现同时关闭连接请求时，通信双方均从ESTABLISHED状态转换为FIN_WAIT_1状态，任意一方收到对方发来的FIN报文后，其状态均由FIN_WAIT_1转变到CLOSING状态，并发送最后的ACK报文，当接收到最后的ACK报文后，状态转变为TIME_WAIT，在等待2MSL时间后进入到CLOSED状态，最终释放整个TCP传输连接。</p>
+<p>至于为什么关闭连接时状态需要先转变为TIME_WAIT，在等待2MSL时间才后进入CLOSED状态，是因为2MSL刚好是一个报文一来一回能在网络中生存的最大时间，能保证发送方未发送完成的数据被接收方接收；另外还有足够的时间让这个连接不会跟后面的连接混在一起。</p>
+<h3 id="5-TCP状态机"><a href="#5-TCP状态机" class="headerlink" title="5. TCP状态机"></a>5. TCP状态机</h3><p>机器与机器的连接就和人和人之间的联系类似，网络上的传输是没有连接的，所谓的连接其实只不过在通讯的双方维持一个“连接的状态”。</p>
+<p><a href="http://www.tcpipguide.com/free/t_TCPOperationalOverviewandtheTCPFiniteStateMachineF-2.htm" target="_blank" rel="noopener">http://www.tcpipguide.com/free/t_TCPOperationalOverviewandtheTCPFiniteStateMachineF-2.htm</a></p>
+<img src="https://newbieyoung.github.io/images/protocol_14.png">
+
+<p>紫色区域为TCP连接建立过程中服务端和客户端状态变化情况（左边为服务端、右边为客户端）；</p>
+<ul>
+<li><code>CLOSED</code>：TCP连接创建之前的默认状态，表示两个设备之间没有连接或者连接还没有建立或者连接已经被销毁；</li>
+<li><code>LISTEN</code>：服务端正在等待客户端发送SYN报文，此时还没有发送自己的SYN报文；</li>
+<li><code>SYN-SENT</code>：客户端已经发送了SYN报文正在等待对应的服务端返回SYN报文；</li>
+<li><code>SYN-RECEIVED</code>：客户端和服务端都接收到对方的SYN报文后，服务端正在等待客户端对其SYN报文进行确认，完成连接的建立；</li>
+<li><code>ESTABLISHED</code>：TCP连接建立完成状态，此时数据可以自由的从一端传送到另一端，这种状态会持续到连接由于某些原因关闭的时候；服务端发送完ACK＋SYN并收到来自客户端的ACK后进入该状态，客户端收到来自服务器的SYN＋ACK并发送ACK后也进入该状态；</li>
+<li><code>CLOSE-WAIT</code>：被动关闭方接收到主动关闭方发送的FIN报文，回应对方ACK报文后，进入该状态；</li>
+<li><code>LAST-ACK</code>：被动关闭方发送FIN报文后，等待对方的ACK报文时，进入该状态；该状态下接收对方的ACK报文后进入CLOSED状态；</li>
+<li><code>FIN-WAIT-1</code>：主动关闭连接，无论客户端还是服务端发送FIN关闭连接报文后都会进入该状态；</li>
+<li><code>FIN-WAIT-2</code>：主动关闭方接收到被动关闭方返回的ACK后，会进入该状态；</li>
+<li><code>CLOSING</code>：被动关闭方接收了FIN关闭报文，而且已经对该报文发送了ACK确认报文，但是还没有接收到对方对自己FIN关闭报文的确认时处于该状态；</li>
+<li><code>TIME-WAIT</code>：表示收到对方的FIN报文并发送了ACK报文，就等2MSL后即可回到CLOSED状态，如果处于FIN_WAIT_1状态下收到对方同时带FIN标志和ACK标志的报文时，可以直接进入TIME_WAIT状态，无需经过FIN_WAIT_2状态。</li>
+</ul>
+<h5 id="Wireshark常见异常状态"><a href="#Wireshark常见异常状态" class="headerlink" title="Wireshark常见异常状态"></a>Wireshark常见异常状态</h5><ul>
+<li>TCP Previous segment not captured TCP前分片未收到</li>
+<li>TCP Out-Of-Order TCP数据乱序</li>
+<li>TCP Dup ACK 47#1 重复应答</li>
+</ul>
+<img src="https://newbieyoung.github.io/images/protocol_25.png">
+<img src="https://newbieyoung.github.io/images/protocol_26.jpg">
+
+<p>当收到一个出问题的分片，TCP协议规定接收方应立即产生一个应答。这个相同的ack不会延迟。这个相同应答的意图是让对端知道一个分片被收到的时候出现问题，并且告诉它希望得到的序列号。上图中TCP Dup ACK 47#1 的意思第47位数据出现问题，次数是1次。</p>
+<ul>
+<li>TCP Keep-Alive TCP保持活动</li>
+</ul>
+<img src="https://newbieyoung.github.io/images/protocol_27.jpg">
+
+<p>根据规范，TCP keepalive保活包不应该包含数据且Seq号是将前一个TCP包的Seq号减去1。</p>
+<img src="https://newbieyoung.github.io/images/protocol_28.jpg">
+
+<p>如果另一方响应ACK，就认为当前连接是有效的。</p>
+<img src="https://newbieyoung.github.io/images/protocol_29.jpg">
+
+<p>如果服务端程序退出，就返回RST应答，撤销TCP连接；如果服务端程序崩溃，就返回FIN应答；如果服务端没有任何应答，则客户端继续发送探测包，直至超时。</p>
+<h3 id="6-疑问"><a href="#6-疑问" class="headerlink" title="6. 疑问"></a>6. 疑问</h3><h5 id="为啥建立连接需要三次握手？"><a href="#为啥建立连接需要三次握手？" class="headerlink" title="为啥建立连接需要三次握手？"></a>为啥建立连接需要三次握手？</h5><p>这个问题的本质就是信道不可靠，但是通信双方需要就某个问题达成一致，而要解决这个问题，无论你在消息中包含什么信息，三次通信是理论上的最小值。</p>
+<h5 id="为啥建立连接是三次握手，断开连接却是四次挥手？"><a href="#为啥建立连接是三次握手，断开连接却是四次挥手？" class="headerlink" title="为啥建立连接是三次握手，断开连接却是四次挥手？"></a>为啥建立连接是三次握手，断开连接却是四次挥手？</h5><p>主要是因为当一方发起关闭请求，只是表示发起方不再给另一方传输数据了，但是有可能另一方还存在一些数据没有传输给发送端，所以需要在另一方也发起关闭请求前，把待传输数据发送过去，所以断开连接就比建立连接多一次交互了。</p>
+<h2 id="WebSocket详解"><a href="#WebSocket详解" class="headerlink" title="WebSocket详解"></a>WebSocket详解</h2><p>以下内容基本翻译于<a href="https://tools.ietf.org/html/rfc6455#page-5" target="_blank" rel="noopener">RFC6455</a>，由于水平有限可能会出现错误或者解释不清的情况，请直接移步到上述链接，或者查看国内大牛翻译的<a href="https://www.kancloud.cn/kancloud/websocket-protocol/56238" target="_blank" rel="noopener">RFC6455</a>。</p>
+<p>后续所有实例都是基于SocketIO实现的简易聊天室。</p>
+<p>WebSocket是HTML5一种新的协议，它建立在TCP协议之上，同HTTP一样通过TCP来传输数据，包括两部分：握手和数据传输。</p>
+<h3 id="1-握手"><a href="#1-握手" class="headerlink" title="1. 握手"></a>1. 握手</h3><p>目前WebSocket的握手使用HTTP协议来实现；</p>
+<h5 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h5><img src="https://newbieyoung.github.io/images/protocol_31.jpg">
+
+<ul>
+<li><code>Origin: http://example.com</code>用来声明请求来源，方便服务器过滤那些未授权的跨站请求；</li>
+<li><code>Upgrade: websocket</code>表示客户端请求服务器如果服务器支持WebSocket协议，请切换到WebSocket协议；</li>
+<li><code>Sec-WebSocket-Protocol: chat， superchat</code>表示客户端告诉服务器自己支持哪些子协议；</li>
+<li><code>Sec-WebSocket-Version: 13</code>表示客户端告诉服务器自己支持WebSocket协议的版本号；</li>
+<li><code>Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==</code>表示客户端传递给服务器的随机字符串，服务器会根据某个算法把这个随机字符串转换成另外的字符串重新传递给客户端，用来标识当前WebSocket连接创建成功。</li>
+</ul>
+<h5 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h5><img src="https://newbieyoung.github.io/images/protocol_32.jpg">
+
+<ul>
+<li><code>HTTP/1.1 101 Switching Protocols</code>，状态码<code>101</code>表示服务器接收客户端切换协议的请求，如果状态码不是<code>101</code>那么此次建立WebSocket连接失败；</li>
+<li><code>Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=</code>表示服务器把处理后的值返回给客户端，客户端会去校验，如果这个值不存在或者没有通过校验则此次建立WebSocket连接失败；</li>
+<li><code>Sec-WebSocket-Protocol: chat</code>表示服务器选择的子协议。</li>
+</ul>
+<h5 id="实例分析"><a href="#实例分析" class="headerlink" title="实例分析"></a>实例分析</h5><img src="https://newbieyoung.github.io/images/protocol_33.jpg">
+
+<p>另外需要注意的是SocketIO类库在建立WebSocket连接时出于兼容性的考虑，会在不支持WebSocket连接的时候用长轮询替换，所以通过wireshark抓包会发现一些其它非握手的HTTP请求。</p>
+<h3 id="2-数据传输"><a href="#2-数据传输" class="headerlink" title="2. 数据传输"></a>2. 数据传输</h3><h5 id="数据帧格式"><a href="#数据帧格式" class="headerlink" title="数据帧格式"></a>数据帧格式</h5><p>WebSocket中所有发送的数据使用帧的形式发送，虽然所有帧都用一种格式，但从客户端发到服务端的数据是被某种算法处理过的，出于安全方面的考虑。</p>
+<img src="https://newbieyoung.github.io/images/protocol_34.jpg">
+
+<ul>
+<li><code>FIN</code>标识这是消息的最后一个片段，第一个片段也可能是最后一个片段；</li>
+<li><code>RSV1</code>、<code>RSV2</code>、<code>RSV3</code>这三个属性都必须是0，除非协商好了非0值的扩展意义；如果属性不为0但是又不存在协商好的非0扩展意义，那么数据帧的接收方必须关闭当前连接；</li>
+<li><code>Opcode</code>定义了<code>Payload data</code>的解释，如果一个未知的<code>Opcode</code>被接收到，那么接收方必须关闭当前连接；<blockquote>
+<ul>
+<li>%x0 代表一个继续帧；</li>
+<li>%x1 代表一个文本帧；</li>
+<li>%x2 代表一个二进制帧；</li>
+<li>%x3-7 保留用于未来的非控制帧；</li>
+<li>%x8 代表连接关闭；</li>
+<li>%x9 代表ping；</li>
+<li>%xA 代表pong；</li>
+<li>%xB-F 保留用于未来的控制帧。</li>
+</ul>
+</blockquote>
+</li>
+<li><code>Mask</code>标识<code>Payload data</code>是否被掩饰了，如果设置为1，那么数据帧的<code>masking-key</code>属性会存在一个值，接收方会利用这个值来进行解掩码操作，所有从客户端传输到服务器的数据帧的<code>Mask</code>都被设置为1。</li>
+<li><code>Payload length</code>表示<code>Payload data</code>的长度，如果值在0-125之间，那么这个值就是长度；如果值等于126，那么后续16位所表示的值为实际长度；如果值等于127，那么后续64位所表示的值为实际长度。</li>
+</ul>
+<h5 id="实例分析-1"><a href="#实例分析-1" class="headerlink" title="实例分析"></a>实例分析</h5><img src="https://newbieyoung.github.io/images/protocol_35.jpg">
+
+<p>建立连接后如果什么都不操作，客户端和服务器总在不停的相互发送数据帧，根据WebSocket协议规范，存在心跳机制，一方可以通过发送ping消息给另一方，另一方收到ping后应该尽可能快的返回pong，但问题在于ping数据帧的<code>Opcode</code>应该是<code>%x9</code>，pong数据帧的<code>Opcode</code>应该是<code>%xA</code>，通过wireshark抓包却发现，客户端和服务器自动发送的数据帧的<code>Opcode</code>都为<code>%x1</code>。</p>
+<img src="https://newbieyoung.github.io/images/protocol_36.jpg">
+
+<img src="https://newbieyoung.github.io/images/protocol_37.jpg">
+
+<p>通过断点调试源代码发现SocketIO处理心跳包时，并没有设置<code>Opcode</code>的值，进一步代码无法调试，姑且认为SocketIO委托浏览器发ping包时并没有设置<code>Opcode</code>值，然后浏览器在委托操作系统网络栈之前根据内容或者默认处理为<code>%x1</code>了。</p>
+<img src="https://newbieyoung.github.io/images/protocol_38.jpg">
+
+<p>另外还要注意的是客户端发给服务器的心跳包中<code>Reserved 0x4</code>，有标准可知<code>RSV1</code>、<code>RSV2</code>、<code>RSV3</code>这三个属性都必须是0，除非已经协商好了其它意义。</p>
+<p>那么这里是什么意思呢？查资料可知，这里应该是客户端通知服务器信息压缩采用了其它方式，从握手时客户端传给服务器的头信息中的可以看到。</p>
+<img src="https://newbieyoung.github.io/images/protocol_39.jpg">
+
+<p>输入一段文字后，就可以在wireshark中看到，如下数据包了；</p>
+<img src="https://newbieyoung.github.io/images/protocol_41.jpg">
+
+<img src="https://newbieyoung.github.io/images/protocol_40.jpg">
+
+<p>另外还需要注意的是WebSocket标准是允许消息分片机制存在的，主要目的是允许实时发送一个大小未知的消息；其次是为了应用于多路复用。</p>
+<h3 id="3-挥手"><a href="#3-挥手" class="headerlink" title="3. 挥手"></a>3. 挥手</h3><p>WebSocket挥手一般是客户端或者服务端发送一个带有一段特殊控制序列数据的控制帧，来开始挥手过程；另一端一旦接收到这样的帧，再发送关闭帧作为回应，之后就是TCP挥手。</p>
+<img src="https://newbieyoung.github.io/images/protocol_42.jpg">
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+        
+        <div class="post-tags">
+            <a href="/tags/TCP/" rel="tag"># TCP</a>
+          
+            <a href="/tags/WebSocket/" rel="tag"># WebSocket</a>
+          
+        </div>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+              <a href="/2016/05/23/animation-optimize/" rel="next" title="一次网页动画踩坑实录">
+                <i class="fa fa-chevron-left"></i> 一次网页动画踩坑实录
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+              <a href="/2017/02/13/px-diff-animation/" rel="prev" title="像素差逐帧动画">
+                像素差逐帧动画 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Young</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">51</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/newbieYoung" title="GitHub &rarr; https://github.com/newbieYoung" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://www.zhihu.com/people/NewbieYoung" title="知乎 &rarr; https://www.zhihu.com/people/NewbieYoung" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>知乎</a>
+      </span>
+    
+  </div>
+
+
+
+        </div>
+      </div>
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基础知识查漏补缺"><span class="nav-number">1.</span> <span class="nav-text">基础知识查漏补缺</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#WireShark"><span class="nav-number">1.1.</span> <span class="nav-text">WireShark</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP-IP四层模型和OSI七层模型"><span class="nav-number">1.2.</span> <span class="nav-text">TCP/IP四层模型和OSI七层模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IP地址（IPv4）"><span class="nav-number">1.3.</span> <span class="nav-text">IP地址（IPv4）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IP地址域名并用的理由"><span class="nav-number">1.4.</span> <span class="nav-text">IP地址域名并用的理由</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP详解"><span class="nav-number">2.</span> <span class="nav-text">TCP详解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-TCP首部数据结构"><span class="nav-number">2.1.</span> <span class="nav-text">1. TCP首部数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#发送方端口号"><span class="nav-number">2.1.0.1.</span> <span class="nav-text">发送方端口号</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#接收方端口号"><span class="nav-number">2.1.0.2.</span> <span class="nav-text">接收方端口号</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#首部长度"><span class="nav-number">2.1.0.3.</span> <span class="nav-text">首部长度</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#序列号"><span class="nav-number">2.1.0.4.</span> <span class="nav-text">序列号</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#确认序列号"><span class="nav-number">2.1.0.5.</span> <span class="nav-text">确认序列号</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#控制位"><span class="nav-number">2.1.0.6.</span> <span class="nav-text">控制位</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#滑动窗口（Window）"><span class="nav-number">2.1.0.7.</span> <span class="nav-text">滑动窗口（Window）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#最长报文大小（MSS）"><span class="nav-number">2.1.0.8.</span> <span class="nav-text">最长报文大小（MSS）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-建立TCP连接（三次握手）"><span class="nav-number">2.2.</span> <span class="nav-text">2. 建立TCP连接（三次握手）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#建立TCP连接时服务端和客户端同时打开连接请求"><span class="nav-number">2.2.0.1.</span> <span class="nav-text">建立TCP连接时服务端和客户端同时打开连接请求</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#SYN-Flood攻击和TCP连接建立SYN超时"><span class="nav-number">2.2.0.2.</span> <span class="nav-text">SYN Flood攻击和TCP连接建立SYN超时</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-TCP数据传输"><span class="nav-number">2.3.</span> <span class="nav-text">3. TCP数据传输</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#TCP报文发送机制"><span class="nav-number">2.3.0.1.</span> <span class="nav-text">TCP报文发送机制</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#TCP报文确认机制"><span class="nav-number">2.3.0.2.</span> <span class="nav-text">TCP报文确认机制</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#选择性重传（Selective-Acknowledgment）"><span class="nav-number">2.3.0.3.</span> <span class="nav-text">选择性重传（Selective Acknowledgment）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#超时重传"><span class="nav-number">2.3.0.4.</span> <span class="nav-text">超时重传</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#快速重传"><span class="nav-number">2.3.0.5.</span> <span class="nav-text">快速重传</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#慢启动"><span class="nav-number">2.3.0.6.</span> <span class="nav-text">慢启动</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#拥塞避免"><span class="nav-number">2.3.0.7.</span> <span class="nav-text">拥塞避免</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#拥塞发生"><span class="nav-number">2.3.0.8.</span> <span class="nav-text">拥塞发生</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#快速恢复"><span class="nav-number">2.3.0.9.</span> <span class="nav-text">快速恢复</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-断开TCP连接（四次挥手）"><span class="nav-number">2.4.</span> <span class="nav-text">4.断开TCP连接（四次挥手）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#客户端和服务端同时关闭连接"><span class="nav-number">2.4.0.1.</span> <span class="nav-text">客户端和服务端同时关闭连接</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-TCP状态机"><span class="nav-number">2.5.</span> <span class="nav-text">5. TCP状态机</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Wireshark常见异常状态"><span class="nav-number">2.5.0.1.</span> <span class="nav-text">Wireshark常见异常状态</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-疑问"><span class="nav-number">2.6.</span> <span class="nav-text">6. 疑问</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#为啥建立连接需要三次握手？"><span class="nav-number">2.6.0.1.</span> <span class="nav-text">为啥建立连接需要三次握手？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#为啥建立连接是三次握手，断开连接却是四次挥手？"><span class="nav-number">2.6.0.2.</span> <span class="nav-text">为啥建立连接是三次握手，断开连接却是四次挥手？</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WebSocket详解"><span class="nav-number">3.</span> <span class="nav-text">WebSocket详解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-握手"><span class="nav-number">3.1.</span> <span class="nav-text">1. 握手</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#客户端"><span class="nav-number">3.1.0.1.</span> <span class="nav-text">客户端</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#服务端"><span class="nav-number">3.1.0.2.</span> <span class="nav-text">服务端</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#实例分析"><span class="nav-number">3.1.0.3.</span> <span class="nav-text">实例分析</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-数据传输"><span class="nav-number">3.2.</span> <span class="nav-text">2. 数据传输</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#数据帧格式"><span class="nav-number">3.2.0.1.</span> <span class="nav-text">数据帧格式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#实例分析-1"><span class="nav-number">3.2.0.2.</span> <span class="nav-text">实例分析</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-挥手"><span class="nav-number">3.3.</span> <span class="nav-text">3. 挥手</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Young</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.3.0</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+      </div>
+
+    
+
+  </div>
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+<script src="/js/utils.js?v=7.3.0"></script>
+  <script src="/js/motion.js?v=7.3.0"></script>
+
+
+  <script src="/js/affix.js?v=7.3.0"></script>
+  <script src="/js/schemes/pisces.js?v=7.3.0"></script>
+
+
+
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  
+  <script src="/js/scrollspy.js?v=7.3.0"></script>
+<script src="/js/post-details.js?v=7.3.0"></script>
+
+
+</body>
+</html>

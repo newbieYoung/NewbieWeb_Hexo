@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="generator" content="Hexo 3.9.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    save_scroll: false,
+    copycode: {"enable":false,"show_result":false,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta name="description" content="Lottie是一套跨平台的平面动画解决方案；设计师使用AE设计动画，然后通过插件将动画导出成定义好的json文件；之后开发人员只需要依赖这个 json 文件和对应平台的Lottie动画库就可以很方便的在相应平台中实现动画了。 普通示例  普通示例在线预览链接为 https://newbieyoung.github.io/lottie-web-sprite/normal.html； 源代码在 lot">
+<meta name="keywords" content="网页动画,Lottie">
+<meta property="og:type" content="article">
+<meta property="og:title" content="精灵图在 Lottie Web 动画中的应用">
+<meta property="og:url" content="https://newbieweb.lione.me/2018/12/13/lottie-web-sprite/index.html">
+<meta property="og:site_name" content="NewbieWeb">
+<meta property="og:description" content="Lottie是一套跨平台的平面动画解决方案；设计师使用AE设计动画，然后通过插件将动画导出成定义好的json文件；之后开发人员只需要依赖这个 json 文件和对应平台的Lottie动画库就可以很方便的在相应平台中实现动画了。 普通示例  普通示例在线预览链接为 https://newbieyoung.github.io/lottie-web-sprite/normal.html； 源代码在 lot">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://newbieyoung.github.io/images/lottie-web-sprite-0.gif">
+<meta property="og:image" content="https://newbieyoung.github.io/images/lottie-web-sprite-1.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/lottie-web-sprite-2.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/lottie-web-sprite-3.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/lottie-web-sprite-0.gif">
+<meta property="og:image" content="https://newbieyoung.github.io/images/lottie-web-sprite-10.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/lottie-web-sprite-4.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/lottie-web-sprite-5.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/lottie-web-sprite-6.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/lottie-web-sprite-7.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/lottie-web-sprite-8.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/lottie-web-sprite-9.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/lottie-web-sprite-11.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/lottie-web-sprite-12.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/lottie-web-sprite-13.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/lottie-web-sprite-14.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/lottie-web-sprite-15.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/lottie-web-sprite-16.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/lottie-web-sprite-17.jpg">
+<meta property="og:updated_time" content="2019-11-09T05:12:33.391Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="精灵图在 Lottie Web 动画中的应用">
+<meta name="twitter:description" content="Lottie是一套跨平台的平面动画解决方案；设计师使用AE设计动画，然后通过插件将动画导出成定义好的json文件；之后开发人员只需要依赖这个 json 文件和对应平台的Lottie动画库就可以很方便的在相应平台中实现动画了。 普通示例  普通示例在线预览链接为 https://newbieyoung.github.io/lottie-web-sprite/normal.html； 源代码在 lot">
+<meta name="twitter:image" content="https://newbieyoung.github.io/images/lottie-web-sprite-0.gif">
+  <link rel="canonical" href="https://newbieweb.lione.me/2018/12/13/lottie-web-sprite/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>精灵图在 Lottie Web 动画中的应用 | NewbieWeb</title>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-145147663-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-145147663-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  <div class="container sidebar-position-left">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">NewbieWeb</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">Oh,Captain! My Captain! Carpe Diem!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content page-post-detail">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://newbieweb.lione.me/2018/12/13/lottie-web-sprite/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Young">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NewbieWeb">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">精灵图在 Lottie Web 动画中的应用
+
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2018-12-13 21:43:00" itemprop="dateCreated datePublished" datetime="2018-12-13T21:43:00+08:00">2018-12-13</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-09 13:12:33" itemprop="dateModified" datetime="2019-11-09T13:12:33+08:00">2019-11-09</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/前端开发/" itemprop="url" rel="index"><span itemprop="name">前端开发</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><code>Lottie</code>是一套跨平台的平面动画解决方案；设计师使用<code>AE</code>设计动画，然后通过插件将动画导出成定义好的<code>json</code>文件；之后开发人员只需要依赖这个 json 文件和对应平台的<code>Lottie</code>动画库就可以很方便的在相应平台中实现动画了。</p>
+<h2 id="普通示例"><a href="#普通示例" class="headerlink" title="普通示例"></a>普通示例</h2><img src="https://newbieyoung.github.io/images/lottie-web-sprite-0.gif">
+
+<p>普通示例在线预览链接为 <a href="https://newbieyoung.github.io/lottie-web-sprite/normal.html" target="_blank" rel="noopener">https://newbieyoung.github.io/lottie-web-sprite/normal.html</a>；</p>
+<p>源代码在 <a href="https://github.com/newbieYoung/lottie-web-sprite/blob/master/normal.html" target="_blank" rel="noopener">lottie-web-sprite</a> 项目中。</p>
+<a id="more"></a>
+
+<p>在 Web 平台则需要使用 <a href="https://github.com/airbnb/lottie-web" target="_blank" rel="noopener">Lottie Web</a>；</p>
+<p>可以去 <a href="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.4.2/lottie.min.js" target="_blank" rel="noopener">https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.4.2/lottie.min.js</a> 下载压缩后的源代码，或者去 <a href="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.4.2/lottie.js" target="_blank" rel="noopener">https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.4.2/lottie.js</a> 下载未压缩源代码;</p>
+<p>设计师使用 AE 导出如下资源：</p>
+<img src="https://newbieyoung.github.io/images/lottie-web-sprite-1.jpg">
+
+<p>格式化其 json 文件内容可以看到：</p>
+<img src="https://newbieyoung.github.io/images/lottie-web-sprite-2.jpg">
+
+<p>其中需要注意<code>w</code>、<code>h</code>、<code>assets</code>；</p>
+<ul>
+<li><code>w</code>表示动画画布宽度；</li>
+<li><code>h</code>表示动画画布高度；</li>
+<li><code>assets</code>表示<code>images</code>目录中的图片资源信息；</li>
+</ul>
+<p>知道动画画布宽度和高度之后，我们就可以设置页面中的动画容器宽度和高度了；</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">div</span>&#123;</span><br><span class="line">	<span class="attribute">width</span>:<span class="number">280px</span>;</span><br><span class="line">	<span class="attribute">height</span>:<span class="number">280px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"animation"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>动画容器为<code>DIV</code>元素，其<code>ID</code>属性为<code>animation</code>，其宽度和高度均为<code>280</code>；</p>
+<p>之后需要引入框架源代码，这里使用未压缩版本，方便调试；</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"./lib/lottie.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>引入代码之后只需要调用<code>lottie.loadAnimation()</code>就可以实现动画了；</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> animation = <span class="built_in">document</span>.querySelector(<span class="string">'#animation'</span>);</span><br><span class="line">lottie.loadAnimation(&#123;</span><br><span class="line">    container: animation,</span><br><span class="line">    renderer: <span class="string">'canvas'</span>,</span><br><span class="line">    loop: <span class="literal">true</span>,</span><br><span class="line">    autoplay: <span class="literal">true</span>,</span><br><span class="line">    path: <span class="string">'./animation/data.json'</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>container</code>表示动画容器；</li>
+<li><code>renderer</code>表示渲染器，目前支持的渲染器有<code>html</code>、<code>svg</code>、<code>canvas</code>，较常用的是<code>svg</code>和<code>canvas</code>；</li>
+<li><code>loop</code>表示动画循环播放；</li>
+<li><code>autoplay</code>表示动画自动播放；</li>
+<li><code>path</code>则表示<code>json</code>文件路径。</li>
+</ul>
+<p>到此整个动画实现就完成了。</p>
+<p>初一看起来没有任何问题，但是当我们打开浏览器调试工具，查看资源加载情况时就会发现有点问题：</p>
+<img src="https://newbieyoung.github.io/images/lottie-web-sprite-3.jpg">
+
+<p>设计师通过 AE 导出的资源里边存在图片资源，而这些图片资源没有经过任何处理是单独加载的，这会导致加载的资源数量过多，特别是当一个页面存在多个独立动画时。</p>
+<p>这个问题可以通过把图片资源整合到 json 文件中的方式解决，最终设计师导出的资源就只有一个 json 文件，不过这种方式需要设计师在导出资源时进行处理，而且需要先把图片转换成矢量图。</p>
+<p>对于我来说这种方式会显得有点麻烦，首先我并不清楚怎么把图片资源转换成矢量图然后整合 json 文件，甚至连 AE 都没安装过；对于一个本身并不清楚而且也没有实际操作经验的问题，自然也就很难跟设计师讲清楚了。</p>
+<p>那有没有其它我擅长的方式呢？</p>
+<h2 id="精灵图示例"><a href="#精灵图示例" class="headerlink" title="精灵图示例"></a>精灵图示例</h2><img src="https://newbieyoung.github.io/images/lottie-web-sprite-0.gif">
+
+<p>精灵图示例在线预览链接为 <a href="https://newbieyoung.github.io/lottie-web-sprite/sprite.html" target="_blank" rel="noopener">https://newbieyoung.github.io/lottie-web-sprite/sprite.html</a>；</p>
+<p>源代码在 <a href="https://github.com/newbieYoung/lottie-web-sprite/blob/master/sprite.html" target="_blank" rel="noopener">lottie-web-sprite</a> 项目中。</p>
+<img src="https://newbieyoung.github.io/images/lottie-web-sprite-10.jpg">
+
+<p>打开浏览器调试工具，可以清楚的看到图片资源都被整合在一张精灵图中了。</p>
+<h3 id="源代码解析及思路"><a href="#源代码解析及思路" class="headerlink" title="源代码解析及思路"></a>源代码解析及思路</h3><p>怎么实现呢？在没有思路的时候看看源代码好了。</p>
+<img src="https://newbieyoung.github.io/images/lottie-web-sprite-4.jpg">
+
+<img src="https://newbieyoung.github.io/images/lottie-web-sprite-5.jpg">
+
+<img src="https://newbieyoung.github.io/images/lottie-web-sprite-6.jpg">
+
+<p>从<code>loadAnimation</code>方法开始，到<code>animItem.setParams(params)</code>在设置并解析参数，最后在<code>assetLoader.load</code>方法中加载 json 文件，加载完成之后执行<code>this.configAnimation.bind(this)</code>配置动画回调函数；</p>
+<img src="https://newbieyoung.github.io/images/lottie-web-sprite-7.jpg">
+
+<p>其中<code>this.animationData</code>即是解析 json 文件内容得到动画数据，其<code>assets</code>属性为图片信息数组；忽略其它流程，重点关注<code>this.preloadImages()</code>，在这个方法中会通过<code>assets</code>加载对应图片资源；</p>
+<img src="https://newbieyoung.github.io/images/lottie-web-sprite-8.jpg">
+
+<img src="https://newbieyoung.github.io/images/lottie-web-sprite-9.jpg">
+
+<p><code>loadAssets</code>方法会根据图片信息数组发送异步请求加载图片资源，然后生成<code>img</code>元素，整合到<code>ImagePreloader</code>对象的<code>images</code>属性中。</p>
+<p>到这里虽然并没有弄清楚<code>Lottie</code>是怎么根据<code>json</code>文件实现动画的，但是可以清楚看到它是怎么解析<code>json</code>文件然后加载相应图片素材的；</p>
+<p>根据上述流程怎么在<code>Lottie</code>中应用精灵图的思路也就渐渐清晰了，我们只要保证通过精灵图得到和上述流程中一样的<code>images</code>数组数据就可以了。</p>
+<h3 id="生成精灵图"><a href="#生成精灵图" class="headerlink" title="生成精灵图"></a>生成精灵图</h3><p>可以用 <a href="https://github.com/cupools/lia" target="_blank" rel="noopener">lia</a> 生成精灵图；</p>
+<p>用法很简单：</p>
+<ol>
+<li>使用<code>npm</code>全局安装<code>lia</code>；</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i -g lia</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>创建精灵图配置文件<code>sprite_conf.js</code>；</li>
+</ol>
+<img src="https://newbieyoung.github.io/images/lottie-web-sprite-11.jpg">
+
+<blockquote>
+<p>使用<code>lia init</code>命令可以自动生成配置文件，只不过因为需要使用自定义模版，所以这里手动创建。</p>
+</blockquote>
+<ul>
+<li><code>src</code>表示图片素材路径匹配规则；</li>
+<li><code>image</code>表示生成的精灵图的路径；</li>
+<li><code>style</code>表示生成的图片素材和精灵图的位置关系数据文件的路径；</li>
+<li><code>tmpl</code>表示图片素材和精灵图的位置关系数据文件模版。</li>
+</ul>
+<ol start="3">
+<li>创建图片素材和精灵图的位置关系数据模版文件<code>template.ejs</code>；</li>
+</ol>
+<img src="https://newbieyoung.github.io/images/lottie-web-sprite-12.jpg">
+
+<ol start="4">
+<li>执行<code>lia</code>命令。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lia</span><br></pre></td></tr></table></figure>
+
+<p>就得到了精灵图以及位置关系数据文件。</p>
+<img src="https://newbieyoung.github.io/images/lottie-web-sprite-13.jpg">
+
+<p>最后需要把位置关系数据文件中的绝对路径改为相对路径。</p>
+<h3 id="更改-json-文件"><a href="#更改-json-文件" class="headerlink" title="更改 json 文件"></a>更改 json 文件</h3><img src="https://newbieyoung.github.io/images/lottie-web-sprite-14.jpg">
+
+<p>更改 json 文件很简单只需要先读取内容，然后新增自定义字段，最后保存即可。</p>
+<h3 id="更改源代码"><a href="#更改源代码" class="headerlink" title="更改源代码"></a>更改源代码</h3><p>数据都准备完成了，接下来需要对<code>Lottie</code>的源代码进行兼容处理。</p>
+<p>兼容处理之后的完整源代码在<a href="https://github.com/newbieYoung/lottie-web-sprite/blob/master/lib/lottie-sprite.js" target="_blank" rel="noopener">https://github.com/newbieYoung/lottie-web-sprite/blob/master/lib/lottie-sprite.js</a>。</p>
+<p>首先在<code>configAnimation</code>方法中，如果解析的 json 数据存在<code>_sprite</code>属性，则使用<code>preloadSprite</code>方法从精灵图中获取图片素材，否则按以前的流程使用<code>preloadImages</code>方法从<code>assets</code>数组中获取图片素材；不管是哪种获取图片素材的方式，后续流程都保持不变。</p>
+<img src="https://newbieyoung.github.io/images/lottie-web-sprite-15.jpg">
+
+<p><code>preloadSprite</code>和<code>preloadImages</code>两个方法的逻辑基本类似，除了前者使用自定义方法<code>loadAssetsFromSprite</code>，后者使用原生方法<code>loadAssets</code>。</p>
+<img src="https://newbieyoung.github.io/images/lottie-web-sprite-16.jpg">
+
+<p>在<code>loadAssetsFromSprite</code>方法中，先根据精灵图路径异步请求精灵图，然后根据位置关系从精灵图中动态获取相关图片素材，并设置到<code>images</code>属性中即可。</p>
+<img src="https://newbieyoung.github.io/images/lottie-web-sprite-17.jpg">
+
+<p>至此就可以在<code>Lottie</code>中应用精灵图了。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+        
+        <div class="post-tags">
+            <a href="/tags/网页动画/" rel="tag"># 网页动画</a>
+          
+            <a href="/tags/Lottie/" rel="tag"># Lottie</a>
+          
+        </div>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+              <a href="/2018/08/31/threejs-rubik-auto-reset-v2/" rel="next" title="使用WebAssembly实现前端运行Kociemba算法自动解魔方">
+                <i class="fa fa-chevron-left"></i> 使用WebAssembly实现前端运行Kociemba算法自动解魔方
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+              <a href="/2018/12/26/css-frame-animation/" rel="prev" title="不建议使用 CSS3 keyframe transform 实现逐帧动画">
+                不建议使用 CSS3 keyframe transform 实现逐帧动画 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Young</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">51</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/newbieYoung" title="GitHub &rarr; https://github.com/newbieYoung" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://www.zhihu.com/people/NewbieYoung" title="知乎 &rarr; https://www.zhihu.com/people/NewbieYoung" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>知乎</a>
+      </span>
+    
+  </div>
+
+
+
+        </div>
+      </div>
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#普通示例"><span class="nav-number">1.</span> <span class="nav-text">普通示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#精灵图示例"><span class="nav-number">2.</span> <span class="nav-text">精灵图示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#源代码解析及思路"><span class="nav-number">2.1.</span> <span class="nav-text">源代码解析及思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#生成精灵图"><span class="nav-number">2.2.</span> <span class="nav-text">生成精灵图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更改-json-文件"><span class="nav-number">2.3.</span> <span class="nav-text">更改 json 文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更改源代码"><span class="nav-number">2.4.</span> <span class="nav-text">更改源代码</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Young</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.3.0</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+      </div>
+
+    
+
+  </div>
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+<script src="/js/utils.js?v=7.3.0"></script>
+  <script src="/js/motion.js?v=7.3.0"></script>
+
+
+  <script src="/js/affix.js?v=7.3.0"></script>
+  <script src="/js/schemes/pisces.js?v=7.3.0"></script>
+
+
+
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  
+  <script src="/js/scrollspy.js?v=7.3.0"></script>
+<script src="/js/post-details.js?v=7.3.0"></script>
+
+
+</body>
+</html>

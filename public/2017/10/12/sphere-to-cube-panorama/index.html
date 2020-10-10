@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="generator" content="Hexo 3.9.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    save_scroll: false,
+    copycode: {"enable":false,"show_result":false,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta name="description" content="前段时间学习了 ThreeJS 项目里边关于全景图的案例之后，自己动手练习了一下，实现了两个全景图的例子，分别如下： WebGLRender 球型全景图 WebGLRender 立方体全景图 CSS3DRender 立方体全景图 WebGLRender 球型全景图由于贴图的原因导致南北极存在扭曲的情况，通过把球型全景图转换成立方体全景图可以改善这个问题，但是不能完全避免； 网络不好的情况下第一次打">
+<meta name="keywords" content="ThreeJS,WebGL,全景图">
+<meta property="og:type" content="article">
+<meta property="og:title" content="聊一聊全景图">
+<meta property="og:url" content="https://newbieweb.lione.me/2017/10/12/sphere-to-cube-panorama/index.html">
+<meta property="og:site_name" content="NewbieWeb">
+<meta property="og:description" content="前段时间学习了 ThreeJS 项目里边关于全景图的案例之后，自己动手练习了一下，实现了两个全景图的例子，分别如下： WebGLRender 球型全景图 WebGLRender 立方体全景图 CSS3DRender 立方体全景图 WebGLRender 球型全景图由于贴图的原因导致南北极存在扭曲的情况，通过把球型全景图转换成立方体全景图可以改善这个问题，但是不能完全避免； 网络不好的情况下第一次打">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://newbieyoung.github.io/images/sphere-to-cube-panorama-1.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/sphere-to-cube-panorama-2.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/sphere-to-cube-panorama-3.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/sphere-to-cube-panorama-4.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/sphere-to-cube-panorama-5.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/sphere-to-cube-panorama-6-1.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/sphere-to-cube-panorama-6-2.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/sphere-to-cube-panorama-7.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/sphere-to-cube-panorama-8.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/sphere-to-cube-panorama-9.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/sphere-to-cube-panorama-10.jpg">
+<meta property="og:updated_time" content="2020-10-10T12:34:31.577Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="聊一聊全景图">
+<meta name="twitter:description" content="前段时间学习了 ThreeJS 项目里边关于全景图的案例之后，自己动手练习了一下，实现了两个全景图的例子，分别如下： WebGLRender 球型全景图 WebGLRender 立方体全景图 CSS3DRender 立方体全景图 WebGLRender 球型全景图由于贴图的原因导致南北极存在扭曲的情况，通过把球型全景图转换成立方体全景图可以改善这个问题，但是不能完全避免； 网络不好的情况下第一次打">
+<meta name="twitter:image" content="https://newbieyoung.github.io/images/sphere-to-cube-panorama-1.jpg">
+  <link rel="canonical" href="https://newbieweb.lione.me/2017/10/12/sphere-to-cube-panorama/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>聊一聊全景图 | NewbieWeb</title>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-145147663-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-145147663-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  <div class="container sidebar-position-left">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">NewbieWeb</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">Oh,Captain! My Captain! Carpe Diem!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content page-post-detail">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://newbieweb.lione.me/2017/10/12/sphere-to-cube-panorama/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Young">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NewbieWeb">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">聊一聊全景图
+
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2017-10-12 11:24:00" itemprop="dateCreated datePublished" datetime="2017-10-12T11:24:00+08:00">2017-10-12</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-10 20:34:31" itemprop="dateModified" datetime="2020-10-10T20:34:31+08:00">2020-10-10</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3D技术/" itemprop="url" rel="index"><span itemprop="name">3D技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>前段时间学习了 ThreeJS 项目里边关于全景图的案例之后，自己动手练习了一下，实现了两个全景图的例子，分别如下：</p>
+<p><a href="https://newbieyoung.github.io/Html_learn/webgl/demo34.html" target="_blank" rel="noopener">WebGLRender 球型全景图</a></p>
+<p><a href="https://newbieyoung.github.io/Html_learn/webgl/demo35.html" target="_blank" rel="noopener">WebGLRender 立方体全景图</a></p>
+<p><a href="https://newbieyoung.github.io/Html_learn/webgl/demo37.html" target="_blank" rel="noopener">CSS3DRender 立方体全景图</a></p>
+<p><code>WebGLRender 球型全景图</code>由于贴图的原因导致南北极存在扭曲的情况，通过把球型全景图转换成立方体全景图可以改善这个问题，但是不能完全避免；</p>
+<p>网络不好的情况下第一次打开可能会比较慢，因为全景图资源比较大。</p>
+<p>实现原理比较简单，只要把摄像机放在模型中心，然后把全景图渲染到模型内表面即可。</p>
+<a id="more"></a>
+
+<p>不过还是需要注意以下两点：</p>
+<p>一、有<code>两种</code>方法可以把全景图渲染到模型内表面：</p>
+<ul>
+<li>一种是在创建材质时设置 <code>side</code> 参数为 <code>THREE.BackSide</code>；</li>
+</ul>
+<img src="https://newbieyoung.github.io/images/sphere-to-cube-panorama-1.jpg">
+
+<ul>
+<li>另一种则是对模型进行镜像变换；</li>
+</ul>
+<img src="https://newbieyoung.github.io/images/sphere-to-cube-panorama-2.jpg">
+
+<p>二、球型全景图和立方体全景图使用的图片资源是有区别的；</p>
+<p>球型全景图如下：</p>
+<img src="https://newbieyoung.github.io/images/sphere-to-cube-panorama-3.jpg">
+
+<p>立方体全景图如下：</p>
+<img src="https://newbieyoung.github.io/images/sphere-to-cube-panorama-4.jpg">
+
+<p>虽然球型全景图更贴近人眼的构建模式，但是从模型上来说比立方体更复杂，而且出于兼容性考虑使用 CSS3DRender 时是无法构建球模型的，<code>因此立方体全景图具有更高的性能和更好的兼容性。</code></p>
+<p>根据自己搜到的相关知识并加以理解最终用 WebGL 实现了 <a href="https://newbieyoung.github.io/Html_learn/webgl/demo36.html" target="_blank" rel="noopener">球型全景图转立方体全景图工具</a>。</p>
+<p>点击上述链接应该会看到该程序根据一张球型全景图生成了一张正方形图片即立方体全景图的一个面；</p>
+<img src="https://newbieyoung.github.io/images/sphere-to-cube-panorama-5.jpg">
+
+<p>该工具核心代码如下：</p>
+<img src="https://newbieyoung.github.io/images/sphere-to-cube-panorama-6-1.jpg">
+<img src="https://newbieyoung.github.io/images/sphere-to-cube-panorama-6-2.jpg">
+
+<p>该工具每次只能得到立方体的一个面，图中 <code>y轴负平面</code> 没有被注释得到了执行，因此得到是 <code>y轴负平面</code> 也就是立方体的底面，要想得到其它平面，只需要执行相关平面代码即可。</p>
+<p>最终得到的六个面后，对应相关命名代入 <code>立方体全景图</code> 例子中的图片数组即可得到立方体全景图了。</p>
+<img src="https://newbieyoung.github.io/images/sphere-to-cube-panorama-7.jpg">
+
+<p>如果你还有兴趣了解该工具的实现，可以接着往下看。</p>
+<p>虽然上边的核心代码很简单每个面大概三四行代码的样子，其实球型全景图到立方体全景图的转换涉及到好几个坐标系的相互映射，稍不小心就会出错，如下：</p>
+<img src="https://newbieyoung.github.io/images/sphere-to-cube-panorama-8.jpg">
+
+<p>坐标系说明：</p>
+<p><code>xyz</code> 坐标系是全景场景中的坐标系；<code>st</code> 坐标系是立方体单个平面的纹理坐标系。</p>
+<p>WebGL 中的纹理坐标系统是二维的，为了将纹理坐标和广泛使用的 <code>xy 坐标系</code> 区分开来，使用 <code>s</code> 和 <code>t</code> 命名，称之为 <code>st 坐标系</code>。</p>
+<p>假设点 <code>P</code> 是从球面和 <code>Z</code> 轴的交点绕 <code>Y</code> 轴旋转 <code>theta</code>，然后在 <code>Y</code> 轴和其本身组成的平面上绕其过原点的法向量旋转 <code>phi</code> 得到，那么点 <code>P</code> 的坐标如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">P(x,y,z);</span><br><span class="line"></span><br><span class="line">x = r*cos(phi)*sin(theta);</span><br><span class="line">y = r*sin(phi);</span><br><span class="line">z = r*cos(phi)*cos(theta);</span><br></pre></td></tr></table></figure>
+
+<p>因为立方体的六个面都和球面相切，那么假设上图中的 <code>OP</code> 直线和正方体的某个面相交于点 <code>Q</code>，那么 <code>OQ</code> 向量肯定等于 <code>m</code> 乘以 <code>OP</code> 向量，那么点 <code>Q</code> 的坐标如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">OQ = m*OP;</span><br><span class="line"></span><br><span class="line">Q(x1,y1,z1);</span><br><span class="line"></span><br><span class="line">x1 = m*x = m*r*cos(phi)*sin(theta);</span><br><span class="line">y1 = m*y = m*r*sin(phi);</span><br><span class="line">z1 = m*z = m*r*cos(phi)*cos(theta);</span><br></pre></td></tr></table></figure>
+
+<p>如果点 <code>Q</code> 在立方体的 <code>Z</code> 平面上；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">z1 = r = m*r*cos(phi)*cos(theta);</span><br><span class="line"></span><br><span class="line">m*cos(phi)*cos(theta) = 1;</span><br><span class="line">m*sin(phi) = 1/cos(theta)*tan(phi);</span><br><span class="line">m*cos(phi)*sin(theta) = 1/tan(theta);</span><br><span class="line"></span><br><span class="line">x1 = r/tan(theta);</span><br><span class="line">y1 = r/cos(theta)*tan(phi);</span><br><span class="line"></span><br><span class="line">Q(r/tan(theta),r/cos(theta)*tan(phi),r);</span><br></pre></td></tr></table></figure>
+
+<p>此时得到了点 <code>Q</code> 在 <code>xyz</code> 坐标系中的坐标，再假设点 <code>Q</code> 在 <code>st</code> 坐标系中的坐标为 <code>(s0,t0)</code>，那么就可以求得 <code>theta</code> 和 <code>phi</code> 的值。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//WebGL纹理坐标最大为1，因此r = 0.5</span><br><span class="line">float r = 0.5;</span><br><span class="line"></span><br><span class="line">//xyz坐标系和st坐标系的映射关系</span><br><span class="line">x = 0.5-s;</span><br><span class="line">y = t-0.5;</span><br></pre></td></tr></table></figure>
+
+<p>通过上边的分析就不难看懂下述代码了：</p>
+<img src="https://newbieyoung.github.io/images/sphere-to-cube-panorama-9.jpg">
+
+<p>之所以求出 <code>theta</code> 和 <code>phi</code> 的值是因为可以通过这两个值把球型全景图转换为二维，示意图如下：</p>
+<img src="https://newbieyoung.github.io/images/sphere-to-cube-panorama-10.jpg">
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">float s1 = theta/PI*0.5 + 0.5;</span><br><span class="line">float t1 = phi/PI*2.0*0.5 + 0.5;</span><br></pre></td></tr></table></figure>
+
+<p>整个推导过程就可以理解为点 <code>Q(s0,t0)</code> 为立方体全景图 <code>z轴正平面</code> 的点，对应到二维球型全景图中的坐标为 <code>(s1,t1)</code>；</p>
+<p>最后需要注意的是需要控制 <code>theta</code> 和 <code>phi</code> 的值不能让其超出范围，还有就是负平面的 <code>theta</code> 和 <code>phi</code> 可以根据正平面的 <code>theta</code> 或者 <code>phi</code> 加上一定的值得到。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+        
+        <div class="post-tags">
+            <a href="/tags/ThreeJS/" rel="tag"># ThreeJS</a>
+          
+            <a href="/tags/WebGL/" rel="tag"># WebGL</a>
+          
+            <a href="/tags/全景图/" rel="tag"># 全景图</a>
+          
+        </div>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+              <a href="/2017/08/23/install-incubator-mxnet-and-run-testcase/" rel="next" title="在 MAC 操作系统中安装 Mxnet 并运行其中的梵高绘画风格模拟例子">
+                <i class="fa fa-chevron-left"></i> 在 MAC 操作系统中安装 Mxnet 并运行其中的梵高绘画风格模拟例子
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+              <a href="/2017/11/23/machinelearningaction-js-linear-regression/" rel="prev" title="UI工程师的机器学习之旅（一）线性回归和梯度下降">
+                UI工程师的机器学习之旅（一）线性回归和梯度下降 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Young</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">51</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/newbieYoung" title="GitHub &rarr; https://github.com/newbieYoung" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://www.zhihu.com/people/NewbieYoung" title="知乎 &rarr; https://www.zhihu.com/people/NewbieYoung" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>知乎</a>
+      </span>
+    
+  </div>
+
+
+
+        </div>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Young</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.3.0</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+      </div>
+
+    
+
+  </div>
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+<script src="/js/utils.js?v=7.3.0"></script>
+  <script src="/js/motion.js?v=7.3.0"></script>
+
+
+  <script src="/js/affix.js?v=7.3.0"></script>
+  <script src="/js/schemes/pisces.js?v=7.3.0"></script>
+
+
+
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  
+  <script src="/js/scrollspy.js?v=7.3.0"></script>
+<script src="/js/post-details.js?v=7.3.0"></script>
+
+
+</body>
+</html>

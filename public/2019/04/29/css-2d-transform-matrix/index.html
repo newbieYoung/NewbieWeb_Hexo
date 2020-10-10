@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="generator" content="Hexo 3.9.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    save_scroll: false,
+    copycode: {"enable":false,"show_result":false,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta name="description" content="给自己出了一道题如下： 在某个大矩形中心有一个黄色的矩形，对该黄色矩形进行一系列 transform 变换得到灰色矩形； 以大矩形中心为坐标原点，屏幕水平向左为X 轴正方向，屏幕垂直向上为Y 轴正方向，黄色矩形初始位置中心在坐标原点，根据其宽高可以得到其初始位置四个顶点的坐标initPoints； 那么求黄色矩形经过一系列变换后新的顶点坐标。   示例链接如下：https://newbieyoun">
+<meta name="keywords" content="CSS3,图形学,矩阵变换">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSS3 2D Transform Matrix">
+<meta property="og:url" content="https://newbieweb.lione.me/2019/04/29/css-2d-transform-matrix/index.html">
+<meta property="og:site_name" content="NewbieWeb">
+<meta property="og:description" content="给自己出了一道题如下： 在某个大矩形中心有一个黄色的矩形，对该黄色矩形进行一系列 transform 变换得到灰色矩形； 以大矩形中心为坐标原点，屏幕水平向左为X 轴正方向，屏幕垂直向上为Y 轴正方向，黄色矩形初始位置中心在坐标原点，根据其宽高可以得到其初始位置四个顶点的坐标initPoints； 那么求黄色矩形经过一系列变换后新的顶点坐标。   示例链接如下：https://newbieyoun">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://newbieyoung.github.io/images/css-2d-transform-matrix-0.jpg">
+<meta property="og:image" content="https://newbieyoung.github.io/images/css-2d-transform-matrix-1.jpg">
+<meta property="og:updated_time" content="2020-03-03T03:28:24.400Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CSS3 2D Transform Matrix">
+<meta name="twitter:description" content="给自己出了一道题如下： 在某个大矩形中心有一个黄色的矩形，对该黄色矩形进行一系列 transform 变换得到灰色矩形； 以大矩形中心为坐标原点，屏幕水平向左为X 轴正方向，屏幕垂直向上为Y 轴正方向，黄色矩形初始位置中心在坐标原点，根据其宽高可以得到其初始位置四个顶点的坐标initPoints； 那么求黄色矩形经过一系列变换后新的顶点坐标。   示例链接如下：https://newbieyoun">
+<meta name="twitter:image" content="https://newbieyoung.github.io/images/css-2d-transform-matrix-0.jpg">
+  <link rel="canonical" href="https://newbieweb.lione.me/2019/04/29/css-2d-transform-matrix/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>CSS3 2D Transform Matrix | NewbieWeb</title>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-145147663-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-145147663-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  <div class="container sidebar-position-left">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">NewbieWeb</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">Oh,Captain! My Captain! Carpe Diem!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content page-post-detail">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://newbieweb.lione.me/2019/04/29/css-2d-transform-matrix/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Young">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NewbieWeb">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">CSS3 2D Transform Matrix
+
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-29 17:17:00" itemprop="dateCreated datePublished" datetime="2019-04-29T17:17:00+08:00">2019-04-29</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-03-03 11:28:24" itemprop="dateModified" datetime="2020-03-03T11:28:24+08:00">2020-03-03</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/前端开发/" itemprop="url" rel="index"><span itemprop="name">前端开发</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>给自己出了一道题如下：</p>
+<p>在某个大矩形中心有一个黄色的矩形，对该黄色矩形进行一系列 transform 变换得到灰色矩形；</p>
+<p>以大矩形中心为<code>坐标原点</code>，屏幕水平向左为<code>X 轴正方向</code>，屏幕垂直向上为<code>Y 轴正方向</code>，黄色矩形初始位置中心在坐标原点，根据其宽高可以得到其初始位置四个顶点的坐标<code>initPoints</code>；</p>
+<p>那么求黄色矩形经过一系列变换后新的顶点坐标。</p>
+<img src="https://newbieyoung.github.io/images/css-2d-transform-matrix-0.jpg">
+
+<p>示例链接如下：<a href="https://newbieyoung.github.io/CSS_learn/transform3.html" target="_blank" rel="noopener">https://newbieyoung.github.io/CSS_learn/transform3.html</a></p>
+<a id="more"></a>
+
+<h2 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h2><img src="https://newbieyoung.github.io/images/css-2d-transform-matrix-1.jpg">
+
+<p>其实不管 CSS3 transform 属性有多复杂，都是可以通过 <code>getComputedStyle</code> 直接获得最终变换矩阵的，具体方法实现如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//获得transform属性对应的矩阵形式</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getTransformMatrix</span>(<span class="params">transform</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> $div = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</span><br><span class="line">    $div.style.visibility = <span class="string">'hidden'</span>;</span><br><span class="line">    $div.style.position = <span class="string">'fixed'</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//处理transform属性的兼容性</span></span><br><span class="line">    <span class="keyword">var</span> transformProperty = <span class="string">'transform'</span>;</span><br><span class="line">    <span class="keyword">if</span>(<span class="string">'transform'</span> <span class="keyword">in</span> $div.style)&#123;</span><br><span class="line">        transformProperty=<span class="string">'transform'</span></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span>( <span class="string">'WebkitTransform'</span> <span class="keyword">in</span> $div.style )&#123;</span><br><span class="line">        transformProperty=<span class="string">'webkitTransform'</span></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">'MozTransform'</span> <span class="keyword">in</span> $div.style)&#123;</span><br><span class="line">        transformProperty=<span class="string">'MozTransform'</span></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">'OTransform'</span> <span class="keyword">in</span> $div.style)&#123;</span><br><span class="line">        transformProperty=<span class="string">'OTransform'</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $div.style[transformProperty] = transform;</span><br><span class="line">    <span class="built_in">document</span>.body.appendChild($div);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> style = <span class="built_in">window</span>.getComputedStyle($div);</span><br><span class="line">    <span class="keyword">var</span> matrix = style[transformProperty];</span><br><span class="line"></span><br><span class="line">    <span class="built_in">document</span>.body.removeChild($div);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> matrix;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过 <code>getTransformMatrix</code> 函数可以获得以下形式的变换矩阵：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">matrix(a, b, c, d, e, f);</span><br><span class="line"></span><br><span class="line">matrix(0.430963, 1.01542, -0.234879, 1.76697, 5, 40)</span><br></pre></td></tr></table></figure>
+
+<p>转换为三阶矩阵：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[a, c, e,</span><br><span class="line"> b, d, f,</span><br><span class="line"> 0, 0, 1];</span><br></pre></td></tr></table></figure>
+
+<p>不知道大家想过没有，明明是 <code>2D</code> 变换，转换为<code>三阶</code>矩阵干啥？</p>
+<p>其实这里是引入了一个<code>齐次坐标</code>的概念，用 <code>N+1</code> 维的向量来表示 <code>N</code> 维向量；比如在 2D 坐标系中某个点 <code>(x, y)</code> 可以在逻辑上表示为 <code>(x*w, y*w, w)</code>，<code>w</code> 即为新增的那个量。</p>
+<p>引入齐次坐标的好处在于可以把<code>缩放</code>、<code>旋转</code>、<code>平移</code>等变换都统一转换成矩阵乘法的形式，这样不管进行多少次变换，都可以表示成矩阵连乘的形式了。</p>
+<p>如果某个 2D 坐标系中点为 <code>(x, y)</code>，转换为齐次坐标 <code>(x, y, 1)</code>，那么经过上述变换后的新坐标为<code>(nx, ny, nz)</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">nx = a * x + c * y + 1 * e;</span><br><span class="line">ny = b * x + d * y + 1 * f;</span><br><span class="line">nz = 0 + 0 + 1;</span><br></pre></td></tr></table></figure>
+
+<p>再把齐次坐标还原，最终坐标为 <code>(nx, ny)</code>。</p>
+<p>具体方法实现如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//计算矩阵变换后的坐标点</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getMatrixPoints</span>(<span class="params">p,matrix</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> mat = matrixAnalyze(matrix);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// var mat3 = [mat[0],mat[2],mat[4],</span></span><br><span class="line">    <span class="comment">//             mat[1],mat[3],mat[5],</span></span><br><span class="line">    <span class="comment">//             0,0,1];</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// var mat3 = [a,c,e,</span></span><br><span class="line">    <span class="comment">//             b,d,f,</span></span><br><span class="line">    <span class="comment">//             0,0,1];</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// var newX = a * x + c * y + 1 * e;</span></span><br><span class="line">    <span class="comment">// var newY = b * x + d * y + 1 * f;</span></span><br><span class="line">    <span class="comment">// var newZ = 0 + 0 +1;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//计算变换后点坐标</span></span><br><span class="line">    <span class="keyword">var</span> newX = mat[<span class="number">0</span>] * p.x + mat[<span class="number">2</span>] * p.y + <span class="number">1</span> * mat[<span class="number">4</span>];</span><br><span class="line">    <span class="keyword">var</span> newY = mat[<span class="number">1</span>] * p.x + mat[<span class="number">3</span>] * p.y + <span class="number">1</span> * mat[<span class="number">5</span>];</span><br><span class="line">    <span class="keyword">var</span> newZ = <span class="number">0</span> + <span class="number">0</span> +<span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;<span class="attr">x</span>:newX/newZ,<span class="attr">y</span>:newY/newZ&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>已知初始坐标 <code>initPoints</code> 和变换矩阵 <code>matrix</code> 相乘即可得到 <code>matrixPoints</code>，到这里我以为这个题目已经解完了。</p>
+<p>直到我尝试着在大矩形中用<code>红色</code>直线把计算得到的 matrixPoints 连起来才发现，新坐标连接得到的图形和 CSS3 transform 变换得到灰色图形并不重合。</p>
+<p>这也就意味着<code>上述计算过程有问题</code>！</p>
+<p>在走了不少弯路之后我才意识到一个问题：<code>CSS3 2D transform 坐标系和题目中设定的坐标系的 Y 轴正方向是相反的</code>（题目中设置的坐标系 Y 轴正方向是屏幕垂直向上而 CSS3 2D transform 坐标系的 Y 轴正方向是屏幕垂直向下）。</p>
+<p>因此在计算新坐标之前，需要对 getComputedStyle 得到的变换矩阵进行<code>镜像变换</code>，从而转换为题目中设定坐标系的变换矩阵，也就是示例中 <code>fixedMatrix</code>，最后计算的新坐标为 <code>fixedPoints</code>；用<code>蓝色</code>直线绘制出来就可以看到和灰色图形完全重合了。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在进行图形学计算时，不管是 2D 还是 3D 都要格外注意不同坐标系之间的区别！</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+        
+        <div class="post-tags">
+            <a href="/tags/CSS3/" rel="tag"># CSS3</a>
+          
+            <a href="/tags/图形学/" rel="tag"># 图形学</a>
+          
+            <a href="/tags/矩阵变换/" rel="tag"># 矩阵变换</a>
+          
+        </div>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+              <a href="/2019/03/26/motion-blur/" rel="next" title="运动模糊滤镜">
+                <i class="fa fa-chevron-left"></i> 运动模糊滤镜
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+              <a href="/2019/05/16/simple-crop/" rel="prev" title="全平台（Vue、React、微信小程序）任意角度旋转 图片裁剪组件">
+                全平台（Vue、React、微信小程序）任意角度旋转 图片裁剪组件 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Young</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">51</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/newbieYoung" title="GitHub &rarr; https://github.com/newbieYoung" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://www.zhihu.com/people/NewbieYoung" title="知乎 &rarr; https://www.zhihu.com/people/NewbieYoung" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>知乎</a>
+      </span>
+    
+  </div>
+
+
+
+        </div>
+      </div>
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#解答"><span class="nav-number">1.</span> <span class="nav-text">解答</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">2.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Young</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.3.0</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+      </div>
+
+    
+
+  </div>
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+<script src="/js/utils.js?v=7.3.0"></script>
+  <script src="/js/motion.js?v=7.3.0"></script>
+
+
+  <script src="/js/affix.js?v=7.3.0"></script>
+  <script src="/js/schemes/pisces.js?v=7.3.0"></script>
+
+
+
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  
+  <script src="/js/scrollspy.js?v=7.3.0"></script>
+<script src="/js/post-details.js?v=7.3.0"></script>
+
+
+</body>
+</html>
