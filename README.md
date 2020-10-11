@@ -8,6 +8,7 @@
 
 > https://github.com/newyoungli
 > 13875175340@163.com
+> [同一客户端下使用多个 Git 账号](https://juejin.im/post/6844903902916132878)
 
 ```
 deploy:
@@ -19,6 +20,8 @@ hexo clean
 hexo g
 hexo d
 ```
+
+最后设置 `Custom domain`
 
 
 
