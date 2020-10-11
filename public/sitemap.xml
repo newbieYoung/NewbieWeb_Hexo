@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://newbieweb.lione.me/2017/08/22/normal-filter-intro/</loc>
+    
+    <lastmod>2020-10-11T12:35:55.380Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://newbieweb.lione.me/2020/10/10/simple-screenshot/</loc>
     
     <lastmod>2020-10-11T10:50:38.207Z</lastmod>
@@ -12,13 +19,6 @@
     <loc>https://newbieweb.lione.me/2017/02/28/threejs-webgl-cube/</loc>
     
     <lastmod>2020-10-10T12:35:30.527Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://newbieweb.lione.me/2017/08/22/normal-filter-intro/</loc>
-    
-    <lastmod>2020-10-10T12:34:49.217Z</lastmod>
     
   </url>
   
@@ -170,14 +170,14 @@
   </url>
   
   <url>
-    <loc>https://newbieweb.lione.me/tags/index.html</loc>
+    <loc>https://newbieweb.lione.me/categories/index.html</loc>
     
     <lastmod>2019-08-15T07:22:32.403Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://newbieweb.lione.me/categories/index.html</loc>
+    <loc>https://newbieweb.lione.me/tags/index.html</loc>
     
     <lastmod>2019-08-15T07:22:32.403Z</lastmod>
     

@@ -64,7 +64,6 @@
 <meta property="og:description" content="如果你想仔细了解文中 WebGL 实现的滤镜算法，首先你得具备一些原生 WebGL 知识，但是如果你只是想大概了解滤镜算法的作用和规律，不具备原生WebGL知识也没关系，建议跳过具体实现，聚焦文字说明、函数、图形、矩阵等； 另外下述部分关于滤镜的 WebGL 实现都是参考于 WebGLImageFilter，因此你也可以认为这篇文章有部分内容是对WebGLImageFilter这个类库源代码的简单">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://newbieyoung.github.io/images/colorful-shadow-0.jpg">
-<meta property="og:image" content="https://newbieyoung.github.io/images/colorful-shadow-1.jpg">
 <meta property="og:image" content="https://newbieyoung.github.io/images/colorful-shadow-2.jpg">
 <meta property="og:image" content="https://newbieyoung.github.io/images/colorful-shadow-3.jpg">
 <meta property="og:image" content="https://newbieyoung.github.io/images/colorful-shadow-4.jpg">
@@ -80,7 +79,7 @@
 <meta property="og:image" content="https://newbieyoung.github.io/images/colorful-shadow-14.jpg">
 <meta property="og:image" content="https://newbieyoung.github.io/images/colorful-shadow-15.jpg">
 <meta property="og:image" content="https://newbieyoung.github.io/images/colorful-shadow-16.jpg">
-<meta property="og:updated_time" content="2020-10-10T12:34:49.217Z">
+<meta property="og:updated_time" content="2020-10-11T12:35:55.380Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="常用滤镜算法以及WebGL实现">
 <meta name="twitter:description" content="如果你想仔细了解文中 WebGL 实现的滤镜算法，首先你得具备一些原生 WebGL 知识，但是如果你只是想大概了解滤镜算法的作用和规律，不具备原生WebGL知识也没关系，建议跳过具体实现，聚焦文字说明、函数、图形、矩阵等； 另外下述部分关于滤镜的 WebGL 实现都是参考于 WebGLImageFilter，因此你也可以认为这篇文章有部分内容是对WebGLImageFilter这个类库源代码的简单">
@@ -290,7 +289,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-10 20:34:49" itemprop="dateModified" datetime="2020-10-10T20:34:49+08:00">2020-10-10</time>
+                <time title="修改时间：2020-10-11 20:35:55" itemprop="dateModified" datetime="2020-10-11T20:35:55+08:00">2020-10-11</time>
               </span>
             
           
@@ -331,19 +330,6 @@
 <p>由于 CSS3、SVG、Canvas 等都直接支持滤镜，因此实现方式也有很多种；</p>
 <h3 id="一、CSS3实现"><a href="#一、CSS3实现" class="headerlink" title="一、CSS3实现"></a>一、CSS3实现</h3><p><a href="https://newbieyoung.github.io/CSS_learn/content-shadow.html" target="_blank" rel="noopener">例子一</a><br><a href="https://newbieyoung.github.io/CSS_learn/gradient-shadow.html" target="_blank" rel="noopener">例子二</a></p>
 <h3 id="二、Canvas实现"><a href="#二、Canvas实现" class="headerlink" title="二、Canvas实现"></a>二、Canvas实现</h3><p><a href="https://newbieyoung.github.io/Html_learn/canvas/demo10.html" target="_blank" rel="noopener">例子三</a><br><a href="https://newbieyoung.github.io/Html_learn/canvas/demo11.html" target="_blank" rel="noopener">例子四</a></p>
-<p>需要注意的 Canvas 的 filter 属性兼容性很不好，因此下边的工具都是使用 CSS3 filter 来实现的。</p>
-<p>另外因为阴影会降低页面的渲染效率，而且页面中的元素不一定是固定不变的，因此静态方式不能完全满足实际需要，所以我封装了一个简单的工具类库 <a href="https://www.npmjs.com/package/colorful-shadow" target="_blank" rel="noopener">colorful-shadow</a> 用于动态给某个元素增加内容阴影，</p>
-<p>Github 上有 <a href="https://github.com/newbieYoung/colorful-shadow" target="_blank" rel="noopener">源代码</a>，在这个项目里边也有简单的 <a href="https://newbieyoung.github.io/colorful-shadow/test.html" target="_blank" rel="noopener">测试用例</a>。</p>
-<img src="https://newbieyoung.github.io/images/colorful-shadow-1.jpg">
-
-<p>功能如下：</p>
-<ul>
-<li>可以调用<code>init</code>方法来实现自定义的重叠内容阴影；</li>
-<li>也可以直接调用<code>bottomContentShadow</code>来实现底部内容投影阴影；</li>
-<li>或者调用<code>bottomGradientShadow</code>来实现底部渐变阴影。</li>
-</ul>
-<p>另外由于是涉及重叠元素的动态定位，这就要求原始元素必须具有定位属性了，比如：relative、absolute、fixed等。</p>
-<p>滤镜不光频繁出现在各种 Web 技术中，而且在各种图像处理软件中也有很多类似的概念；</p>
 <p>由于滤镜实在是太普遍了，作为一个有追求的程序员（出于装逼的需要），仅仅知道怎么用，或者就算知道一些特殊的用法，显然也是远远不够的！</p>
 <p>那接下来就聊聊滤镜算法以及实现吧……</p>
 <h2 id="blur-高斯模糊"><a href="#blur-高斯模糊" class="headerlink" title="blur 高斯模糊"></a>blur 高斯模糊</h2><p>详细请看 <a href="http://www.ruanyifeng.com/blog/2012/11/gaussian_blur.html" target="_blank" rel="noopener">阮一峰 高斯模糊的算法</a>，通俗易懂。</p>
