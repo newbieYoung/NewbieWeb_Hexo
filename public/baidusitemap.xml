@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://newbieweb.lione.me/2020/10/10/simple-screenshot/</loc>
-    <lastmod>2020-10-10</lastmod>
+    <lastmod>2020-10-11</lastmod>
   </url>  <url>
     <loc>https://newbieweb.lione.me/2017/02/28/threejs-webgl-cube/</loc>
     <lastmod>2020-10-10</lastmod>
@@ -55,22 +55,22 @@
     <loc>https://newbieweb.lione.me/2017/12/21/maintenance-jotting/</loc>
     <lastmod>2019-11-09</lastmod>
   </url>  <url>
-    <loc>https://newbieweb.lione.me/2019/08/02/machinelearningaction-tensorflow-layer-reg/</loc>
-    <lastmod>2019-11-09</lastmod>
-  </url>  <url>
     <loc>https://newbieweb.lione.me/2018/02/03/machinelearningaction-js-localweighted-linear/</loc>
     <lastmod>2019-11-09</lastmod>
   </url>  <url>
-    <loc>https://newbieweb.lione.me/2017/11/23/machinelearningaction-js-linear-regression/</loc>
+    <loc>https://newbieweb.lione.me/2019/08/02/machinelearningaction-tensorflow-layer-reg/</loc>
     <lastmod>2019-11-09</lastmod>
   </url>  <url>
-    <loc>https://newbieweb.lione.me/2018/07/05/ios-pits/</loc>
+    <loc>https://newbieweb.lione.me/2017/11/23/machinelearningaction-js-linear-regression/</loc>
     <lastmod>2019-11-09</lastmod>
   </url>  <url>
     <loc>https://newbieweb.lione.me/2017/07/21/draw-bezier-curve/</loc>
     <lastmod>2019-11-09</lastmod>
   </url>  <url>
     <loc>https://newbieweb.lione.me/2017/08/23/install-incubator-mxnet-and-run-testcase/</loc>
+    <lastmod>2019-11-09</lastmod>
+  </url>  <url>
+    <loc>https://newbieweb.lione.me/2018/07/05/ios-pits/</loc>
     <lastmod>2019-11-09</lastmod>
   </url>  <url>
     <loc>https://newbieweb.lione.me/2018/12/13/lottie-web-sprite/</loc>

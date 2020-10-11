@@ -12,6 +12,8 @@ author: Young
 
 ![](https://newbieyoung.github.io/images/simple-screenshot-0.gif)![](https://newbieyoung.github.io/images/simple-screenshot-1.gif)
 
+<!--more-->
+
 ## 相关技术
 
 目前流行的“截屏”实现方案按生成图片的方式可以分为`客户端截屏`和`服务端截屏`两种。
