@@ -34,24 +34,6 @@ author: Young
 [例子三](https://newbieyoung.github.io/Html_learn/canvas/demo10.html)
 [例子四](https://newbieyoung.github.io/Html_learn/canvas/demo11.html)
 
-需要注意的 Canvas 的 filter 属性兼容性很不好，因此下边的工具都是使用 CSS3 filter 来实现的。
-
-另外因为阴影会降低页面的渲染效率，而且页面中的元素不一定是固定不变的，因此静态方式不能完全满足实际需要，所以我封装了一个简单的工具类库 [colorful-shadow](https://www.npmjs.com/package/colorful-shadow) 用于动态给某个元素增加内容阴影，
-
-Github 上有 [源代码](https://github.com/newbieYoung/colorful-shadow)，在这个项目里边也有简单的 [测试用例](https://newbieyoung.github.io/colorful-shadow/test.html)。
-
-<img src="https://newbieyoung.github.io/images/colorful-shadow-1.jpg">
-
-功能如下：
-
-- 可以调用`init`方法来实现自定义的重叠内容阴影；
-- 也可以直接调用`bottomContentShadow`来实现底部内容投影阴影；
-- 或者调用`bottomGradientShadow`来实现底部渐变阴影。
-
-另外由于是涉及重叠元素的动态定位，这就要求原始元素必须具有定位属性了，比如：relative、absolute、fixed等。
-
-滤镜不光频繁出现在各种 Web 技术中，而且在各种图像处理软件中也有很多类似的概念；
-
 由于滤镜实在是太普遍了，作为一个有追求的程序员（出于装逼的需要），仅仅知道怎么用，或者就算知道一些特殊的用法，显然也是远远不够的！
 
 那接下来就聊聊滤镜算法以及实现吧......
