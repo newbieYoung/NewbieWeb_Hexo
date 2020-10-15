@@ -2,7 +2,7 @@
 title: 3D图形学线代基础
 date: 2020-10-14 18:00
 tags: [线性代数]
-categories: [线性代数]
+categories: [数学]
 author: Young
 ---
 
