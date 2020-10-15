@@ -689,3 +689,7 @@ X 轴基向量变换后的新向量为 OC，Y 轴基向量变换后的新向量�
 ![图 3.1.3-26.png](https://newbieyoung.github.io/threebook/chapter3/3.1.3-26.png)
 
 ## 未完待续
+
+最后顺便推荐下自己的[掘金小册子](https://juejin.im/book/6844733759326158861)
+
+![](https://newbieyoung.github.io/imgs/juejin/threejs_rubik.png)
