@@ -56,9 +56,9 @@
 </script>
 
   <meta name="description" content="背景“截屏”是指把小程序或者 H5 页面转换成图片，从而方便用户转发或者分享。截屏分享相对于普通的结构化分享（链接分享）具有更丰富的视觉表现、更多的信息承载等优势，在很多项目中均有应用，举例来说：">
-<meta name="keywords" content="Puppeteer,SVG,微信小程序,截屏">
+<meta name="keywords" content="SVG,Puppeteer,微信小程序,截屏">
 <meta property="og:type" content="article">
-<meta property="og:title" content="前后端混合式“截屏”方案">
+<meta property="og:title" content="前后端混合“截屏”方案">
 <meta property="og:url" content="https://newbieweb.lione.me/2020/10/10/simple-screenshot/index.html">
 <meta property="og:site_name" content="NewbieWeb">
 <meta property="og:description" content="背景“截屏”是指把小程序或者 H5 页面转换成图片，从而方便用户转发或者分享。截屏分享相对于普通的结构化分享（链接分享）具有更丰富的视觉表现、更多的信息承载等优势，在很多项目中均有应用，举例来说：">
@@ -77,9 +77,9 @@
 <meta property="og:image" content="https://newbieyoung.github.io/images/simple-screenshot-11.png">
 <meta property="og:image" content="https://newbieyoung.github.io/images/simple-screenshot-12.png">
 <meta property="og:image" content="https://newbieyoung.github.io/images/simple-screenshot-13.jpg">
-<meta property="og:updated_time" content="2020-10-11T10:50:38.207Z">
+<meta property="og:updated_time" content="2020-10-15T03:02:28.118Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="前后端混合式“截屏”方案">
+<meta name="twitter:title" content="前后端混合“截屏”方案">
 <meta name="twitter:description" content="背景“截屏”是指把小程序或者 H5 页面转换成图片，从而方便用户转发或者分享。截屏分享相对于普通的结构化分享（链接分享）具有更丰富的视觉表现、更多的信息承载等优势，在很多项目中均有应用，举例来说：">
 <meta name="twitter:image" content="https://newbieyoung.github.io/images/simple-screenshot-0.gif">
   <link rel="canonical" href="https://newbieweb.lione.me/2020/10/10/simple-screenshot/">
@@ -96,7 +96,7 @@
   };
 </script>
 
-  <title>前后端混合式“截屏”方案 | NewbieWeb</title>
+  <title>前后端混合“截屏”方案 | NewbieWeb</title>
   
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-145147663-1"></script>
   <script>
@@ -259,7 +259,7 @@
       <header class="post-header">
 
         
-          <h1 class="post-title" itemprop="name headline">前后端混合式“截屏”方案
+          <h1 class="post-title" itemprop="name headline">前后端混合“截屏”方案
 
             
           </h1>
@@ -287,7 +287,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-11 18:50:38" itemprop="dateModified" datetime="2020-10-11T18:50:38+08:00">2020-10-11</time>
+                <time title="修改时间：2020-10-15 11:02:28" itemprop="dateModified" datetime="2020-10-15T11:02:28+08:00">2020-10-15</time>
               </span>
             
           
@@ -378,7 +378,7 @@
 <p>上图中第四个为原页面绝对定位布局效果，第三个蓝框部分为 dom-to-image 对绝对定位布局截屏后的效果，可以明显地看到截屏后的效果存在空白异常的情况。</p>
 <p>除了 dom-to-image 本身的实现问题以外，还存在一些方案本身的问题；比如 foreignObject 和 data:image/svg+xml 存在兼容性问题，某些情况下可能客户端并不支持这些特性（小程序以及部分浏览器）。</p>
 <p><img src="https://newbieyoung.github.io/images/simple-screenshot-9.jpg" alt></p>
-<h2 id="混合式截屏方案"><a href="#混合式截屏方案" class="headerlink" title="混合式截屏方案"></a>混合式截屏方案</h2><p>在上文中总结了服务端截屏、客户端截屏等各种方案的优缺点；基于<code>实现简单</code>、<code>使用方便</code>、<code>稳定可靠</code>的原则，不局限于单一技术，把服务端截屏和客户端 SVG 截屏方案结合起来，是可以得到一种<code>更完善</code>的解决方案的。</p>
+<h2 id="混合截屏方案"><a href="#混合截屏方案" class="headerlink" title="混合截屏方案"></a>混合截屏方案</h2><p>在上文中总结了服务端截屏、客户端截屏等各种方案的优缺点；基于<code>实现简单</code>、<code>使用方便</code>、<code>稳定可靠</code>的原则，不局限于单一技术，把服务端截屏和客户端 SVG 截屏方案结合起来，是可以得到一种<code>更完善</code>的解决方案的。</p>
 <p>具体实现如下：<a href="https://github.com/newbieYoung/Simple-Screenshot" target="_blank" rel="noopener">SimpleScreenshot</a>。</p>
 <p><img src="https://newbieyoung.github.io/images/simple-screenshot-10.jpg" alt></p>
 <p>项目核心代码包括两部分：</p>
@@ -408,7 +408,7 @@
 <blockquote>
 <p>上文中 html2canvas、dom-to-image 问题说明的示例图中也展示了 SimpleScreenshot 的截屏效果（黄框部分）。</p>
 </blockquote>
-<h2 id="总结与展望"><a href="#总结与展望" class="headerlink" title="总结与展望"></a>总结与展望</h2><p>本文提出并实现的前后端混合式截屏方案 SimpleScreenshot <code>采用相对简单的解决方案，在保证稳定可靠的前提下，充分利用了客户端的资源和能力；统一截屏需求在浏览器和小程序的实现方式，尽可能地减少学习和开发成本</code>。</p>
+<h2 id="总结与展望"><a href="#总结与展望" class="headerlink" title="总结与展望"></a>总结与展望</h2><p>本文提出并实现的前后端混合截屏方案 SimpleScreenshot <code>采用相对简单的解决方案，在保证稳定可靠的前提下，充分利用了客户端的资源和能力；统一截屏需求在浏览器和小程序的实现方式，尽可能地减少学习和开发成本</code>。</p>
 <p>该方案目前已在少数几个项目中进行了实践，但是应用场景较少，不排除还有其它没有发现的问题；个人精力有限，欢迎大家携手共建。</p>
 
     </div>
@@ -421,9 +421,9 @@
           
         
         <div class="post-tags">
-            <a href="/tags/Puppeteer/" rel="tag"># Puppeteer</a>
-          
             <a href="/tags/SVG/" rel="tag"># SVG</a>
+          
+            <a href="/tags/Puppeteer/" rel="tag"># Puppeteer</a>
           
             <a href="/tags/微信小程序/" rel="tag"># 微信小程序</a>
           
@@ -441,6 +441,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+              <a href="/2020/10/14/3d-math-basic/" rel="prev" title="3D图形学线代基础">
+                3D图形学线代基础 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
     </footer>
@@ -492,7 +496,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-count">25</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -523,7 +527,9 @@
         
           
         
-        <span class="site-state-item-count">8</span>
+          
+        
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">分类</span>
         </a>
       </div>
@@ -624,7 +630,9 @@
         
           
         
-        <span class="site-state-item-count">43</span>
+          
+        
+        <span class="site-state-item-count">44</span>
         <span class="site-state-item-name">标签</span>
         </a>
       </div>
@@ -669,7 +677,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关技术"><span class="nav-number">2.</span> <span class="nav-text">相关技术</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#html2canvas"><span class="nav-number">2.1.</span> <span class="nav-text">html2canvas</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dom-to-image"><span class="nav-number">2.2.</span> <span class="nav-text">dom-to-image</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#混合式截屏方案"><span class="nav-number">3.</span> <span class="nav-text">混合式截屏方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结与展望"><span class="nav-number">4.</span> <span class="nav-text">总结与展望</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关技术"><span class="nav-number">2.</span> <span class="nav-text">相关技术</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#html2canvas"><span class="nav-number">2.1.</span> <span class="nav-text">html2canvas</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dom-to-image"><span class="nav-number">2.2.</span> <span class="nav-text">dom-to-image</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#混合截屏方案"><span class="nav-number">3.</span> <span class="nav-text">混合截屏方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结与展望"><span class="nav-number">4.</span> <span class="nav-text">总结与展望</span></a></li></ol></div>
             
 
           </div>
