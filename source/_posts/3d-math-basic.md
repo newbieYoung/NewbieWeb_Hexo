@@ -220,7 +220,7 @@ OA 向量表示在 X 轴正方向上移动 1 个单位和在 Y 轴正方向上�
 
 ![图 3.1.1-22.png](https://newbieyoung.github.io/threebook/chapter3/3.1.1-22.png)
 
-如上图所示，OE 向量、OF 向量、OG 向量分别在 Y 轴、X 轴、Z 轴上，彼此垂直；把这三个向量代入到公式中，可以很明显的看到叉乘分配律是成立的；比如 OF 向量 和 OG 向量相加得到 OH 向量，OH 向量和 OE 向量叉乘最终结果为 OJ 向量；拆看来看 OF 向量 和 OE 向量叉乘得到 OI 向量，OG 向量和 OE 叉乘得到 OF 向量，而 OF 向量和 OI 向量相加最终结果也是 OJ 向量。
+如上图所示，OE 向量、OF 向量、OG 向量分别在 Y 轴、X 轴、Z 轴上，彼此垂直；把这三个向量代入到公式中，可以很明显的看到叉乘分配律是成立的；比如 OF 向量 和 OG 向量相加得到 OH 向量，OH 向量和 OE 向量叉乘最终结果为 OJ 向量；拆看来看 OF 向量 和 OE 向量叉乘得到 OG 向量，OG 向量和 OE 叉乘得到 OI 向量，而 OG 向量和 OI 向量相加最终结果也是 OJ 向量。
 
 ![图 3.1.1-23.png](https://newbieyoung.github.io/threebook/chapter3/3.1.1-23.png)
 
